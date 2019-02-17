@@ -9,8 +9,8 @@
 
 #include "Game.h"
 
-Game *gpGame;
-
+Game *mpGame;
+/*
 // Default Game Constructor
 Game::Game()
 {
@@ -37,11 +37,11 @@ void Game::gameInit(int displayWidth, int displayHeight)
 	// Initialize the GraphicsBuffer vector
 	gameBuffers = std::vector<GraphicsBuffer *>();
 
-	// Push back graphics buffers for to-screen display	
+	// Push back graphics buffers for to-screen display
 	addNewBuffer(ASSET_PATH, SMURF_SPRITE_FILENAME);
-	addNewBuffer(ASSET_PATH, DEAN_SPRITE_FILENAME);	
+	addNewBuffer(ASSET_PATH, DEAN_SPRITE_FILENAME);
 	addNewBuffer(ASSET_PATH, WOODS_FILENAME);
-	
+
 	// Create the default Unit at center-screen
 	Unit *smurfUnit = new Unit(gameSystem->getMousePosition());
 
@@ -50,7 +50,7 @@ void Game::gameInit(int displayWidth, int displayHeight)
 
 	// Initialize animation vector
 	animSet = std::vector<Animation *>();
-	
+
 	// Create an animation set from SMURF_SPRITE_FILENAME
 	animSet.push_back(new Animation(*gameBuffers.at(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
 
@@ -130,7 +130,7 @@ void Game::runGameLoop(Timer &gameTimer)
 	std::cout << "Press 'Escape' to stop program running." << std::endl;
 
 	// Access game state to determine if loop can run
-	gameRunning = gameSystem->getGameState();	
+	gameRunning = gameSystem->getGameState();
 
 	while (gameRunning)
 	{
@@ -143,7 +143,7 @@ void Game::runGameLoop(Timer &gameTimer)
 		// Update game state
 		update();
 
-		// Render with Update	
+		// Render with Update
 		render();
 
 		// Sleep for 16.7 ms. FIXED GAME TIME
@@ -208,3 +208,71 @@ void Game::render()
 
 	return;
 }
+
+*/
+
+Game * Game::mpsGameInstance = nullptr;
+System * Game::mpsSystemInstance = nullptr;
+
+Game * Game::getGameInstance()
+{
+	assert(mpsGameInstance != nullptr);
+
+	return mpsGameInstance;
+}
+
+System * Game::getSystemInstance()
+{
+	assert(mpsSystemInstance != nullptr);
+
+	return mpsSystemInstance;
+}
+
+void Game::initInstance(int displayWidth, int displayHeight)
+{
+	mpsGameInstance = new Game;
+}
+
+void Game::cleanupInstance()
+{
+	delete mpsGameInstance;
+
+	mpsGameInstance = nullptr;
+}
+
+Game::~Game()
+{
+	cleanupInstance();
+}
+
+/*
+class Game : public Trackable
+{
+private:
+	// Vector of GraphicsBuffers
+	// Index 0 must always be your background image
+	std::vector<GraphicsBuffer *> gameBuffers;
+
+	// Vector of type Unit
+	std::vector<Unit *> gameObjects;
+
+	// Vector of type Animation
+	std::vector<Animation *> animSet;
+
+	// Scale for drawn background image
+	const float BACKGROUND_SCALE = 0.5f;
+
+	// Framerate Variables
+	const double MS_PER_FRAME = 16.7;
+
+	// Tracker for game loop frame speed
+	const std::string GAME_LOOP_TRACKER = "game_loop";
+
+	// TODO: Clean up variables when keypress / mouse state is fixed
+	// Controls runGameLoop
+	bool gameRunning = false;
+
+	// Controls speed of unit animations
+	double animSpeed = 1.0;
+};
+*/

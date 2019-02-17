@@ -10,42 +10,49 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-// C/C++ Includes
-#include <vector>
-
-// DeanLib Includes
-#include <Vector2D.h>
-
 // GraphicsLib Includes
 #include <Animation.h>
 
 class Unit : public Trackable
 {
+	friend class UnitManager;
+
 public:
-	// Default Unit Constructor
-	Unit(Vector2D &newLocation);
+	// Public Unit Accessors
+	inline std::vector<Animation *> getAnimations() const { return mUnitAnimations; };
 
-	~Unit();
-
-	void unitCleanup();
+	inline Vector2D getUnitPosition() const { return mUnitPosition; };
 
 	void addNewAnimation(Animation &newAnim);
 
 	void drawUnit(int animToDraw);
-
-	Vector2D getUnitPosition() { return unitLocation; }
-
-	std::vector<Animation *> getAnimSet() { return unitAnimSet; }
+	
+	void cleanupUnit();
 
 private:
-	// Set of Animations associated with this Unit
-	std::vector<Animation *> unitAnimSet;
+	Unit();
+	Unit(Vector2D &newPosition);
+	~Unit();
 
-	// Current Animation to display on-screen
-	int currentAnimIndex = 0;
+	std::vector<Animation *> mUnitAnimations;
 
-	// Location of the unit in 2D Space
-	Vector2D unitLocation;
+	int mCurrentAnimIndex;
+
+	Vector2D mUnitPosition;
 };
 
 #endif
+
+/*
+
+void Unit::drawUnit(int animToDraw)
+{
+	currentAnimIndex = animToDraw;
+
+	Sprite spr = unitAnimSet.at(currentAnimIndex)->getCurrentSprite();
+
+	Vector2D unitPos = gpGame->getGameSystem()->getMousePosition();
+
+	gpGame->getGameSystem()->getGraphicsSystem()->draw(spr, unitPos.getX(), unitPos.getY());
+}
+*/

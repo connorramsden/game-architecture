@@ -24,12 +24,18 @@
     <ClCompile Include="GraphicsLib\Unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UnitManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsLib\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsLib\Unit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

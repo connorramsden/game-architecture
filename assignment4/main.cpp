@@ -49,18 +49,13 @@ int main()
 	pPerformanceTracker->startTracking(INIT_TRACKER_NAME);
 
 	// Ensure the global Game object is created
-	gpGame = new Game();
-
-	// Initialize the global Game object
-	gpGame->gameInit(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+	mpGame->initInstance(DISPLAY_WIDTH, DISPLAY_HEIGHT);	
 
 	// Stop tracking initialization.
 	pPerformanceTracker->stopTracking(INIT_TRACKER_NAME);
 
 	// Start tracking game loop.
-	pPerformanceTracker->startTracking(LOOP_TRACKER_NAME);
-
-	gpGame->runGameLoop(*gameTimer);
+	pPerformanceTracker->startTracking(LOOP_TRACKER_NAME);	
 
 	// Stop tracking game loop.
 	pPerformanceTracker->stopTracking(LOOP_TRACKER_NAME);
@@ -71,13 +66,13 @@ int main()
 	std::cout << "Time to Init:" << pPerformanceTracker->getElapsedTime(INIT_TRACKER_NAME) << " ms" << std::endl;
 	std::cout << "Time in Game Loop:" << pPerformanceTracker->getElapsedTime(LOOP_TRACKER_NAME) << " ms" << std::endl;
 
+	mpGame->cleanupInstance();
+
 	// Delete all the pointers to free memory.
-	delete gpGame;
 	delete gameTimer;
 	delete pPerformanceTracker;
 
 	// Make sure the pointers are nulled.
-	gpGame = nullptr;
 	gameTimer = nullptr;
 	pPerformanceTracker = nullptr;
 

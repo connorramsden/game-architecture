@@ -7,18 +7,13 @@
 **		Assignment 04 Author: Connor Ramsden						**
 *********************************************************************/
 
-/* 
-	TODO: 
-	- UPDATE TO 'STATIC' CLASS
-	- ADD MANAGER CLASSES (UNT & GRAPHICSBUFFER)
-*/
-
 #ifndef GAME_H
 #define GAME_H
 
 // C/C++ Includes
 #include <vector>
 #include <string>
+#include <assert.h>
 
 // DeanLib Includes
 #include <Timer.h>
@@ -30,6 +25,7 @@
 // GraphicsLib Includes
 #include <System.h>
 
+/*
 // Asset locations / file names for use in the Game
 // Real game would have a better asset management system
 const std::string ASSET_PATH = "..\\..\\shared\\assets\\";
@@ -43,76 +39,44 @@ const int SPRITESHEET_COLUMN_COUNT = 4;
 
 // Indexing for vector storage
 const int SMURF_SPRITE_INDEX = 0;
-const int DEAN_SPRITE_INDEX = 1; 
+const int DEAN_SPRITE_INDEX = 1;
 const int BACKGROUND_INDEX = 2;
+*/
 
 class Game : public Trackable
 {
 public:
-	// Default Game Constructor
-	Game();
+	// System / Manager Accessors
+	static Game *getGameInstance();
+	static System *getSystemInstance();
+	// static UnitManager *getUnitManager();
+	// static GraphicsBufferManager *getGraphicsBufferManager();
 
-	// Default Game Deconstructor
-	~Game();
+	// Game Init / Cleanup
+	static void initInstance(int displayWidth, int displayHeight);
+	static void cleanupInstance();
 
-	// Initializes the Game system
-	void gameInit(int displayWidth, int displayHeight);
+	// Game Operations
+	static void runGame(Timer &gameTimer, PerformanceTracker &perfTracker);
 
-	// Cleans up the Game system
-	void gameCleanup();
+	static void getUserInput();
 
-	// Cleans up any new'd vector pointers
-	void vectorCleanup();
+	static void updateLoop();
 
-	// Begins the core gameplay loop
-	// Utilizing Fixed Interval Time + Render catch-up
-	void runGameLoop(Timer &gameTimer);
-
-	// Checks for Mouse / Keyboard input from the user
-	void getUserInput();
-
-	// Create a new GraphicsBuffer in graphicsBuffers
-	void addNewBuffer(std::string assetPath, std::string fileName);
-
-	// Update the game state based on input / automatic stuff
-	void update();
-
-	// Render out background & units
-	void render();
-
-	System *getGameSystem() { return gameSystem; }
+	static void renderToScreen();
 
 private:
-	// Access to a System object
-	System *gameSystem = nullptr;
+	Game();
+	~Game();
 
-	// Vector of GraphicsBuffers
-	// Index 0 must always be your background image
-	std::vector<GraphicsBuffer *> gameBuffers;
+	static Game *mpsGameInstance;
 
-	// Vector of type Unit
-	std::vector<Unit *> gameObjects;
+	static System *mpsSystemInstance;
 
-	// Vector of type Animation
-	std::vector<Animation *> animSet;
-
-	// Scale for drawn background image
-	const float BACKGROUND_SCALE = 0.5f;
-
-	// Framerate Variables
-	const double MS_PER_FRAME = 16.7;
-
-	// Tracker for game loop frame speed
-	const std::string GAME_LOOP_TRACKER = "game_loop";
-
-	// TODO: Clean up variables when keypress / mouse state is fixed
-	// Controls runGameLoop
-	bool gameRunning = false;
-
-	// Controls speed of unit animations
-	double animSpeed = 1.0;
+	// static UnitManager *mpsUnitManager;
+	// static GraphicsBufferManager *mpsGraphicsBufferManager;
 };
 
-extern Game *gpGame;
+extern Game *mpGame;
 
 #endif
