@@ -9,7 +9,6 @@
 
 #include "Game.h"
 
-Game *mpGame;
 /*
 // Default Game Constructor
 Game::Game()
@@ -213,6 +212,7 @@ void Game::render()
 
 Game * Game::mpsGameInstance = nullptr;
 System * Game::mpsSystemInstance = nullptr;
+UnitManager *Game::mpsUnitManager = nullptr;
 
 Game * Game::getGameInstance()
 {
@@ -228,9 +228,16 @@ System * Game::getSystemInstance()
 	return mpsSystemInstance;
 }
 
+UnitManager * Game::getUnitManagerInstance()
+{
+	assert(mpsUnitManager != nullptr);
+
+	return mpsUnitManager;
+}
+
 void Game::initInstance(int displayWidth, int displayHeight)
 {
-	mpsGameInstance = new Game;
+	mpsGameInstance = new Game();
 }
 
 void Game::cleanupInstance()
@@ -238,6 +245,11 @@ void Game::cleanupInstance()
 	delete mpsGameInstance;
 
 	mpsGameInstance = nullptr;
+}
+
+Game::Game()
+{
+	return;
 }
 
 Game::~Game()

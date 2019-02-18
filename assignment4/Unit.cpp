@@ -40,10 +40,14 @@ Unit::Unit(Vector2D &newPosition)
 	return;
 }
 
+Unit::Unit()
+{
+	return;
+}
+
 Unit::~Unit()
 {
 	cleanupUnit();
 
 	return;
 }
-

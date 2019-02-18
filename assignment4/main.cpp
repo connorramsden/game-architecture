@@ -48,8 +48,9 @@ int main()
 	// Start tracking the initialization.
 	pPerformanceTracker->startTracking(INIT_TRACKER_NAME);
 
-	// Ensure the global Game object is created
-	mpGame->initInstance(DISPLAY_WIDTH, DISPLAY_HEIGHT);	
+	Game *mpGame = Game::getGameInstance();
+
+	Game::initInstance(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 
 	// Stop tracking initialization.
 	pPerformanceTracker->stopTracking(INIT_TRACKER_NAME);
@@ -66,7 +67,7 @@ int main()
 	std::cout << "Time to Init:" << pPerformanceTracker->getElapsedTime(INIT_TRACKER_NAME) << " ms" << std::endl;
 	std::cout << "Time in Game Loop:" << pPerformanceTracker->getElapsedTime(LOOP_TRACKER_NAME) << " ms" << std::endl;
 
-	mpGame->cleanupInstance();
+	Game::cleanupInstance();
 
 	// Delete all the pointers to free memory.
 	delete gameTimer;
