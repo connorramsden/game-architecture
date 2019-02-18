@@ -124,7 +124,7 @@ void GraphicsSystem::draw(Sprite _sprite, float _destinationX, float _destinatio
 }
 
 // Draw a buffer to a target buffer.
-void GraphicsSystem::draw(GraphicsBuffer& _drawBuffer, GraphicsBuffer& _targetBuffer, int _flag /*  BUFFER_TOP_LEFT*/, float _scale /* = 1.0f*/)
+void GraphicsSystem::draw(GraphicsBuffer& _drawBuffer, GraphicsBuffer& _targetBuffer, int _flag /*  BUFFER_TOP_LEFT */, float _scale /* = 1.0 */)
 {
 	// Store the back buffer temporarily.
 	ALLEGRO_BITMAP* pBackBuffer = al_get_target_bitmap();
@@ -160,7 +160,7 @@ void GraphicsSystem::draw(GraphicsBuffer& _drawBuffer, GraphicsBuffer& _targetBu
 }
 
 // Draw directly to the back buffer.
-void GraphicsSystem::draw(GraphicsBuffer& _drawBuffer, int _flag /* = BUFFER_TOP_LEFT */, float _scale/* = 1.0f*/)
+void GraphicsSystem::draw(GraphicsBuffer& _drawBuffer, int _flag /* = BUFFER_TOP_LEFT */, float _scale /* = 1.0f */)
 {
 	// Get the width of the buffer to draw.
 	int drawBufferWidth = _drawBuffer.getWidth();

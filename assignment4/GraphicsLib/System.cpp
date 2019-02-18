@@ -32,8 +32,8 @@ void System::systemInit(int displayWidth, int displayHeight)
 	initAllegroInput();
 
 	// Initialize first mouse position to center-screen
-	lastMousePos.setX(displayWidth / 2.0f);
-	lastMousePos.setY(displayHeight / 2.0f);
+	lastMousePos.setX(float(displayWidth / 2));
+	lastMousePos.setY(float(displayHeight / 2));
 
 	// Initialize graphicsSystem with passed width & height
 	graphicsSystem->initialize(displayWidth, displayHeight);

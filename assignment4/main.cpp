@@ -48,15 +48,17 @@ int main()
 	// Start tracking the initialization.
 	pPerformanceTracker->startTracking(INIT_TRACKER_NAME);
 
-	Game *mpGame = Game::getGameInstance();
-
 	Game::initInstance(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
+	Game *mpGame = Game::getGameInstance();	
 
 	// Stop tracking initialization.
 	pPerformanceTracker->stopTracking(INIT_TRACKER_NAME);
 
 	// Start tracking game loop.
-	pPerformanceTracker->startTracking(LOOP_TRACKER_NAME);	
+	pPerformanceTracker->startTracking(LOOP_TRACKER_NAME);
+
+	mpGame->runGame(*gameTimer, *pPerformanceTracker);
 
 	// Stop tracking game loop.
 	pPerformanceTracker->stopTracking(LOOP_TRACKER_NAME);

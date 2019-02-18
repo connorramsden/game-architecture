@@ -238,6 +238,10 @@ UnitManager * Game::getUnitManagerInstance()
 void Game::initInstance(int displayWidth, int displayHeight)
 {
 	mpsGameInstance = new Game();
+
+	mpsSystemInstance->systemInit(displayWidth, displayHeight);
+
+	return;
 }
 
 void Game::cleanupInstance()
@@ -245,16 +249,36 @@ void Game::cleanupInstance()
 	delete mpsGameInstance;
 
 	mpsGameInstance = nullptr;
+
+	return;
+}
+
+void Game::runGame(Timer & gameTimer, PerformanceTracker & perfTracker)
+{
+	std::cout << "RUNNING GAME" << std::endl;
 }
 
 Game::Game()
 {
+	// Create new System/Managers
+	mpsSystemInstance = new System();
+
+	mpsUnitManager = new UnitManager();
+
 	return;
 }
 
 Game::~Game()
 {
-	cleanupInstance();
+	// Clean up System / Managers
+
+	delete mpsUnitManager;
+
+	mpsUnitManager = nullptr;
+
+	delete mpsSystemInstance;
+
+	mpsSystemInstance = nullptr;
 }
 
 /*

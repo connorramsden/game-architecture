@@ -17,7 +17,7 @@ typedef std::map<UnitKey, Unit*> UnitMap;
 class UnitManager : public Trackable
 {
 public:
-	UnitManager() { return;  };
+	UnitManager() { return;  }
 	~UnitManager();
 
 	void cleanupUnitManager();
