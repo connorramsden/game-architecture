@@ -49,7 +49,7 @@ public:
 	// System / Manager Accessors
 	static Game *getGameInstance();
 	static System *getSystemInstance();
-	// static UnitManager *getUnitManager();
+	static UnitManager *getUnitManagerInstance();
 	// static GraphicsBufferManager *getGraphicsBufferManager();
 
 	// Game Init / Cleanup
@@ -73,10 +73,8 @@ private:
 
 	static System *mpsSystemInstance;
 
-	// static UnitManager *mpsUnitManager;
+	static UnitManager *mpsUnitManager;
 	// static GraphicsBufferManager *mpsGraphicsBufferManager;
 };
-
-extern Game *mpGame;
 
 #endif

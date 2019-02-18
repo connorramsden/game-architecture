@@ -117,9 +117,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GraphicsLib\Game.cpp" />
-    <ClCompile Include="GraphicsLib\Unit.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="GraphicsLib\GraphicsLib.vcxproj">
@@ -127,8 +127,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GraphicsLib\Game.h" />
-    <ClInclude Include="GraphicsLib\Unit.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
