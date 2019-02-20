@@ -34,7 +34,7 @@ public:
 	~System();
 
 	// Initializes System
-	void systemInit(int displayWidth, int displayHeight);
+	void systemInit();
 
 	// Initializes Allegro components for user input
 	void initAllegroInput();
@@ -49,41 +49,27 @@ public:
 	void getMouseState();
 
 	// Returns graphicsSystem
-	GraphicsSystem *getGraphicsSystem() { return graphicsSystem; }
+	GraphicsSystem *getGraphicsSystem() { return mpGraphicsSystem; }
 
 	// Returns last known mouse position
-	Vector2D getMousePosition() { return lastMousePos; }
+	Vector2D getMousePosition() { return mLastMousePos; }
 
-	// TODO: Clean up functions when keypress / mouse state is fixed
-	// Functions accessed by Game
-	// returns game state to determine if game loop should continue or stop
-	bool getGameState() { return loopController; }
-
-	double getAnimSpeed() { return animSpeed; }
-
-	int getUnitToDisplay() { return unitToDisplay; }
-	
 private:
 	// Stores a GraphicsSystem object
-	GraphicsSystem *graphicsSystem = nullptr;
+	GraphicsSystem *mpGraphicsSystem = nullptr;
 
 	// Resolves user mouse input calls
-	ALLEGRO_MOUSE_STATE mouseState;
+	ALLEGRO_MOUSE_STATE mMouseState;
 
 	// Resolves user keyboard input calls
-	ALLEGRO_KEYBOARD_STATE keyboardState;
+	ALLEGRO_KEYBOARD_STATE mKeyboardState;
 
 	// Stores last known mouse position
-	Vector2D lastMousePos;
+	Vector2D mLastMousePos;
 
-	// TODO: Clean up variables when keypress / mouse state is fixed
-	// Variables pass to Game
-	// Determines if game should run or stop
-	bool loopController = true;
-
-	double animSpeed = 1.0;
-
-	int unitToDisplay = 0;
+	// Display dimensions.
+	const int DISPLAY_WIDTH = 800;
+	const int DISPLAY_HEIGHT = 600;
 };
 
 #endif

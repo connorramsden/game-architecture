@@ -10,7 +10,7 @@
 
 class Unit;
 
-typedef std::string UnitKey;
+typedef int UnitKey;
 
 typedef std::map<UnitKey, Unit*> UnitMap;
 

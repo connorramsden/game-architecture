@@ -28,7 +28,7 @@ void UnitManager::cleanupUnitManager()
 
 Unit * UnitManager::createAndManageUnit(const UnitKey & key)
 {
-	Unit *pUnit = nullptr;
+	Unit *mpUnit = nullptr;
 
 	UnitMap::iterator iter = mUnitMap.find(key);
 
@@ -36,12 +36,12 @@ Unit * UnitManager::createAndManageUnit(const UnitKey & key)
 	if (iter == mUnitMap.end())
 	{
 		// if the given unit doesn't exist, create and add it to the map
-		pUnit = new Unit();
+		mpUnit = new Unit();
 
-		mUnitMap[key] = pUnit;
+		mUnitMap[key] = mpUnit;
 	}
 
-	return pUnit;
+	return mpUnit;
 }
 
 void UnitManager::deleteUnit(const UnitKey & key)
@@ -58,25 +58,29 @@ void UnitManager::deleteUnit(const UnitKey & key)
 
 		return;
 	}
+
+	return;
 }
 
-void UnitManager::deleteUnit(Unit * pUnit)
+void UnitManager::deleteUnit(Unit * mpUnit)
 {
 	UnitMap::iterator iter;
 
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); iter++)
 	{
-		if (pUnit == iter->second)
+		if (mpUnit == iter->second)
 		{
-			delete pUnit;
+			delete mpUnit;
 
-			pUnit = nullptr;
+			mpUnit = nullptr;
 
 			mUnitMap.erase(iter);
 
 			return;
 		}
 	}
+
+	return;
 }
 
 Unit * UnitManager::getUnit(const UnitKey & key) const

@@ -9,210 +9,14 @@
 
 #include "Game.h"
 
-/*
-// Default Game Constructor
-Game::Game()
-{
-	return;
-}
-
-// Default Game Deconstructor
-Game::~Game()
-{
-	gameCleanup();
-
-	return;
-}
-
-// Initializes the Game system
-void Game::gameInit(int displayWidth, int displayHeight)
-{
-	// Instantiate the gameSystem
-	gameSystem = new System();
-
-	// Initialize the new System
-	gameSystem->systemInit(displayWidth, displayHeight);
-
-	// Initialize the GraphicsBuffer vector
-	gameBuffers = std::vector<GraphicsBuffer *>();
-
-	// Push back graphics buffers for to-screen display
-	addNewBuffer(ASSET_PATH, SMURF_SPRITE_FILENAME);
-	addNewBuffer(ASSET_PATH, DEAN_SPRITE_FILENAME);
-	addNewBuffer(ASSET_PATH, WOODS_FILENAME);
-
-	// Create the default Unit at center-screen
-	Unit *smurfUnit = new Unit(gameSystem->getMousePosition());
-
-	// Initialize the Unit vector
-	gameObjects = std::vector<Unit *>();
-
-	// Initialize animation vector
-	animSet = std::vector<Animation *>();
-
-	// Create an animation set from SMURF_SPRITE_FILENAME
-	animSet.push_back(new Animation(*gameBuffers.at(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
-
-	// create an animation set from DEAN_SPRITE_FILENAME
-	animSet.push_back(new Animation(*gameBuffers.at(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
-
-	// Set up the smurfUnit with two animation sets
-	smurfUnit->addNewAnimation(*animSet.at(SMURF_SPRITE_INDEX));
-	smurfUnit->addNewAnimation(*animSet.at(DEAN_SPRITE_INDEX));
-
-	// Ensure that the unit exists in the game object vector
-	gameObjects.push_back(smurfUnit);
-
-	return;
-}
-
-// Called from Deconstructor
-void Game::gameCleanup()
-{
-	// call any Vector deconstructors
-	vectorCleanup();
-
-	// Clean up gameSystem
-	if (gameSystem != nullptr)
-	{
-		// call gameSystem Deconstructor
-		delete gameSystem;
-
-		// Ensure gameSystem is nullptr
-		gameSystem = nullptr;
-	}
-
-	return;
-}
-
-// Call graphicsBuffers, Deconstructor
-void Game::vectorCleanup()
-{
-	if (animSet.at(0) != nullptr)
-	{
-		for (Animation *deadAnim : animSet)
-		{
-			delete deadAnim;
-
-			deadAnim = nullptr;
-		}
-	}
-
-	if (gameObjects.at(0) != nullptr)
-	{
-		for (Unit *deadUnit : gameObjects)
-		{
-			delete deadUnit;
-
-			deadUnit = nullptr;
-		}
-	}
-
-	if (gameBuffers.at(0) != nullptr)
-	{
-		for (GraphicsBuffer *deadBuffer : gameBuffers)
-		{
-			delete deadBuffer;
-
-			deadBuffer = nullptr;
-		}
-	}
-
-	return;
-}
-
-// Begins the core gameplay loop
-// Utilizing Fixed Interval Time + Render catch-up
-void Game::runGameLoop(Timer &gameTimer)
-{
-	// Ensure player / developer knows to hit Escape to exit loop
-	std::cout << "Press 'Escape' to stop program running." << std::endl;
-
-	// Access game state to determine if loop can run
-	gameRunning = gameSystem->getGameState();
-
-	while (gameRunning)
-	{
-		// Start the Timer for the game loop
-		gameTimer.start();
-
-		// Check for any Mouse / Keyboard input
-		getUserInput();
-
-		// Update game state
-		update();
-
-		// Render with Update
-		render();
-
-		// Sleep for 16.7 ms. FIXED GAME TIME
-		gameTimer.sleepUntilElapsed(MS_PER_FRAME);
-	}
-
-	// Stop the timer when game loop ends
-	gameTimer.stop();
-
-	return;
-}
-
-// Checks for Mouse / Keyboard input from the user
-void Game::getUserInput()
-{
-	if (gameSystem != nullptr)
-	{
-		gameSystem->getMouseState();
-		gameSystem->getKeyState();
-	}
-
-	return;
-}
-
-// Create a new GraphicsBuffer in graphicsBuffers
-void Game::addNewBuffer(std::string assetPath, std::string fileName)
-{
-	gameBuffers.push_back(new GraphicsBuffer(assetPath, fileName));
-}
-
-void Game::update()
-{
-	// Check if game should continue to run
-	gameRunning = gameSystem->getGameState();
-
-	animSpeed = gameSystem->getAnimSpeed();
-
-	for (Unit *unitToUpdate : gameObjects)
-	{
-		for (Animation *anim : unitToUpdate->getAnimSet())
-		{
-			anim->animUpdate(animSpeed);
-		}
-	}
-
-	return;
-}
-
-void Game::render()
-{
-	// Draw the background image
-	gameSystem->getGraphicsSystem()->draw(*gameBuffers.at(BACKGROUND_INDEX), 0, BACKGROUND_SCALE);
-
-	// Draw units that exist
-	for (Unit *unitToDraw : gameObjects)
-	{
-		unitToDraw->drawUnit(gameSystem->getUnitToDisplay());
-	}
-
-	// Flip the display
-	gameSystem->getGraphicsSystem()->updateDisplay();
-
-	return;
-}
-
-*/
-
+// Initialize Game / System / Manager Instances
 Game * Game::mpsGameInstance = nullptr;
 System * Game::mpsSystemInstance = nullptr;
-UnitManager *Game::mpsUnitManager = nullptr;
+UnitManager * Game::mpsUnitManager = nullptr;
+
+// Initialize tracker & Timer
+PerformanceTracker * Game::mpPerformanceTrackerInstance = nullptr;
+Timer * Game::mpTimerInstance = nullptr;
 
 Game * Game::getGameInstance()
 {
@@ -235,27 +39,80 @@ UnitManager * Game::getUnitManagerInstance()
 	return mpsUnitManager;
 }
 
-void Game::initInstance(int displayWidth, int displayHeight)
+PerformanceTracker * Game::getPerformanceTrackerInstance()
 {
-	mpsGameInstance = new Game();
+	assert(mpPerformanceTrackerInstance != nullptr);
 
-	mpsSystemInstance->systemInit(displayWidth, displayHeight);
+	return mpPerformanceTrackerInstance;
+}
+
+Timer * Game::getTimerInstance()
+{
+	assert(mpTimerInstance != nullptr);
+
+	return mpTimerInstance;
+}
+
+void Game::initInstance()
+{
+	if (!mpsGameInstance)
+	{
+		mpsGameInstance = new Game();
+	}
+	else { std::cout << "Game instance already exists." << std::endl; }
+
+	if (mpsSystemInstance)
+	{
+		mpsSystemInstance->systemInit();
+	}
+	else { std::cout << "No system instance exists." << std::endl; }
+
+
+	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
 
 	return;
 }
 
 void Game::cleanupInstance()
 {
-	delete mpsGameInstance;
+	// TODO: clean up static vectors
 
-	mpsGameInstance = nullptr;
+	if (mpsGameInstance != nullptr)
+	{
+		delete mpsGameInstance;
+
+		mpsGameInstance = nullptr;
+	}
+	else { std::cout << "No game instance exists" << std::endl; }
 
 	return;
 }
 
-void Game::runGame(Timer & gameTimer, PerformanceTracker & perfTracker)
+void Game::initGameLoop()
 {
-	const std::string GAME_LOOP_TRACKER = "game_loop";
+	if (!mpPerformanceTrackerInstance)
+	{
+		mpPerformanceTrackerInstance = new PerformanceTracker();
+	}
+	else { std::cout << "PerformanceTracker already exists." << std::endl; }
+
+	if (!mpTimerInstance)
+	{
+		mpTimerInstance = new Timer();
+	}
+	else { std::cout << "Timer already exists." << std::endl; }
+
+
+	std::cout << "Press 'Escape' to stop the game." << std::endl;
+
+	return;
+}
+
+void Game::runGameLoop()
+{
+	initGameLoop();
+
+	static const std::string GAME_LOOP_TRACKER = "game_loop";
 
 	static double MS_PER_FRAME = 16.67;
 
@@ -263,37 +120,106 @@ void Game::runGame(Timer & gameTimer, PerformanceTracker & perfTracker)
 
 	while (mGameIsRunning)
 	{
-		perfTracker.clearTracker(GAME_LOOP_TRACKER);
+		// Clear the performance tracke for the game loop
+		mpPerformanceTrackerInstance->clearTracker(GAME_LOOP_TRACKER);
 
-		perfTracker.startTracking(GAME_LOOP_TRACKER);
+		// Begin tracking this frame
+		mpPerformanceTrackerInstance->startTracking(GAME_LOOP_TRACKER);
 
-		gameTimer.start();
+		// Start the timer for this frame
+		mpTimerInstance->start();
 
-		gameTimer.sleepUntilElapsed(MS_PER_FRAME);
+		// Get mouse / keyboard input
+		getUserInput();
 
-		perfTracker.stopTracking(GAME_LOOP_TRACKER);	
+		// Update Unit(s) on screen
+		updateLoop();
 
-		std::cout << "Elapsed Time: " << perfTracker.getElapsedTime(GAME_LOOP_TRACKER) << std::endl;
+		// Render background / units / etc to display
+		renderToDisplay();
+
+		// Sleep for ~16 ms
+		mpTimerInstance->sleepUntilElapsed(MS_PER_FRAME);
+
+		// Stop tracking the performance of this frame
+		mpPerformanceTrackerInstance->stopTracking(GAME_LOOP_TRACKER);
+
+		// Print elapsed time to console
+		std::cout << "Elapsed Time: " << mpPerformanceTrackerInstance->getElapsedTime(GAME_LOOP_TRACKER) << std::endl;
 	}
 
-	gameTimer.stop();
+	// Stop the game loop, delete pointers, etc.
+	stopGameLoop();
+
+	return;
+}
+
+// Cleans up all game loop objects / pointers
+void Game::stopGameLoop()
+{
+	// Stops game timer
+	mpTimerInstance->stop();
+
+	if (mpTimerInstance)
+	{
+		// Delete & nullify the game timer
+		delete mpTimerInstance;
+		mpTimerInstance = nullptr;
+	}
+	else { std::cout << "No Timer instance exists" << std::endl; }
+
+	if (mpPerformanceTrackerInstance)
+	{
+		// Delete & nullify game performance tracker
+		delete mpPerformanceTrackerInstance;
+		mpPerformanceTrackerInstance = nullptr;
+	}
+	else { std::cout << "No PerformanceTracker instance exists" << std::endl; }
+
+	return;
 }
 
 void Game::getUserInput()
-{}
+{
+	if (mpsSystemInstance != nullptr)
+	{		
+		mpsSystemInstance->getMouseState();
+		mpsSystemInstance->getKeyState();
+	}
+
+	return;
+}
 
 void Game::updateLoop()
-{}
+{
 
-void Game::renderToScreen()
-{}
+
+	return;
+}
+
+void Game::renderToDisplay()
+{
+
+	// Flip the display to render graphics to user
+	mpsSystemInstance->getGraphicsSystem()->updateDisplay();
+
+	return;
+}
 
 Game::Game()
 {
-	// Create new System/Managers
-	mpsSystemInstance = new System();
+	if (!mpsSystemInstance)
+	{
+		// Create new System/Managers
+		mpsSystemInstance = new System();
+	}
+	else { std::cout << "A system instance already exists" << std::endl; }
 
-	mpsUnitManager = new UnitManager();
+	if (!mpsUnitManager)
+	{
+		mpsUnitManager = new UnitManager();
+	}
+	else { std::cout << "A UnitManager already exists" << std::endl; }
 
 	return;
 }
@@ -301,44 +227,21 @@ Game::Game()
 Game::~Game()
 {
 	// Clean up System / Managers
+	if (mpsUnitManager)
+	{
+		delete mpsUnitManager;
 
-	delete mpsUnitManager;
+		mpsUnitManager = nullptr;
+	}
+	else { std::cout << "No UnitManager exists" << std::endl; }
 
-	mpsUnitManager = nullptr;
+	if (mpsSystemInstance)
+	{
+		delete mpsSystemInstance;
 
-	delete mpsSystemInstance;
+		mpsSystemInstance = nullptr;
+	}
+	else { std::cout << "No System instance exists" << std::endl; }
 
-	mpsSystemInstance = nullptr;
+	return;
 }
-
-/*
-class Game : public Trackable
-{
-private:
-	// Vector of GraphicsBuffers
-	// Index 0 must always be your background image
-	std::vector<GraphicsBuffer *> gameBuffers;
-
-	// Vector of type Unit
-	std::vector<Unit *> gameObjects;
-
-	// Vector of type Animation
-	std::vector<Animation *> animSet;
-
-	// Scale for drawn background image
-	const float BACKGROUND_SCALE = 0.5f;
-
-	// Framerate Variables
-	const double MS_PER_FRAME = 16.7;
-
-	// Tracker for game loop frame speed
-	const std::string GAME_LOOP_TRACKER = "game_loop";
-
-	// TODO: Clean up variables when keypress / mouse state is fixed
-	// Controls runGameLoop
-	bool gameRunning = false;
-
-	// Controls speed of unit animations
-	double animSpeed = 1.0;
-};
-*/

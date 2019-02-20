@@ -43,30 +43,30 @@ public:
 	void animUpdate(double newSpeed);
 
 	// Returns the current sprite
-	Sprite getCurrentSprite() { return currentSprite; }
+	Sprite getCurrentSprite() { return mCurrentSprite; }
 
 	// Returns current Animation speed
-	float getAnimSpeed() { return animSpeed; }
+	float getAnimSpeed() { return mAnimSpeed; }
 
 	// Adjusts the speed of animation
 	void updateAnimSpeed(double newSpeed);
 
 private:
 	// List of Sprites
-	std::vector<Sprite> spriteSheet;
+	std::vector<Sprite> mSpriteSheet;
 
 	// Speed at which animation plays
-	double animSpeed = 1.0;
+	double mAnimSpeed = 1.0;
 
 	// Current sprite info
 	// Index of spriteList vector where current sprite is
-	int currentSprIndex = 0;
+	int mCurrentSprIndex = 0;
 
 	// Actual sprite that is currently selected
-	Sprite currentSprite;
+	Sprite mCurrentSprite;
 
 	// Determines if an Animation should loop
-	bool shouldLoop = true;
+	bool mShouldLoop = true;
 };
 
 #endif

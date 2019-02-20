@@ -25,7 +25,7 @@ public:
 
 	void addNewAnimation(Animation &newAnim);
 
-	void drawUnit(int animToDraw);
+	void drawUnit();
 	
 	void cleanupUnit();
 
@@ -36,7 +36,7 @@ private:
 
 	std::vector<Animation *> mUnitAnimations;
 
-	int mCurrentAnimIndex;
+	Animation *mpCurrentAnimation;
 
 	Vector2D mUnitPosition;
 };

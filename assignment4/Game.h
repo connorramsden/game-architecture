@@ -52,18 +52,23 @@ public:
 	static UnitManager *getUnitManagerInstance();
 	// static GraphicsBufferManager *getGraphicsBufferManager();
 
+	static PerformanceTracker *getPerformanceTrackerInstance();
+	static Timer *getTimerInstance();
+
 	// Game Init / Cleanup
-	static void initInstance(int displayWidth, int displayHeight);
+	static void initInstance();
 	static void cleanupInstance();
 
 	// Game Operations
-	static void runGame(Timer &gameTimer, PerformanceTracker &perfTracker);
+	static void initGameLoop();
+	static void runGameLoop();
+	static void stopGameLoop();
 
 	static void getUserInput();
 
 	static void updateLoop();
 
-	static void renderToScreen();
+	static void renderToDisplay();
 
 private:
 	Game();
@@ -75,6 +80,146 @@ private:
 
 	static UnitManager *mpsUnitManager;
 	// static GraphicsBufferManager *mpsGraphicsBufferManager;
+
+	// Game Performance Tracker
+	static PerformanceTracker *mpPerformanceTrackerInstance;
+
+	// Game Timer
+	static Timer *mpTimerInstance;
 };
 
 #endif
+
+/*
+// Initializes the Game system
+void Game::gameInit(int displayWidth, int displayHeight)
+{
+	// Instantiate the gameSystem
+	gameSystem = new System();
+
+	// Initialize the new System
+	gameSystem->systemInit(displayWidth, displayHeight);
+
+	// Initialize the GraphicsBuffer vector
+	gameBuffers = std::vector<GraphicsBuffer *>();
+
+	// Push back graphics buffers for to-screen display
+	addNewBuffer(ASSET_PATH, SMURF_SPRITE_FILENAME);
+	addNewBuffer(ASSET_PATH, DEAN_SPRITE_FILENAME);
+	addNewBuffer(ASSET_PATH, WOODS_FILENAME);
+
+	// Create the default Unit at center-screen
+	Unit *smurfUnit = new Unit(gameSystem->getMousePosition());
+
+	// Initialize the Unit vector
+	gameObjects = std::vector<Unit *>();
+
+	// Initialize animation vector
+	animSet = std::vector<Animation *>();
+
+	// Create an animation set from SMURF_SPRITE_FILENAME
+	animSet.push_back(new Animation(*gameBuffers.at(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
+
+	// create an animation set from DEAN_SPRITE_FILENAME
+	animSet.push_back(new Animation(*gameBuffers.at(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
+
+	// Set up the smurfUnit with two animation sets
+	smurfUnit->addNewAnimation(*animSet.at(SMURF_SPRITE_INDEX));
+	smurfUnit->addNewAnimation(*animSet.at(DEAN_SPRITE_INDEX));
+
+	// Ensure that the unit exists in the game object vector
+	gameObjects.push_back(smurfUnit);
+
+	return;
+}
+
+// Call graphicsBuffers, Deconstructor
+void Game::vectorCleanup()
+{
+	if (animSet.at(0) != nullptr)
+	{
+		for (Animation *deadAnim : animSet)
+		{
+			delete deadAnim;
+
+			deadAnim = nullptr;
+		}
+	}
+
+	if (gameObjects.at(0) != nullptr)
+	{
+		for (Unit *deadUnit : gameObjects)
+		{
+			delete deadUnit;
+
+			deadUnit = nullptr;
+		}
+	}
+
+	if (gameBuffers.at(0) != nullptr)
+	{
+		for (GraphicsBuffer *deadBuffer : gameBuffers)
+		{
+			delete deadBuffer;
+
+			deadBuffer = nullptr;
+		}
+	}
+
+	return;
+}
+
+// Checks for Mouse / Keyboard input from the user
+void Game::getUserInput()
+{
+	if (gameSystem != nullptr)
+	{
+		gameSystem->getMouseState();
+		gameSystem->getKeyState();
+	}
+
+	return;
+}
+
+// Create a new GraphicsBuffer in graphicsBuffers
+void Game::addNewBuffer(std::string assetPath, std::string fileName)
+{
+	gameBuffers.push_back(new GraphicsBuffer(assetPath, fileName));
+}
+
+void Game::update()
+{
+	// Check if game should continue to run
+	gameRunning = gameSystem->getGameState();
+
+	animSpeed = gameSystem->getAnimSpeed();
+
+	for (Unit *unitToUpdate : gameObjects)
+	{
+		for (Animation *anim : unitToUpdate->getAnimSet())
+		{
+			anim->animUpdate(animSpeed);
+		}
+	}
+
+	return;
+}
+
+void Game::render()
+{
+	// Draw the background image
+	gameSystem->getGraphicsSystem()->draw(*gameBuffers.at(BACKGROUND_INDEX), 0, BACKGROUND_SCALE);
+
+	// Draw units that exist
+	for (Unit *unitToDraw : gameObjects)
+	{
+		unitToDraw->drawUnit(gameSystem->getUnitToDisplay());
+	}
+
+	// Flip the display
+	gameSystem->getGraphicsSystem()->updateDisplay();
+
+	return;
+}
+
+*/

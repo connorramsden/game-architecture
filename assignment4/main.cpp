@@ -21,63 +21,20 @@
 #include <string>
 
 // DeanLib Includes
-#include <PerformanceTracker.h>
 #include <MemoryTracker.h>
 
 // GraphicsLib Includes
 #include "Game.h"
 
-// Display dimensions.
-const int DISPLAY_WIDTH = 800;
-const int DISPLAY_HEIGHT = 600;
-
 int main()
 {
-	// Create a performance tracker.
-	PerformanceTracker* pPerformanceTracker = new PerformanceTracker;
+	Game::initInstance();
 
-	// Create a timer for framerate
-	Timer *gameTimer = new Timer;
+	Game *mpGame = Game::getGameInstance();
 
-	/*********************
-		Tracker names.
-	**********************/
-	const std::string INIT_TRACKER_NAME = "init";
-	const std::string LOOP_TRACKER_NAME = "loop";
-
-	// Start tracking the initialization.
-	pPerformanceTracker->startTracking(INIT_TRACKER_NAME);
-
-	Game::initInstance(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-
-	Game *mpGame = Game::getGameInstance();	
-
-	// Stop tracking initialization.
-	pPerformanceTracker->stopTracking(INIT_TRACKER_NAME);
-
-	// Start tracking game loop.
-	pPerformanceTracker->startTracking(LOOP_TRACKER_NAME);
-
-	mpGame->runGame(*gameTimer, *pPerformanceTracker);
-
-	// Stop tracking game loop.
-	pPerformanceTracker->stopTracking(LOOP_TRACKER_NAME);
-
-	/****************************
-		Report elapsed times.
-	*****************************/
-	std::cout << "Time to Init:" << pPerformanceTracker->getElapsedTime(INIT_TRACKER_NAME) << " ms" << std::endl;
-	std::cout << "Time in Game Loop:" << pPerformanceTracker->getElapsedTime(LOOP_TRACKER_NAME) << " ms" << std::endl;
+	mpGame->runGameLoop();
 
 	Game::cleanupInstance();
-
-	// Delete all the pointers to free memory.
-	delete gameTimer;
-	delete pPerformanceTracker;
-
-	// Make sure the pointers are nulled.
-	gameTimer = nullptr;
-	pPerformanceTracker = nullptr;
 
 	MemoryTracker::getInstance()->reportAllocations(std::cout);
 	system("pause");

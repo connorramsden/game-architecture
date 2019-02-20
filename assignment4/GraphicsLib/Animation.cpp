@@ -18,7 +18,7 @@ Animation::Animation(GraphicsBuffer & src, Vector2D rowColNum, bool loopSheet)
 {
 	fillSpriteSheet(src, rowColNum);
 
-	shouldLoop = loopSheet;
+	mShouldLoop = loopSheet;
 
 	return;
 }
@@ -30,7 +30,7 @@ Animation::~Animation()
 
 void Animation::addSprite(GraphicsBuffer &src, Vector2D sprLoc, Vector2D sprDimensions)
 {
-	spriteSheet.push_back(Sprite(src, sprLoc.getX(), sprLoc.getY(), sprDimensions.getX(), sprDimensions.getY()));
+	mSpriteSheet.push_back(Sprite(src, sprLoc.getX(), sprLoc.getY(), sprDimensions.getX(), sprDimensions.getY()));
 
 	return;
 }
@@ -39,7 +39,7 @@ void Animation::fillSpriteSheet(GraphicsBuffer & src, Vector2D rowColNum)
 {
 	// Clear the sprite sheet before filling it
 	// Make sure to add this Animation to a Unit before calling this function
-	spriteSheet.clear();
+	mSpriteSheet.clear();
 
 	// Temp Vector2D for storing sprite location
 	// spriteLocation: X = xLocation && Y = yLocation
@@ -76,35 +76,35 @@ void Animation::animUpdate(double newSpeed)
 
 	// Ensures that sprite index will never go out of bounds
 	// and increases keyframe by animSpeed
-	if (currentSprIndex < (int)spriteSheet.size() - 1)
+	if (mCurrentSprIndex < (int)mSpriteSheet.size() - 1)
 	{
-		if ((currentSprIndex + animSpeed) < (int)spriteSheet.size() - 1)
+		if ((mCurrentSprIndex + mAnimSpeed) < (int)mSpriteSheet.size() - 1)
 		{
-			currentSprIndex += animSpeed;
+			mCurrentSprIndex += mAnimSpeed;
 		}
 		else
 		{
-			currentSprIndex++;
+			mCurrentSprIndex++;
 		}
 		
 	}
-	else if (currentSprIndex == (int)spriteSheet.size() - 1)
+	else if (mCurrentSprIndex == (int)mSpriteSheet.size() - 1)
 	{
-		if (shouldLoop)
+		if (mShouldLoop)
 		{
-			currentSprIndex = 0;
+			mCurrentSprIndex = 0;
 		}
 	}
 
 	// Update current sprite target
-	currentSprite = spriteSheet.at(currentSprIndex);
+	mCurrentSprite = mSpriteSheet.at(mCurrentSprIndex);
 
 	return;
 }
 
 void Animation::updateAnimSpeed(double newSpeed)
 {
-	animSpeed = newSpeed;
+	mAnimSpeed = newSpeed;
 
 	return;
 }

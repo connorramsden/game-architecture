@@ -12,7 +12,7 @@
 // Creates a new GraphicsSystem within this System
 System::System()
 {
-	graphicsSystem = new GraphicsSystem();
+	mpGraphicsSystem = new GraphicsSystem();
 
 	return;
 }
@@ -26,17 +26,17 @@ System::~System()
 }
 
 // Initializes the system for gameplay use
-void System::systemInit(int displayWidth, int displayHeight)
+void System::systemInit()
 {
 	// Initialize Allegro components
 	initAllegroInput();
 
 	// Initialize first mouse position to center-screen
-	lastMousePos.setX(float(displayWidth / 2));
-	lastMousePos.setY(float(displayHeight / 2));
+	mLastMousePos.setX(float(DISPLAY_WIDTH / 2));
+	mLastMousePos.setY(float(DISPLAY_HEIGHT / 2));
 
 	// Initialize graphicsSystem with passed width & height
-	graphicsSystem->initialize(displayWidth, displayHeight);
+	mpGraphicsSystem->initialize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 
 	return;
 }
@@ -81,55 +81,19 @@ void System::systemCleanup()
 	al_uninstall_keyboard();
 
 	// Call GraphicsSystem deconstructor
-	delete graphicsSystem;
+	delete mpGraphicsSystem;
 
 	// Ensure GraphicsSystem is nullptr
-	graphicsSystem = nullptr;
+	mpGraphicsSystem = nullptr;
 
 	return;
 }
 
 // Gets user keyboard input
 void System::getKeyState()
-{	// TODO: Expand to all possible key-presses, instead of these 4
-
+{
 	// Checks current keyboard state
-	al_get_keyboard_state(&keyboardState);
-
-
-	// If F is pressed, respond accordingly
-	if (al_key_down(&keyboardState, ALLEGRO_KEY_F))
-	{
-		animSpeed += 0.1;
-	}
-
-	// if S is pressed, respond accordingly
-	if (al_key_down(&keyboardState, ALLEGRO_KEY_S))
-	{
-		if (animSpeed > 1.0)
-		{
-			animSpeed -= 0.1;
-		}
-	}
-
-	// if Enter is pressed, respond accordingly
-	if (al_key_down(&keyboardState, ALLEGRO_KEY_ENTER))
-	{
-		if (unitToDisplay == 0)
-		{
-			unitToDisplay = 1;
-		}
-		else
-		{
-			unitToDisplay = 0;
-		}
-	}
-
-	// if Escape is pressed, shut down the System
-	if (al_key_down(&keyboardState, ALLEGRO_KEY_ESCAPE))
-	{
-		loopController = false;
-	}
+	al_get_keyboard_state(&mKeyboardState);
 
 	return;
 }
@@ -138,13 +102,13 @@ void System::getKeyState()
 void System::getMouseState()
 {
 	// Checks current mouse state
-	al_get_mouse_state(&mouseState);
+	al_get_mouse_state(&mMouseState);
 
 	// if Mouse1 is pressed, move Unit to location
-	if (mouseState.buttons & 1)
+	if (mMouseState.buttons & 1)
 	{
-		lastMousePos.setX(mouseState.x);
-		lastMousePos.setY(mouseState.y);
+		mLastMousePos.setX(mMouseState.x);
+		mLastMousePos.setY(mMouseState.y);
 	}
 
 	return;

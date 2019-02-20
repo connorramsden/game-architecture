@@ -14,11 +14,9 @@ void Unit::addNewAnimation(Animation & newAnim)
 	mUnitAnimations.push_back(new Animation(newAnim));
 }
 
-void Unit::drawUnit(int animToDraw)
-{
-	mCurrentAnimIndex = animToDraw;
-	
-	Sprite spr = mUnitAnimations.at(mCurrentAnimIndex)->getCurrentSprite();
+void Unit::drawUnit()
+{	
+	Sprite spr = mpCurrentAnimation->getCurrentSprite();
 }
 
 void Unit::cleanupUnit()
@@ -37,11 +35,17 @@ Unit::Unit(Vector2D &newPosition)
 
 	mUnitAnimations = std::vector<Animation *>();
 
+	mpCurrentAnimation = nullptr;
+
 	return;
 }
 
 Unit::Unit()
 {
+	mUnitAnimations = std::vector<Animation *>();
+
+	mpCurrentAnimation = nullptr;
+
 	return;
 }
 
