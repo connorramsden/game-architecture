@@ -255,8 +255,38 @@ void Game::cleanupInstance()
 
 void Game::runGame(Timer & gameTimer, PerformanceTracker & perfTracker)
 {
-	std::cout << "RUNNING GAME" << std::endl;
+	const std::string GAME_LOOP_TRACKER = "game_loop";
+
+	static double MS_PER_FRAME = 16.67;
+
+	static bool mGameIsRunning = true;
+
+	while (mGameIsRunning)
+	{
+		perfTracker.clearTracker(GAME_LOOP_TRACKER);
+
+		perfTracker.startTracking(GAME_LOOP_TRACKER);
+
+		gameTimer.start();
+
+		gameTimer.sleepUntilElapsed(MS_PER_FRAME);
+
+		perfTracker.stopTracking(GAME_LOOP_TRACKER);	
+
+		std::cout << "Elapsed Time: " << perfTracker.getElapsedTime(GAME_LOOP_TRACKER) << std::endl;
+	}
+
+	gameTimer.stop();
 }
+
+void Game::getUserInput()
+{}
+
+void Game::updateLoop()
+{}
+
+void Game::renderToScreen()
+{}
 
 Game::Game()
 {
