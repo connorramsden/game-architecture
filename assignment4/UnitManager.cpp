@@ -1,6 +1,7 @@
 #include "UnitManager.h"
 #include "Unit.h"
 
+// Default UnitManager Deconstructor
 UnitManager::~UnitManager()
 {
 	cleanupUnitManager();
@@ -8,6 +9,7 @@ UnitManager::~UnitManager()
 	return;
 }
 
+// Loops through mUnitMap and deletes all Unit(s)
 void UnitManager::cleanupUnitManager()
 {
 	UnitMap::iterator iter;
@@ -26,6 +28,7 @@ void UnitManager::cleanupUnitManager()
 	return;
 }
 
+// Creates a new Unit and adds it into mUnitMap
 Unit * UnitManager::createAndManageUnit(const UnitKey & key)
 {
 	Unit *mpUnit = nullptr;
@@ -44,6 +47,7 @@ Unit * UnitManager::createAndManageUnit(const UnitKey & key)
 	return mpUnit;
 }
 
+// Deletes a unit in mUnitMap at &key
 void UnitManager::deleteUnit(const UnitKey & key)
 {
 	UnitMap::iterator iter = mUnitMap.find(key);
@@ -53,7 +57,7 @@ void UnitManager::deleteUnit(const UnitKey & key)
 		delete iter->second;
 
 		iter->second = nullptr;
-		
+
 		mUnitMap.erase(iter);
 
 		return;
@@ -62,6 +66,7 @@ void UnitManager::deleteUnit(const UnitKey & key)
 	return;
 }
 
+// Deletes the passed unit from mUnitMap
 void UnitManager::deleteUnit(Unit * mpUnit)
 {
 	UnitMap::iterator iter;
@@ -83,6 +88,7 @@ void UnitManager::deleteUnit(Unit * mpUnit)
 	return;
 }
 
+// returns the Unit located at &key in mUnitMap
 Unit * UnitManager::getUnit(const UnitKey & key) const
 {
 	UnitMap::const_iterator iter = mUnitMap.find(key);

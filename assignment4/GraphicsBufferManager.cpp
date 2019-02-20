@@ -1,6 +1,7 @@
 #include "GraphicsBufferManager.h"
 #include <GraphicsBuffer.h>
 
+// Default GraphicsBufferManager Deconstructor
 GraphicsBufferManager::~GraphicsBufferManager()
 {
 	cleanupGraphicsBufferManager();
@@ -8,6 +9,7 @@ GraphicsBufferManager::~GraphicsBufferManager()
 	return;
 }
 
+// Loops through mGraphicsBufferMap and deletes all GraphicsBuffer(s)
 void GraphicsBufferManager::cleanupGraphicsBufferManager()
 {
 	GraphicsBufferMap::iterator iter;
@@ -26,6 +28,7 @@ void GraphicsBufferManager::cleanupGraphicsBufferManager()
 	return;
 }
 
+// Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
 GraphicsBuffer * GraphicsBufferManager::createAndManageGraphicsBuffer(const GraphicsBufferKey & key)
 {
 	GraphicsBuffer *mpGraphicsBuffer = nullptr;
@@ -42,6 +45,7 @@ GraphicsBuffer * GraphicsBufferManager::createAndManageGraphicsBuffer(const Grap
 	return mpGraphicsBuffer;
 }
 
+// Delete the GraphicsBuffer in mGraphicsBufferMap at &key
 void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey & key)
 {
 	GraphicsBufferMap::iterator iter = mGraphicsBufferMap.find(key);
@@ -60,6 +64,7 @@ void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey & key)
 	return;
 }
 
+// Delete the GraphicsBuffer passed into the function
 void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * mpGraphicsBuffer)
 {
 	GraphicsBufferMap::iterator iter;
@@ -81,6 +86,7 @@ void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * mpGraphicsBuff
 	return;
 }
 
+// Return the GraphicsBuffer in mGraphicsBufferMap at &key
 GraphicsBuffer * GraphicsBufferManager::getGraphicsBuffer(const GraphicsBufferKey & key) const
 {
 	GraphicsBufferMap::const_iterator iter = mGraphicsBufferMap.find(key);

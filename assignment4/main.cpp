@@ -28,16 +28,24 @@
 
 int main()
 {
+	// Initialize a Game instance
 	Game::initInstance();
 
+	// Instantiate a Game object from the initialized instance
 	Game *mpGame = Game::getGameInstance();
 
+	// Run the core game loop
 	mpGame->runGameLoop();
 
+	// When the game loop breaks, clean up the Game instance
 	Game::cleanupInstance();
 
+	// Report memory leaks to console
 	MemoryTracker::getInstance()->reportAllocations(std::cout);
+
+	// Wait for user input before returning
 	system("pause");
 
+	// Exit the console window
 	return 0;
 }

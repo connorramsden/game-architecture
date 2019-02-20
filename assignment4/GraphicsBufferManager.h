@@ -17,19 +17,29 @@ typedef std::map<GraphicsBufferKey, GraphicsBuffer*> GraphicsBufferMap;
 class GraphicsBufferManager : public Trackable
 {
 public:
+	// Default GraphicsBufferManager Constructor
 	GraphicsBufferManager() { return; }
+
+	// Default GraphicsBufferManager Deconstructor
 	~GraphicsBufferManager();
 
+	// Loops through mGraphicsBufferMap and deletes all GraphicsBuffer(s)
 	void cleanupGraphicsBufferManager();
 
+	// Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
 	GraphicsBuffer *createAndManageGraphicsBuffer(const GraphicsBufferKey &key);
 
+	// Delete the GraphicsBuffer in mGraphicsBufferMap at &key
 	void deleteGraphicsBuffer(const GraphicsBufferKey &key);
+	
+	// Delete the GraphicsBuffer passed into the function
 	void deleteGraphicsBuffer(GraphicsBuffer *mpGraphicsBuffer);
-
+	
+	// Return the GraphicsBuffer in mGraphicsBufferMap at &key
 	GraphicsBuffer *getGraphicsBuffer(const GraphicsBufferKey &key) const;
 
 private:
+	// A STL map storing GraphicsBufferKey(s) and GraphicsBuffer(s)
 	GraphicsBufferMap mGraphicsBufferMap;
 };
 
