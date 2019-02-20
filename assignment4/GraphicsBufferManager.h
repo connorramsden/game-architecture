@@ -10,7 +10,7 @@
 
 class GraphicsBuffer;
 
-typedef int GraphicsBufferKey;
+typedef std::string GraphicsBufferKey;
 
 typedef std::map<GraphicsBufferKey, GraphicsBuffer*> GraphicsBufferMap;
 
@@ -28,6 +28,9 @@ public:
 
 	// Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
 	GraphicsBuffer *createAndManageGraphicsBuffer(const GraphicsBufferKey &key);
+
+	// Create and add a new GraphicsBuffer to the map
+	void addNewBuffer(std::string ASSET_PATH, std::string FILE_NAME);
 
 	// Delete the GraphicsBuffer in mGraphicsBufferMap at &key
 	void deleteGraphicsBuffer(const GraphicsBufferKey &key);

@@ -45,6 +45,14 @@ GraphicsBuffer * GraphicsBufferManager::createAndManageGraphicsBuffer(const Grap
 	return mpGraphicsBuffer;
 }
 
+// Create and add a new GraphicsBuffer to the map
+void GraphicsBufferManager::addNewBuffer(std::string ASSET_PATH, std::string FILE_NAME)
+{
+	GraphicsBuffer *pNewBuffer = new GraphicsBuffer(ASSET_PATH, FILE_NAME);
+
+	mGraphicsBufferMap.emplace(pNewBuffer);
+}
+
 // Delete the GraphicsBuffer in mGraphicsBufferMap at &key
 void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey & key)
 {

@@ -21,11 +21,11 @@
 
 // Game Includes
 #include "UnitManager.h"
+#include "GraphicsBufferManager.h"
 
 // GraphicsLib Includes
 #include <System.h>
 
-/*
 // Asset locations / file names for use in the Game
 // Real game would have a better asset management system
 const std::string ASSET_PATH = "..\\..\\shared\\assets\\";
@@ -41,7 +41,6 @@ const int SPRITESHEET_COLUMN_COUNT = 4;
 const int SMURF_SPRITE_INDEX = 0;
 const int DEAN_SPRITE_INDEX = 1;
 const int BACKGROUND_INDEX = 2;
-*/
 
 class Game : public Trackable
 {
@@ -50,7 +49,7 @@ public:
 	static Game *getGameInstance();
 	static System *getSystemInstance();
 	static UnitManager *getUnitManagerInstance();
-	// static GraphicsBufferManager *getGraphicsBufferManager();
+	static GraphicsBufferManager *getGraphicsBufferManager();
 
 	static PerformanceTracker *getPerformanceTrackerInstance();
 	static Timer *getTimerInstance();
@@ -79,7 +78,7 @@ private:
 	static System *mpsSystemInstance;
 
 	static UnitManager *mpsUnitManager;
-	// static GraphicsBufferManager *mpsGraphicsBufferManager;
+	static GraphicsBufferManager *mpsGraphicsBufferManager;
 
 	// Game Performance Tracker
 	static PerformanceTracker *mpPerformanceTrackerInstance;

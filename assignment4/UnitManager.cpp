@@ -9,93 +9,66 @@ UnitManager::~UnitManager()
 	return;
 }
 
+
 // Loops through mUnitMap and deletes all Unit(s)
 void UnitManager::cleanupUnitManager()
 {
-	UnitMap::iterator iter;
-
-	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
+	for (int i = 0; i < (int)mUnitList.size() - 1; i++)
 	{
-		Unit *pUnit = iter->second;
+		Unit *pUnit = mUnitList.at(i);
 
 		delete pUnit;
 
 		pUnit = nullptr;
 	}
 
-	mUnitMap.clear();
+	mUnitList.clear();
 
 	return;
 }
 
 // Creates a new Unit and adds it into mUnitMap
-Unit * UnitManager::createAndManageUnit(const UnitKey & key)
+void UnitManager::addNewUnit(Unit *newUnit)
 {
-	Unit *mpUnit = nullptr;
-
-	UnitMap::iterator iter = mUnitMap.find(key);
-
-	// Is iter already in map?
-	if (iter == mUnitMap.end())
-	{
-		// if the given unit doesn't exist, create and add it to the map
-		mpUnit = new Unit();
-
-		mUnitMap[key] = mpUnit;
-	}
-
-	return mpUnit;
-}
-
-// Deletes a unit in mUnitMap at &key
-void UnitManager::deleteUnit(const UnitKey & key)
-{
-	UnitMap::iterator iter = mUnitMap.find(key);
-
-	if (iter != mUnitMap.end())
-	{
-		delete iter->second;
-
-		iter->second = nullptr;
-
-		mUnitMap.erase(iter);
-
-		return;
-	}
-
-	return;
+	mUnitList.push_back(newUnit);
 }
 
 // Deletes the passed unit from mUnitMap
-void UnitManager::deleteUnit(Unit * mpUnit)
+void UnitManager::deleteUnit(Unit *mpUnit)
 {
-	UnitMap::iterator iter;
-
-	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); iter++)
+	if (!mUnitList.empty())
 	{
-		if (mpUnit == iter->second)
+		for (int i = 0; i < (int)mUnitList.size() - 1;)
 		{
-			delete mpUnit;
+			if (mpUnit == mUnitList.at(i))
+			{
+				delete mpUnit;
 
-			mpUnit = nullptr;
-
-			mUnitMap.erase(iter);
-
-			return;
+				mpUnit = nullptr;
+			}
+			else
+			{
+				i++;
+			}
 		}
 	}
-
+	
 	return;
 }
 
 // returns the Unit located at &key in mUnitMap
-Unit * UnitManager::getUnit(const UnitKey & key) const
+Unit * UnitManager::getUnit(const UnitKey key) const
 {
-	UnitMap::const_iterator iter = mUnitMap.find(key);
-
-	if (iter != mUnitMap.end())
+	if (!mUnitList.empty())
 	{
-		return iter->second;
+		if (mUnitList.at(key))
+		{
+			return mUnitList.at(key);
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 	else
 	{

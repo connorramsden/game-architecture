@@ -13,6 +13,7 @@
 Game * Game::mpsGameInstance = nullptr;
 System * Game::mpsSystemInstance = nullptr;
 UnitManager * Game::mpsUnitManager = nullptr;
+GraphicsBufferManager * Game::mpsGraphicsBufferManager = nullptr;
 
 // Initialize tracker & Timer
 PerformanceTracker * Game::mpPerformanceTrackerInstance = nullptr;
@@ -37,6 +38,13 @@ UnitManager * Game::getUnitManagerInstance()
 	assert(mpsUnitManager != nullptr);
 
 	return mpsUnitManager;
+}
+
+GraphicsBufferManager * Game::getGraphicsBufferManager()
+{
+	assert(mpsGraphicsBufferManager != nullptr);
+
+	return mpsGraphicsBufferManager;
 }
 
 PerformanceTracker * Game::getPerformanceTrackerInstance()
@@ -69,6 +77,10 @@ void Game::initInstance()
 
 
 	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
+	if (mpsGraphicsBufferManager)
+	{
+		mpsGraphicsBufferManager->addNewBuffer(ASSET_PATH, SMURF_SPRITE_FILENAME);
+	}
 
 	return;
 }
@@ -182,7 +194,7 @@ void Game::stopGameLoop()
 void Game::getUserInput()
 {
 	if (mpsSystemInstance != nullptr)
-	{		
+	{
 		mpsSystemInstance->getMouseState();
 		mpsSystemInstance->getKeyState();
 	}
@@ -220,6 +232,12 @@ Game::Game()
 		mpsUnitManager = new UnitManager();
 	}
 	else { std::cout << "A UnitManager already exists" << std::endl; }
+
+	if (!mpsGraphicsBufferManager)
+	{
+		mpsGraphicsBufferManager = new GraphicsBufferManager();
+	}
+	else { std::cout << "A GraphicsBufferManager already exists" << std::endl; }
 
 	return;
 }
