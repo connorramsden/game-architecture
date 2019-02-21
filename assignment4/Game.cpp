@@ -19,6 +19,7 @@ GraphicsBufferManager * Game::mpsGraphicsBufferManager = nullptr;
 PerformanceTracker * Game::mpPerformanceTrackerInstance = nullptr;
 Timer * Game::mpTimerInstance = nullptr;
 
+// Returns mpsGameInstance
 Game * Game::getGameInstance()
 {
 	assert(mpsGameInstance != nullptr);
@@ -26,6 +27,7 @@ Game * Game::getGameInstance()
 	return mpsGameInstance;
 }
 
+// Returns mpsSystemInstance
 System * Game::getSystemInstance()
 {
 	assert(mpsSystemInstance != nullptr);
@@ -33,6 +35,7 @@ System * Game::getSystemInstance()
 	return mpsSystemInstance;
 }
 
+// Returns mpsUnitManager
 UnitManager * Game::getUnitManagerInstance()
 {
 	assert(mpsUnitManager != nullptr);
@@ -40,6 +43,7 @@ UnitManager * Game::getUnitManagerInstance()
 	return mpsUnitManager;
 }
 
+// returns mpsGraphicsBufferManager
 GraphicsBufferManager * Game::getGraphicsBufferManager()
 {
 	assert(mpsGraphicsBufferManager != nullptr);
@@ -47,6 +51,7 @@ GraphicsBufferManager * Game::getGraphicsBufferManager()
 	return mpsGraphicsBufferManager;
 }
 
+// Returns mpPerforamnceTracker
 PerformanceTracker * Game::getPerformanceTrackerInstance()
 {
 	assert(mpPerformanceTrackerInstance != nullptr);
@@ -54,6 +59,7 @@ PerformanceTracker * Game::getPerformanceTrackerInstance()
 	return mpPerformanceTrackerInstance;
 }
 
+// Returns mpTimerInstance
 Timer * Game::getTimerInstance()
 {
 	assert(mpTimerInstance != nullptr);
@@ -61,44 +67,98 @@ Timer * Game::getTimerInstance()
 	return mpTimerInstance;
 }
 
+// Initializes a new Game instance
 void Game::initInstance()
 {
+	// If the instance has not been initialized, initialize the instance
 	if (!mpsGameInstance)
 	{
 		mpsGameInstance = new Game();
 	}
-	else { std::cout << "Game instance already exists." << std::endl; }
+	// Otherwise, print that the instance has already been initt'd
+	else { std::cout << "Game instance already exists." << std::endl; return; }
 
-	if (mpsSystemInstance)
-	{
-		mpsSystemInstance->systemInit();
-	}
-	else { std::cout << "No system instance exists." << std::endl; }
-
-	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
-	if (mpsGraphicsBufferManager)
-	{
-
-	}
+	// Now that the Instance has been initialized, initialize the game
+	initGame();
 
 	return;
 }
 
+// Clean up the existing Game instance
 void Game::cleanupInstance()
 {
-	// TODO: clean up static vectors
-
-	if (mpsGameInstance != nullptr)
+	// If a Game instance exists, delete & null out the instance
+	if (mpsGameInstance)
 	{
 		delete mpsGameInstance;
 
 		mpsGameInstance = nullptr;
 	}
-	else { std::cout << "No game instance exists" << std::endl; }
+	// Otherwise, report to console that no instance exists
+	else { std::cout << "No game instance exists" << std::endl; return; }
 
 	return;
 }
 
+// Initialize System/Managers within the game
+void Game::initGame()
+{
+	// If the system instance has been properly initialized
+	if (mpsSystemInstance)
+	{
+		// Init the display
+		mpsSystemInstance->systemInit();
+	}
+	else { std::cout << "No system instance exists." << std::endl; }
+
+	// If the UMI has been properly initialized
+	if (mpsUnitManager)
+	{
+		//Init the UMI
+	}
+
+	// If the GBM instance has been properly initialized
+	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
+	if (mpsGraphicsBufferManager)
+	{
+
+		// Init the GBM
+	}
+
+	return;
+}
+
+// Delete System/Managers
+void Game::cleanupGame()
+{
+	// Clean up the GBM
+	if (mpsGraphicsBufferManager)
+	{
+		delete mpsGraphicsBufferManager;
+
+		mpsGraphicsBufferManager = nullptr;
+	}
+
+	// Clean up the UMI
+	if (mpsUnitManager)
+	{
+		delete mpsUnitManager;
+
+		mpsUnitManager = nullptr;
+	}
+	else { std::cout << "No UnitManager exists" << std::endl; }
+
+	// Clean up the System Instance
+	if (mpsSystemInstance)
+	{
+		delete mpsSystemInstance;
+
+		mpsSystemInstance = nullptr;
+	}
+	else { std::cout << "No System instance exists" << std::endl; }
+}
+
+// Initialize components necessary for the game loop to function
 void Game::initGameLoop()
 {
 	if (!mpPerformanceTrackerInstance)
@@ -118,16 +178,22 @@ void Game::initGameLoop()
 	return;
 }
 
+// Run the core game loop (input, update, render)
 void Game::runGameLoop()
 {
+	// Initialize necessary game loop components
 	initGameLoop();
 
+	// PerformanceTracker string to track frame performance
 	static const std::string GAME_LOOP_TRACKER = "game_loop";
 
+	// Target frame elapsed time
 	static double MS_PER_FRAME = 16.67;
 
+	// Controls whether or not the game is running
 	static bool mGameIsRunning = true;
 
+	// Loop functionality
 	while (mGameIsRunning)
 	{
 		// Clear the performance tracke for the game loop
@@ -156,6 +222,9 @@ void Game::runGameLoop()
 
 		// Print elapsed time to console
 		std::cout << "Elapsed Time: " << mpPerformanceTrackerInstance->getElapsedTime(GAME_LOOP_TRACKER) << std::endl;
+
+		// TODO: Remove this once ESC functionality is in
+		mGameIsRunning = false;
 	}
 
 	// Stop the game loop, delete pointers, etc.
@@ -189,9 +258,12 @@ void Game::stopGameLoop()
 	return;
 }
 
+// Checks for user input from the system
 void Game::getUserInput()
 {
-	if (mpsSystemInstance != nullptr)
+	// Ensure the System Instance is initialized
+	// TODO: Upgrade user input parsing
+	if (mpsSystemInstance)
 	{
 		mpsSystemInstance->getMouseState();
 		mpsSystemInstance->getKeyState();
@@ -200,6 +272,7 @@ void Game::getUserInput()
 	return;
 }
 
+// Update all game objects / units
 void Game::updateLoop()
 {
 
@@ -207,6 +280,7 @@ void Game::updateLoop()
 	return;
 }
 
+// Render all units / backgrounds
 void Game::renderToDisplay()
 {
 
@@ -216,6 +290,7 @@ void Game::renderToDisplay()
 	return;
 }
 
+// Default Game Constructor
 Game::Game()
 {
 	if (!mpsSystemInstance)
@@ -240,24 +315,10 @@ Game::Game()
 	return;
 }
 
+// Default Game Deconstructor
 Game::~Game()
 {
-	// Clean up System / Managers
-	if (mpsUnitManager)
-	{
-		delete mpsUnitManager;
-
-		mpsUnitManager = nullptr;
-	}
-	else { std::cout << "No UnitManager exists" << std::endl; }
-
-	if (mpsSystemInstance)
-	{
-		delete mpsSystemInstance;
-
-		mpsSystemInstance = nullptr;
-	}
-	else { std::cout << "No System instance exists" << std::endl; }
+	cleanupGame();
 
 	return;
 }

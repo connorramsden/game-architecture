@@ -107,9 +107,14 @@ void System::getMouseState()
 	// if Mouse1 is pressed, move Unit to location
 	if (mMouseState.buttons & 1)
 	{
-		mLastMousePos.setX(mMouseState.x);
-		mLastMousePos.setY(mMouseState.y);
+		setMousePosition(mMouseState.x, mMouseState.y);
 	}
 
 	return;
+}
+
+void System::setMousePosition(int xPos, int yPos)
+{
+	mLastMousePos.setX(xPos);
+	mLastMousePos.setY(yPos);
 }

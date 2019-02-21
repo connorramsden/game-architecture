@@ -55,9 +55,13 @@ public:
 	static PerformanceTracker *getPerformanceTrackerInstance();
 	static Timer *getTimerInstance();
 
-	// Game Init / Cleanup
+	// Game Instance Init / Cleanup
 	static void initInstance();
 	static void cleanupInstance();
+
+	// Game Init / Cleanup
+	static void initGame();
+	static void cleanupGame();
 
 	// Game Operations
 	static void initGameLoop();

@@ -37,6 +37,7 @@ public:
 	Unit *getUnit(const UnitKey key) const;
 
 private:
+	// An STL vector storing Units
 	UnitList mUnitList;
 };
 

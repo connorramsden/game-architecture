@@ -39,7 +39,7 @@ public:
 	GraphicsBuffer *getGraphicsBuffer(const GraphicsBufferKey &key) const;
 
 private:
-	// A STL map storing GraphicsBufferKey(s) and GraphicsBuffer(s)
+	// An STL map storing GraphicsBufferKey(s) and GraphicsBuffer(s)
 	GraphicsBufferMap mGraphicsBufferMap;
 };
 

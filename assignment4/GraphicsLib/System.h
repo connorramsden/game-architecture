@@ -54,6 +54,9 @@ public:
 	// Returns last known mouse position
 	Vector2D getMousePosition() { return mLastMousePos; }
 
+	// Sets mLastMousePos X&Y
+	void setMousePosition(int xPos, int yPos);
+
 private:
 	// Stores a GraphicsSystem object
 	GraphicsSystem *mpGraphicsSystem = nullptr;
