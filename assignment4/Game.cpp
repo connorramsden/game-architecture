@@ -114,7 +114,6 @@ void Game::initGameLoop()
 	}
 	else { std::cout << "Timer already exists." << std::endl; }
 
-
 	std::cout << "Press 'Escape' to stop the game." << std::endl;
 
 	return;
