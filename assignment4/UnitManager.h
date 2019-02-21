@@ -29,7 +29,7 @@ public:
 
 	// Creates a new Unit and adds it into mUnitMap
 	void addNewUnit(Unit *newUnit);
-	
+
 	// Deletes the passed unit from mUnitMap
 	void deleteUnit(Unit *pUnit);
 

@@ -31,10 +31,10 @@ public:
 
 	// Delete the GraphicsBuffer in mGraphicsBufferMap at &key
 	void deleteGraphicsBuffer(const GraphicsBufferKey &key);
-	
+
 	// Delete the GraphicsBuffer passed into the function
 	void deleteGraphicsBuffer(GraphicsBuffer *mpGraphicsBuffer);
-	
+
 	// Return the GraphicsBuffer in mGraphicsBufferMap at &key
 	GraphicsBuffer *getGraphicsBuffer(const GraphicsBufferKey &key) const;
 

@@ -75,11 +75,10 @@ void Game::initInstance()
 	}
 	else { std::cout << "No system instance exists." << std::endl; }
 
-
 	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
 	if (mpsGraphicsBufferManager)
 	{
-		
+
 	}
 
 	return;

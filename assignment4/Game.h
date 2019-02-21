@@ -51,6 +51,7 @@ public:
 	static UnitManager *getUnitManagerInstance();
 	static GraphicsBufferManager *getGraphicsBufferManager();
 
+	// Performance Accessors
 	static PerformanceTracker *getPerformanceTrackerInstance();
 	static Timer *getTimerInstance();
 
@@ -63,21 +64,32 @@ public:
 	static void runGameLoop();
 	static void stopGameLoop();
 
+	// Retrieve user input from KB&M
 	static void getUserInput();
 
+	// Update all game objects
 	static void updateLoop();
 
+	// Render all game objects and backgrounds to the display
 	static void renderToDisplay();
 
 private:
+	// Default Game Constructor
 	Game();
+
+	// Default Game Deconstructor
 	~Game();
 
+	// An instance of the Game class
 	static Game *mpsGameInstance;
 
+	// An instance of the System class, referenced by the Game
 	static System *mpsSystemInstance;
 
+	// An instance of the UnitManager class, referenced by the Game
 	static UnitManager *mpsUnitManager;
+	
+	// A reference the the GraphicsBufferManager class, referenced by the Game
 	static GraphicsBufferManager *mpsGraphicsBufferManager;
 
 	// Game Performance Tracker
