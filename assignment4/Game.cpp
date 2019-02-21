@@ -79,7 +79,7 @@ void Game::initInstance()
 	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
 	if (mpsGraphicsBufferManager)
 	{
-		mpsGraphicsBufferManager->addNewBuffer(ASSET_PATH, SMURF_SPRITE_FILENAME);
+		
 	}
 
 	return;
