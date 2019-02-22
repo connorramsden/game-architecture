@@ -3,17 +3,18 @@
 
 // C/C++ Includes
 #include <string>
-#include <vector>
+#include <map>
 
 // DeanLib Includes
 #include <Trackable.h>
+#include <Vector2D.h>
 
 // Reference to Unit class
 class Unit;
 
 typedef int UnitKey;
 
-typedef std::vector<Unit *> UnitList;
+typedef std::map<UnitKey, Unit *> UnitMap;
 
 class UnitManager : public Trackable
 {
@@ -27,8 +28,10 @@ public:
 	// Loops through mUnitMap and deletes all Unit(s)
 	void cleanupUnitManager();
 
-	// Creates a new Unit and adds it into mUnitMap
-	void addNewUnit(Unit *newUnit);
+	Unit *createAndManageUnit(const UnitKey key, Vector2D &unitLocation);
+
+	// Delete the Unit in mUnitMap at the specified key
+	void deleteUnit(const UnitKey key);
 
 	// Deletes the passed unit from mUnitMap
 	void deleteUnit(Unit *pUnit);
@@ -38,7 +41,7 @@ public:
 
 private:
 	// An STL vector storing Units
-	UnitList mUnitList;
+	UnitMap mUnitMap;
 };
 
 #endif

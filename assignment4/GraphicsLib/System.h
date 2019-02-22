@@ -10,9 +10,6 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-// C/C++ includes
-#include <tuple>
-
 // DeanLib Includes
 #include <Trackable.h>
 #include <Vector2D.h>
@@ -51,14 +48,11 @@ public:
 	// Gets user mouse input
 	int getMouseState();
 
+	// Get the team-defined DISPLAY_WIDTH & DISPLAY_HEIGHT as a clean Vector2D
+	Vector2D getDisplayDimensions() { return Vector2D(DISPLAY_WIDTH, DISPLAY_HEIGHT); }
+
 	// Returns graphicsSystem
 	GraphicsSystem *getGraphicsSystem() { return mpGraphicsSystem; }
-
-	// Returns last known mouse position
-	Vector2D getMousePosition() { return mLastMousePos; }
-
-	// Sets mLastMousePos X&Y
-	void setMousePosition(int xPos, int yPos);
 
 private:
 	// Stores a GraphicsSystem object
@@ -72,9 +66,6 @@ private:
 
 	ALLEGRO_EVENT_QUEUE *mKeyboardQueue;
 	ALLEGRO_EVENT_QUEUE *mMouseQueue;
-
-	// Stores last known mouse position
-	Vector2D mLastMousePos;
 
 	// Display dimensions.
 	const int DISPLAY_WIDTH = 800;

@@ -7,6 +7,9 @@
 **		Assignment 04 Author: Connor Ramsden						**
 *********************************************************************/
 
+// Input Setup referenced from https://wiki.allegro.cc/index.php?title=Basic_Keyboard_Example
+
+// GraphicsLib Includes
 #include "System.h"
 
 // Creates a new GraphicsSystem within this System
@@ -40,10 +43,6 @@ void System::systemInit()
 
 	// Register mouse input with the new Event Queue
 	al_register_event_source(mMouseQueue, al_get_mouse_event_source());
-
-	// Initialize first mouse position to center-screen
-	mLastMousePos.setX(float(DISPLAY_WIDTH / 2));
-	mLastMousePos.setY(float(DISPLAY_HEIGHT / 2));
 
 	// Initialize graphicsSystem with passed width & height
 	mpGraphicsSystem->initialize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
@@ -114,23 +113,24 @@ void System::systemCleanup()
 	return;
 }
 
+// Returns index of keyboard button down
 int System::getKeyState()
 {
 	ALLEGRO_EVENT keyInput;
 
 	// Wait for 0.0001 seconds to set up a keyboard input
 	al_wait_for_event_timed(mKeyboardQueue, &keyInput, 0.0001f);
-		
+
 	return keyInput.keyboard.keycode;
 }
 
+// TODO: Much more hacky / janky than keyboard input, not 100% sure why
+// Returns index of mouse button down
 int System::getMouseState()
 {
-	return 0;
-}
+	ALLEGRO_EVENT mouseInput;
 
-void System::setMousePosition(int xPos, int yPos)
-{
-	mLastMousePos.setX(xPos);
-	mLastMousePos.setY(yPos);
+	al_wait_for_event_timed(mMouseQueue, &mouseInput, 0.0001f);
+
+	return mouseInput.mouse.button;
 }

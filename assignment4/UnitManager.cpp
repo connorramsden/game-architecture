@@ -13,62 +13,86 @@ UnitManager::~UnitManager()
 // Loops through mUnitMap and deletes all Unit(s)
 void UnitManager::cleanupUnitManager()
 {
-	for (int i = 0; i < (int)mUnitList.size() - 1; i++)
+	UnitMap::iterator iter;
+
+	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
 	{
-		Unit *pUnit = mUnitList.at(i);
+		Unit *mpUnit = iter->second;
 
-		delete pUnit;
+		delete mpUnit;
 
-		pUnit = nullptr;
+		mpUnit = nullptr;
 	}
 
-	mUnitList.clear();
+	mUnitMap.clear();
 
 	return;
 }
 
-// Creates a new Unit and adds it into mUnitMap
-void UnitManager::addNewUnit(Unit *newUnit)
+Unit * UnitManager::createAndManageUnit(const UnitKey key, Vector2D &unitLocation)
 {
-	mUnitList.push_back(newUnit);
+	Unit *pUnit = nullptr;
+
+	UnitMap::iterator iter = mUnitMap.find(key);
+
+	if (iter == mUnitMap.end())
+	{
+		pUnit = new Unit(unitLocation);
+
+		mUnitMap[key] = pUnit;
+	}
+
+	return pUnit;
+}
+
+void UnitManager::deleteUnit(const UnitKey key)
+{
+	UnitMap::iterator iter = mUnitMap.find(key);
+
+	if (iter != mUnitMap.end())
+	{
+		delete iter->second;
+
+		iter->second = nullptr;
+
+		mUnitMap.erase(iter);
+
+		return;
+	}
+
+	return;
 }
 
 // Deletes the passed unit from mUnitMap
-void UnitManager::deleteUnit(Unit *mpUnit)
+void UnitManager::deleteUnit(Unit *pUnit)
 {
-	if (!mUnitList.empty())
-	{
-		for (int i = 0; i < (int)mUnitList.size() - 1;)
-		{
-			if (mpUnit == mUnitList.at(i))
-			{
-				delete mpUnit;
+	UnitMap::iterator iter;
 
-				mpUnit = nullptr;
-			}
-			else
-			{
-				i++;
-			}
+	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); iter++)
+	{
+		if (pUnit == iter->second)
+		{
+			delete pUnit;
+
+			pUnit = nullptr;
+
+			mUnitMap.erase(iter);
+
+			return;
 		}
 	}
-	
+
 	return;
 }
 
 // returns the Unit located at &key in mUnitMap
 Unit * UnitManager::getUnit(const UnitKey key) const
 {
-	if (!mUnitList.empty())
+	UnitMap::const_iterator iter = mUnitMap.find(key);
+
+	if (iter != mUnitMap.end())
 	{
-		if (mUnitList.at(key))
-		{
-			return mUnitList.at(key);
-		}
-		else
-		{
-			return nullptr;
-		}
+		return iter->second;
 	}
 	else
 	{

@@ -29,24 +29,24 @@ void GraphicsBufferManager::cleanupGraphicsBufferManager()
 }
 
 // Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
-GraphicsBuffer * GraphicsBufferManager::createAndManageGraphicsBuffer(const GraphicsBufferKey & key)
+GraphicsBuffer * GraphicsBufferManager::createAndManageGraphicsBuffer(const GraphicsBufferKey key, std::string assetPath, std::string fileName)
 {
-	GraphicsBuffer *mpGraphicsBuffer = nullptr;
+	GraphicsBuffer *pGraphicsBuffer = nullptr;
 
 	GraphicsBufferMap::iterator iter = mGraphicsBufferMap.find(key);
 
 	if (iter == mGraphicsBufferMap.end())
 	{
-		mpGraphicsBuffer = new GraphicsBuffer();
+		pGraphicsBuffer = new GraphicsBuffer(assetPath, fileName);
 
-		mGraphicsBufferMap[key] = mpGraphicsBuffer;
+		mGraphicsBufferMap[key] = pGraphicsBuffer;
 	}
 
-	return mpGraphicsBuffer;
+	return pGraphicsBuffer;
 }
 
 // Delete the GraphicsBuffer in mGraphicsBufferMap at &key
-void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey & key)
+void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey key)
 {
 	GraphicsBufferMap::iterator iter = mGraphicsBufferMap.find(key);
 
@@ -65,17 +65,17 @@ void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey & key)
 }
 
 // Delete the GraphicsBuffer passed into the function
-void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * mpGraphicsBuffer)
+void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * pGraphicsBuffer)
 {
 	GraphicsBufferMap::iterator iter;
 
 	for (iter = mGraphicsBufferMap.begin(); iter != mGraphicsBufferMap.end(); iter++)
 	{
-		if (mpGraphicsBuffer == iter->second)
+		if (pGraphicsBuffer == iter->second)
 		{
-			delete mpGraphicsBuffer;
+			delete pGraphicsBuffer;
 
-			mpGraphicsBuffer = nullptr;
+			pGraphicsBuffer = nullptr;
 
 			mGraphicsBufferMap.erase(iter);
 
@@ -87,7 +87,7 @@ void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * mpGraphicsBuff
 }
 
 // Return the GraphicsBuffer in mGraphicsBufferMap at &key
-GraphicsBuffer * GraphicsBufferManager::getGraphicsBuffer(const GraphicsBufferKey & key) const
+GraphicsBuffer * GraphicsBufferManager::getGraphicsBuffer(const GraphicsBufferKey key) const
 {
 	GraphicsBufferMap::const_iterator iter = mGraphicsBufferMap.find(key);
 

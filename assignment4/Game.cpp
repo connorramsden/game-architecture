@@ -112,17 +112,16 @@ void Game::initGame()
 	else { std::cout << "No system instance exists." << std::endl; }
 
 	// If the UMI has been properly initialized
-	if (mpsUnitManager)
+	if (mpsUnitManager && mpsGraphicsBufferManager)
 	{
-		//Init the UMI
-	}
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SMURF_SPRITE_INDEX, ASSET_PATH, SMURF_SPRITE_FILENAME);
 
-	// If the GBM instance has been properly initialized
-	// TODO: GRAPHICS BUFFERS / UNITS / ANIMATIONS
-	if (mpsGraphicsBufferManager)
-	{
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(DEAN_SPRITE_INDEX, ASSET_PATH, DEAN_SPRITE_FILENAME);
 
-		// Init the GBM
+		// Add the woods background to mpsGraphicsBufferManager
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(BACKGROUND_INDEX, ASSET_PATH, WOODS_FILENAME);
+
+		mpsUnitManager->createAndManageUnit(0, mpsSystemInstance->getDisplayDimensions());
 	}
 
 	return;
@@ -256,20 +255,29 @@ void Game::stopGameLoop()
 // TODO: Create KB & Mouse functions to prevent future messiness
 void Game::getUserInput()
 {
-	int userInput = mpsSystemInstance->getKeyState();
+	int keyboardInput = mpsSystemInstance->getKeyState();
+	int mouseInput = mpsSystemInstance->getMouseState();
 
-	std::cout << "Input: " << userInput << "\n";
-
-	if (userInput == ESCAPE)
+	if (keyboardInput == ESCAPE)
 	{
 		mpsGameInstance->mGameIsRunning = false;
 	}
-	else if (userInput == ENTER)
+	else if (keyboardInput == ENTER)
 	{
 
 	}
-	else if (userInput == SPACEBAR)
+	else if (keyboardInput == SPACEBAR)
 	{
+	}
+
+	// TODO: Mouse Input is much more hacky / janky than keyboard input
+	if (mouseInput == LEFTBUTTON)
+	{
+
+	}
+	else if (mouseInput == RIGHTBUTTON)
+	{
+
 	}
 
 	return;
@@ -285,6 +293,8 @@ void Game::updateLoop()
 // Render all units / backgrounds
 void Game::renderToDisplay()
 {
+	// Draw 'woods.png' as the background
+	mpsSystemInstance->getGraphicsSystem()->draw(*mpsGraphicsBufferManager->getGraphicsBuffer(BACKGROUND_INDEX), 0, BACKGROUND_SCALE);
 
 	// Flip the display to render graphics to user
 	mpsSystemInstance->getGraphicsSystem()->updateDisplay();
@@ -323,4 +333,23 @@ Game::~Game()
 	cleanupGame();
 
 	return;
+}
+
+// Converts passed string to ASCII characters
+int stringToASCII(std::string s)
+{
+	int sum = 0;
+
+	for (int i = 0; i < (int)s.length(); i++)
+	{
+		sum += (int)s[i];
+	}
+
+	return sum;
+}
+
+// Uses ASCII characters to create an integer hash index
+int basicHashFunction(std::string s)
+{
+	return stringToASCII(s) % HASH_MOD;
 }

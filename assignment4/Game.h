@@ -26,6 +26,10 @@
 // GraphicsLib Includes
 #include <System.h>
 
+// Converts a string to its ascii / char values, and returns the sum of those values
+int stringToASCII(std::string s);
+int basicHashFunction(std::string s);
+
 // Asset locations / file names for use in the Game
 // Real game would have a better asset management system
 const std::string ASSET_PATH = "..\\..\\shared\\assets\\";
@@ -33,14 +37,23 @@ const std::string WOODS_FILENAME = "woods.png";
 const std::string SMURF_SPRITE_FILENAME = "smurf_sprites.png";
 const std::string DEAN_SPRITE_FILENAME = "dean_sprites.png";
 
+/*
 // Number of rows & columns per sprite-sheet, standardized across the Game
 const int SPRITESHEET_ROW_COUNT = 4;
 const int SPRITESHEET_COLUMN_COUNT = 4;
 
+*/
+
+// Decent table size to hash-map with
+const int HASH_MOD = 127;
+
+// Float to scale 'woods.png' by 
+const float BACKGROUND_SCALE = 0.5f;
+
 // Indexing for vector storage
-const int SMURF_SPRITE_INDEX = 0;
-const int DEAN_SPRITE_INDEX = 1;
-const int BACKGROUND_INDEX = 2;
+const int SMURF_SPRITE_INDEX = basicHashFunction(SMURF_SPRITE_FILENAME) % HASH_MOD;
+const int DEAN_SPRITE_INDEX = basicHashFunction(DEAN_SPRITE_FILENAME) % HASH_MOD;
+const int BACKGROUND_INDEX = basicHashFunction(WOODS_FILENAME) % HASH_MOD;
 
 class Game : public Trackable
 {
@@ -92,7 +105,7 @@ private:
 
 	// An instance of the UnitManager class, referenced by the Game
 	static UnitManager *mpsUnitManager;
-	
+
 	// A reference the the GraphicsBufferManager class, referenced by the Game
 	static GraphicsBufferManager *mpsGraphicsBufferManager;
 
@@ -118,6 +131,12 @@ enum KeyCode : int
 	ESCAPE = 59,
 	ENTER = 67,
 	SPACEBAR = 75,
+};
+
+enum MouseCode : int
+{
+	LEFTBUTTON = 1,
+	RIGHTBUTTON = 2,
 };
 
 #endif

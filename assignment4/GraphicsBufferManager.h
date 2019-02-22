@@ -10,7 +10,7 @@
 
 class GraphicsBuffer;
 
-typedef std::string GraphicsBufferKey;
+typedef int GraphicsBufferKey;
 
 typedef std::map<GraphicsBufferKey, GraphicsBuffer*> GraphicsBufferMap;
 
@@ -27,16 +27,16 @@ public:
 	void cleanupGraphicsBufferManager();
 
 	// Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
-	GraphicsBuffer *createAndManageGraphicsBuffer(const GraphicsBufferKey &key);
+	GraphicsBuffer *createAndManageGraphicsBuffer(const GraphicsBufferKey key, std::string assetPath, std::string fileName);
 
 	// Delete the GraphicsBuffer in mGraphicsBufferMap at &key
-	void deleteGraphicsBuffer(const GraphicsBufferKey &key);
+	void deleteGraphicsBuffer(const GraphicsBufferKey key);
 
 	// Delete the GraphicsBuffer passed into the function
 	void deleteGraphicsBuffer(GraphicsBuffer *mpGraphicsBuffer);
 
 	// Return the GraphicsBuffer in mGraphicsBufferMap at &key
-	GraphicsBuffer *getGraphicsBuffer(const GraphicsBufferKey &key) const;
+	GraphicsBuffer *getGraphicsBuffer(const GraphicsBufferKey key) const;
 
 private:
 	// An STL map storing GraphicsBufferKey(s) and GraphicsBuffer(s)
