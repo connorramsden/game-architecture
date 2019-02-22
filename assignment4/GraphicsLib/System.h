@@ -51,6 +51,9 @@ public:
 	// Get the team-defined DISPLAY_WIDTH & DISPLAY_HEIGHT as a clean Vector2D
 	Vector2D getDisplayDimensions() { return Vector2D(DISPLAY_WIDTH, DISPLAY_HEIGHT); }
 
+	Vector2D getMousePosition() { return mMousePosition; }
+	void setMousePosition(int newMouseX, int newMouseY);
+
 	// Returns graphicsSystem
 	GraphicsSystem *getGraphicsSystem() { return mpGraphicsSystem; }
 
@@ -65,7 +68,9 @@ private:
 	ALLEGRO_KEYBOARD_STATE mKeyboardState;
 
 	ALLEGRO_EVENT_QUEUE *mKeyboardQueue;
-	ALLEGRO_EVENT_QUEUE *mMouseQueue;
+
+	// Vector2D storing current mouse position
+	Vector2D mMousePosition;
 
 	// Display dimensions.
 	const int DISPLAY_WIDTH = 800;

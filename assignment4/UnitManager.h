@@ -40,13 +40,17 @@ public:
 	// Deletes the passed unit from mUnitMap
 	void deleteUnit(Unit *pUnit);
 
+	// Delete the unit at unitToDeletePostion from mUnitMap
+	void deleteUnit(Vector2D unitToDeletePosition);
+
 	void addAnimationToUnit(const UnitKey key, Animation &animToAdd);
 
 	// Draws all units in mUnitMap to screen
 	void drawUnitsInMap();
 
 	// Update all units in mUnitMap
-	void updateUnitsInMap(const int currentUnitState);
+	void updateUnitInMap(const UnitKey key, const int currentUnitState);
+	void updateUnitsInMap(double newAnimSpeed);
 
 	// returns the Unit located at &key in mUnitMap
 	Unit *getUnit(const UnitKey key) const;

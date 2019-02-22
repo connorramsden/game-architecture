@@ -19,19 +19,15 @@ void Unit::addNewAnimation(Animation & newAnim)
 void Unit::updateUnit(const int currentUnitState)
 {
 	mpCurrentAnimation = mUnitAnimations.at(currentUnitState);
-
-	std::cout << "UU Debug\n";
 }
 
 void Unit::drawUnit()
 {
 	Sprite spr = mpCurrentAnimation->getCurrentSprite();
 
-	std::cout << "DU Debug\n";
-
 	// BREAKING HERE
 	// COME BACK IN MORNING
-	gpGame->getSystemInstance()->getGraphicsSystem()->draw(spr, 400, 300);
+	gpGame->getSystemInstance()->getGraphicsSystem()->draw(spr, mUnitPosition.getX(), mUnitPosition.getY());
 }
 
 // Loop through all Animation(s) in mUnitAnimations
@@ -75,16 +71,3 @@ Unit::~Unit()
 
 	return;
 }
-
-/*
-void Unit::drawUnit(int animToDraw)
-{
-	currentAnimIndex = animToDraw;
-
-	Sprite spr = unitAnimSet.at(currentAnimIndex)->getCurrentSprite();
-
-	Vector2D unitPos = gpGame->getGameSystem()->getMousePosition();
-
-	gpGame->getGameSystem()->getGraphicsSystem()->draw(spr, unitPos.getX(), unitPos.getY());
-}
-*/

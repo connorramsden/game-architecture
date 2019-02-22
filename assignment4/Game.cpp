@@ -124,12 +124,6 @@ void Game::initGame()
 
 		// Add the woods background to mpsGraphicsBufferManager
 		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(BACKGROUND_INDEX, ASSET_PATH, WOODS_FILENAME);
-
-		// Create a new unit and emplace it at center-screen
-		// TODO: Hash && || index management system
-		mpsUnitManager->createAndManageUnit(0, mpsSystemInstance->getDisplayDimensions());
-
-		mpsUnitManager->addAnimationToUnit(0, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D( SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
 	}
 
 	return;
@@ -196,6 +190,9 @@ void Game::runGameLoop()
 	{
 		mpsGameInstance->mGameIsRunning = true;
 		mpsGameInstance->mUnitAnimIndex = 0;
+		// Starts at -1 to start at 0 index in vector
+		mpsGameInstance->mNumUnits = -1;
+		mpsGameInstance->mUnitSpeed = 1.0;
 	}
 
 	// Loop functionality
@@ -214,7 +211,7 @@ void Game::runGameLoop()
 		getUserInput();
 
 		// Update Unit(s) on screen
-		updateLoop();
+		updateLoop(mpsGameInstance->mUnitSpeed);
 
 		// Render background / units / etc to display
 		renderToDisplay();
@@ -285,27 +282,52 @@ void Game::getUserInput()
 	}
 	else if (keyboardInput == SPACEBAR)
 	{
+		if (mpsGameInstance->mUnitSpeed == 1.0)
+		{
+			mpsGameInstance->mUnitSpeed = 0.0;
+		}
+		else
+		{
+			mpsGameInstance->mUnitSpeed = 1.0;
+		}
 	}
 
-	// TODO: Mouse Input is much more hacky / janky than keyboard input
+	// TODO: Fix drawing new units @ mUnitAnimIndex, instead at 0
 	if (mouseInput == LEFTBUTTON)
 	{
+		mpsGameInstance->mNumUnits++;
 
+		// Create a new unit and emplace it at center-screen
+		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, mpsSystemInstance->getMousePosition());
+
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
+
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
 	}
+	// TODO: Delete @ mouse position
 	else if (mouseInput == RIGHTBUTTON)
 	{
-
+		if (mpsGameInstance->mNumUnits >= 0)
+		{
+			// Deletes last-created unit
+			// Have some functionality for deleting @ mouse position, but not working properly.
+			mpsUnitManager->deleteUnit(mpsGameInstance->mNumUnits);
+			mpsGameInstance->mNumUnits--;
+		}
 	}
 
 	return;
 }
 
 // Update all game objects / units
-void Game::updateLoop()
+void Game::updateLoop(double newUnitSpeed)
 {
-	// Update all units in map
-	// TODO: Last unit only
-	mpsUnitManager->updateUnitsInMap(mpsGameInstance->mUnitAnimIndex);
+	// Ensure that there is at least one unit present
+	if (mpsGameInstance->mNumUnits >= 0)
+	{
+		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mpsGameInstance->mUnitAnimIndex);
+		mpsUnitManager->updateUnitsInMap(newUnitSpeed);
+	}	
 
 	return;
 }

@@ -84,6 +84,27 @@ void UnitManager::deleteUnit(Unit *pUnit)
 	return;
 }
 
+void UnitManager::deleteUnit(Vector2D unitToDeletePosition)
+{
+	UnitMap::iterator iter;
+
+	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); iter++)
+	{
+		if (unitToDeletePosition == iter->second->getUnitPosition())
+		{
+			delete iter->second;
+
+			iter->second = nullptr;
+
+			mUnitMap.erase(iter);
+
+			return;
+		}
+	}
+
+	return;
+}
+
 void UnitManager::addAnimationToUnit(const UnitKey key, Animation & animToAdd)
 {
 	mUnitMap[key]->addNewAnimation(animToAdd);
@@ -104,7 +125,20 @@ void UnitManager::drawUnitsInMap()
 	return;
 }
 
-void UnitManager::updateUnitsInMap(const int currentUnitState)
+void UnitManager::updateUnitInMap(const UnitKey key, const int currentUnitState)
+{
+	UnitMap::iterator iter = mUnitMap.find(key);
+
+	if (iter->second)
+	{
+		Unit *pUnit = iter->second;
+		pUnit->updateUnit(currentUnitState);
+	}
+
+	return;
+}
+
+void UnitManager::updateUnitsInMap(double newAnimSpeed)
 {
 	UnitMap::iterator iter;
 
@@ -112,10 +146,8 @@ void UnitManager::updateUnitsInMap(const int currentUnitState)
 	{
 		Unit *pUnit = iter->second;
 
-		pUnit->updateUnit(currentUnitState);
+		pUnit->getCurrentAnimation()->animUpdate(newAnimSpeed);
 	}
-
-	return;
 }
 
 // returns the Unit located at &key in mUnitMap

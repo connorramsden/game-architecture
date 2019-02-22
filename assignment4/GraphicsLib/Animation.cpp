@@ -66,6 +66,9 @@ void Animation::fillSpriteSheet(GraphicsBuffer & src, Vector2D rowColNum)
 		}
 	}
 
+	// Set current sprite to 0th index
+	mCurrentSprite = mSpriteSheet.at(0);
+
 	return;
 }
 

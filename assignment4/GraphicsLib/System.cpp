@@ -36,16 +36,15 @@ void System::systemInit()
 
 	// Start a new Allegro Event Queue
 	mKeyboardQueue = al_create_event_queue();
-	mMouseQueue = al_create_event_queue();
 
 	// Register keyboard input with the new Event Queue
 	al_register_event_source(mKeyboardQueue, al_get_keyboard_event_source());
 
-	// Register mouse input with the new Event Queue
-	al_register_event_source(mMouseQueue, al_get_mouse_event_source());
-
 	// Initialize graphicsSystem with passed width & height
 	mpGraphicsSystem->initialize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
+	// Set default mouse position to center-screen
+	setMousePosition(DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2);
 
 	return;
 }
@@ -93,9 +92,6 @@ void System::initAllegroInput()
 // Cleans up graphicsSystem when this object is being deleted
 void System::systemCleanup()
 {
-	// Destroy the system mouse event queue
-	al_destroy_event_queue(mMouseQueue);
-
 	// Destroy the system keyboard event queue
 	al_destroy_event_queue(mKeyboardQueue);
 
@@ -116,6 +112,10 @@ void System::systemCleanup()
 // Returns index of keyboard button down
 int System::getKeyState()
 {
+	// Update the current keyboard state
+	al_get_keyboard_state(&mKeyboardState);
+
+	// Event managing keyboard input
 	ALLEGRO_EVENT keyInput;
 
 	// Wait for 0.0001 seconds to set up a keyboard input
@@ -124,13 +124,21 @@ int System::getKeyState()
 	return keyInput.keyboard.keycode;
 }
 
-// TODO: Much more hacky / janky than keyboard input, not 100% sure why
 // Returns index of mouse button down
 int System::getMouseState()
 {
-	ALLEGRO_EVENT mouseInput;
+	// Get the current mouse state
+	al_get_mouse_state(&mMouseState);
 
-	al_wait_for_event_timed(mMouseQueue, &mouseInput, 0.0001f);
+	// Update mouse position
+	setMousePosition(mMouseState.x, mMouseState.y);
 
-	return mouseInput.mouse.button;
+	// Return any mouse buttons triggered at this time
+	return mMouseState.buttons;
+}
+
+void System::setMousePosition(int newMouseX, int newMouseY)
+{
+	mMousePosition.setX(newMouseX);
+	mMousePosition.setY(newMouseY);
 }

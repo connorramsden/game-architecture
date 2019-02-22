@@ -20,6 +20,7 @@ class Unit : public Trackable
 public:
 	// Public Unit Accessors
 	inline std::vector<Animation *> getAnimations() const { return mUnitAnimations; };
+	inline Animation *getCurrentAnimation() const { return mpCurrentAnimation; };
 
 	// Returns the current unit position as a Vector2D
 	inline Vector2D getUnitPosition() const { return mUnitPosition; };

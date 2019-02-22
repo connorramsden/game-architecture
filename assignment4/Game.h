@@ -82,7 +82,7 @@ public:
 	static void getUserInput();
 
 	// Update all game objects
-	static void updateLoop();
+	static void updateLoop(double newUnitSpeed);
 
 	// Render all game objects and backgrounds to the display
 	static void renderToDisplay();
@@ -122,7 +122,13 @@ private:
 	// Controls whether or not the game loop can run
 	bool mGameIsRunning;
 
+	// Controls which index of mpsUnitManager to show
 	int mUnitAnimIndex;
+
+	// Determines how many units exist in mpsUnitManager
+	int mNumUnits;
+
+	double mUnitSpeed;
 };
 
 extern Game *gpGame;
