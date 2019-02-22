@@ -1,1 +1,1 @@
-# egp-310
+# Repository for Connor Ramsden's work on EGP-310 (Game Architecture)
