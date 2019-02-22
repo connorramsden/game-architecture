@@ -32,10 +32,10 @@ int main()
 	Game::initInstance();
 
 	// Instantiate a Game object from the initialized instance
-	Game *mpGame = Game::getGameInstance();
+	gpGame = Game::getGameInstance();
 
 	// Run the core game loop
-	mpGame->runGameLoop();
+	gpGame->runGameLoop();
 
 	// When the game loop breaks, clean up the Game instance
 	Game::cleanupInstance();

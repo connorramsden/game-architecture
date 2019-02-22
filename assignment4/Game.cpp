@@ -9,6 +9,8 @@
 
 #include "Game.h"
 
+Game *gpGame;
+
 // Initialize Game / System / Manager Instances
 Game * Game::mpsGameInstance = nullptr;
 System * Game::mpsSystemInstance = nullptr;
@@ -114,14 +116,20 @@ void Game::initGame()
 	// If the UMI has been properly initialized
 	if (mpsUnitManager && mpsGraphicsBufferManager)
 	{
+		// Create a graphics buffer from 'smurf_sprites.png'
 		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SMURF_SPRITE_INDEX, ASSET_PATH, SMURF_SPRITE_FILENAME);
 
+		// Create a graphics buffer from 'dean_sprites.png'
 		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(DEAN_SPRITE_INDEX, ASSET_PATH, DEAN_SPRITE_FILENAME);
 
 		// Add the woods background to mpsGraphicsBufferManager
 		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(BACKGROUND_INDEX, ASSET_PATH, WOODS_FILENAME);
 
+		// Create a new unit and emplace it at center-screen
+		// TODO: Hash && || index management system
 		mpsUnitManager->createAndManageUnit(0, mpsSystemInstance->getDisplayDimensions());
+
+		mpsUnitManager->addAnimationToUnit(0, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D( SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
 	}
 
 	return;
@@ -187,6 +195,7 @@ void Game::runGameLoop()
 	if (mpsSystemInstance && mpsUnitManager && mpsGraphicsBufferManager)
 	{
 		mpsGameInstance->mGameIsRunning = true;
+		mpsGameInstance->mUnitAnimIndex = 0;
 	}
 
 	// Loop functionality
@@ -262,9 +271,17 @@ void Game::getUserInput()
 	{
 		mpsGameInstance->mGameIsRunning = false;
 	}
+	// Toggle last Unit animation state
 	else if (keyboardInput == ENTER)
 	{
-
+		if (mpsGameInstance->mUnitAnimIndex == 0)
+		{
+			mpsGameInstance->mUnitAnimIndex = 1;
+		}
+		else if (mpsGameInstance->mUnitAnimIndex == 1)
+		{
+			mpsGameInstance->mUnitAnimIndex = 0;
+		}
 	}
 	else if (keyboardInput == SPACEBAR)
 	{
@@ -286,6 +303,9 @@ void Game::getUserInput()
 // Update all game objects / units
 void Game::updateLoop()
 {
+	// Update all units in map
+	// TODO: Last unit only
+	mpsUnitManager->updateUnitsInMap(mpsGameInstance->mUnitAnimIndex);
 
 	return;
 }
@@ -295,6 +315,8 @@ void Game::renderToDisplay()
 {
 	// Draw 'woods.png' as the background
 	mpsSystemInstance->getGraphicsSystem()->draw(*mpsGraphicsBufferManager->getGraphicsBuffer(BACKGROUND_INDEX), 0, BACKGROUND_SCALE);
+
+	mpsUnitManager->drawUnitsInMap();
 
 	// Flip the display to render graphics to user
 	mpsSystemInstance->getGraphicsSystem()->updateDisplay();

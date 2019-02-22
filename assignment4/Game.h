@@ -37,12 +37,9 @@ const std::string WOODS_FILENAME = "woods.png";
 const std::string SMURF_SPRITE_FILENAME = "smurf_sprites.png";
 const std::string DEAN_SPRITE_FILENAME = "dean_sprites.png";
 
-/*
 // Number of rows & columns per sprite-sheet, standardized across the Game
 const int SPRITESHEET_ROW_COUNT = 4;
 const int SPRITESHEET_COLUMN_COUNT = 4;
-
-*/
 
 // Decent table size to hash-map with
 const int HASH_MOD = 127;
@@ -124,7 +121,11 @@ private:
 
 	// Controls whether or not the game loop can run
 	bool mGameIsRunning;
+
+	int mUnitAnimIndex;
 };
+
+extern Game *gpGame;
 
 enum KeyCode : int
 {

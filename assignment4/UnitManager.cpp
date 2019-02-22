@@ -9,7 +9,6 @@ UnitManager::~UnitManager()
 	return;
 }
 
-
 // Loops through mUnitMap and deletes all Unit(s)
 void UnitManager::cleanupUnitManager()
 {
@@ -17,11 +16,11 @@ void UnitManager::cleanupUnitManager()
 
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
 	{
-		Unit *mpUnit = iter->second;
+		Unit *pUnit = iter->second;
 
-		delete mpUnit;
+		delete pUnit;
 
-		mpUnit = nullptr;
+		pUnit = nullptr;
 	}
 
 	mUnitMap.clear();
@@ -80,6 +79,40 @@ void UnitManager::deleteUnit(Unit *pUnit)
 
 			return;
 		}
+	}
+
+	return;
+}
+
+void UnitManager::addAnimationToUnit(const UnitKey key, Animation & animToAdd)
+{
+	mUnitMap[key]->addNewAnimation(animToAdd);
+}
+
+// Loops through all Unit(s) in mUnitMap and draws their current state
+void UnitManager::drawUnitsInMap()
+{
+	UnitMap::iterator iter;
+
+	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
+	{
+		Unit *pUnit = iter->second;
+
+		pUnit->drawUnit();
+	}
+
+	return;
+}
+
+void UnitManager::updateUnitsInMap(const int currentUnitState)
+{
+	UnitMap::iterator iter;
+
+	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
+	{
+		Unit *pUnit = iter->second;
+
+		pUnit->updateUnit(currentUnitState);
 	}
 
 	return;

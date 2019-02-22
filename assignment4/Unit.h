@@ -21,12 +21,19 @@ public:
 	// Public Unit Accessors
 	inline std::vector<Animation *> getAnimations() const { return mUnitAnimations; };
 
+	// Returns the current unit position as a Vector2D
 	inline Vector2D getUnitPosition() const { return mUnitPosition; };
 
+	// Adds a new Animation to the Unit's animation sheet
 	void addNewAnimation(Animation &newAnim);
 
+	// Update the unit currently selected
+	void updateUnit(const int currentUnitState);
+
+	// Draw the unit's current animation to screen
 	void drawUnit();
-	
+
+	// Cleans up the unit & its animation sheet
 	void cleanupUnit();
 
 private:
@@ -42,17 +49,3 @@ private:
 };
 
 #endif
-
-/*
-
-void Unit::drawUnit(int animToDraw)
-{
-	currentAnimIndex = animToDraw;
-
-	Sprite spr = unitAnimSet.at(currentAnimIndex)->getCurrentSprite();
-
-	Vector2D unitPos = gpGame->getGameSystem()->getMousePosition();
-
-	gpGame->getGameSystem()->getGraphicsSystem()->draw(spr, unitPos.getX(), unitPos.getY());
-}
-*/
