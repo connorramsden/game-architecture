@@ -10,14 +10,17 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+// C/C++ includes
+#include <tuple>
+
 // DeanLib Includes
 #include <Trackable.h>
 #include <Vector2D.h>
 
 // Allegro Includes
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include <allegro5/mouse.h>
-#include <allegro5/mouse_cursor.h>
 #include <allegro5/keyboard.h>
 
 // GraphicsLib Includes
@@ -43,10 +46,10 @@ public:
 	void systemCleanup();
 
 	// Gets user keyboard input
-	void getKeyState();
+	int getKeyState();
 
 	// Gets user mouse input
-	void getMouseState();
+	int getMouseState();
 
 	// Returns graphicsSystem
 	GraphicsSystem *getGraphicsSystem() { return mpGraphicsSystem; }
@@ -66,6 +69,9 @@ private:
 
 	// Resolves user keyboard input calls
 	ALLEGRO_KEYBOARD_STATE mKeyboardState;
+
+	ALLEGRO_EVENT_QUEUE *mKeyboardQueue;
+	ALLEGRO_EVENT_QUEUE *mMouseQueue;
 
 	// Stores last known mouse position
 	Vector2D mLastMousePos;

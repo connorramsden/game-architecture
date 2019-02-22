@@ -31,6 +31,16 @@ void System::systemInit()
 	// Initialize Allegro components
 	initAllegroInput();
 
+	// Start a new Allegro Event Queue
+	mKeyboardQueue = al_create_event_queue();
+	mMouseQueue = al_create_event_queue();
+
+	// Register keyboard input with the new Event Queue
+	al_register_event_source(mKeyboardQueue, al_get_keyboard_event_source());
+
+	// Register mouse input with the new Event Queue
+	al_register_event_source(mMouseQueue, al_get_mouse_event_source());
+
 	// Initialize first mouse position to center-screen
 	mLastMousePos.setX(float(DISPLAY_WIDTH / 2));
 	mLastMousePos.setY(float(DISPLAY_HEIGHT / 2));
@@ -48,6 +58,15 @@ void System::initAllegroInput()
 	if (!al_init())
 	{
 		std::cout << "Error initializing Allegro!" << std::endl;
+		return;
+	}
+
+	if (!al_init_primitives_addon())
+	{
+		std::cout << "Error initializing Allegro primitives addon!" << std::endl;
+
+		system("pause");
+
 		return;
 	}
 
@@ -75,6 +94,12 @@ void System::initAllegroInput()
 // Cleans up graphicsSystem when this object is being deleted
 void System::systemCleanup()
 {
+	// Destroy the system mouse event queue
+	al_destroy_event_queue(mMouseQueue);
+
+	// Destroy the system keyboard event queue
+	al_destroy_event_queue(mKeyboardQueue);
+
 	// Clean-up Allegro components
 	al_uninstall_mouse();
 
@@ -89,28 +114,19 @@ void System::systemCleanup()
 	return;
 }
 
-// Gets user keyboard input
-void System::getKeyState()
+int System::getKeyState()
 {
-	// Checks current keyboard state
-	al_get_keyboard_state(&mKeyboardState);
+	ALLEGRO_EVENT keyInput;
 
-	return;
+	// Wait for 0.0001 seconds to set up a keyboard input
+	al_wait_for_event_timed(mKeyboardQueue, &keyInput, 0.0001f);
+		
+	return keyInput.keyboard.keycode;
 }
 
-// Gets user mouse input
-void System::getMouseState()
+int System::getMouseState()
 {
-	// Checks current mouse state
-	al_get_mouse_state(&mMouseState);
-
-	// if Mouse1 is pressed, move Unit to location
-	if (mMouseState.buttons & 1)
-	{
-		setMousePosition(mMouseState.x, mMouseState.y);
-	}
-
-	return;
+	return 0;
 }
 
 void System::setMousePosition(int xPos, int yPos)

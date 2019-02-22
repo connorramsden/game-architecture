@@ -184,23 +184,20 @@ void Game::runGameLoop()
 	// Initialize necessary game loop components
 	initGameLoop();
 
-	// PerformanceTracker string to track frame performance
-	static const std::string GAME_LOOP_TRACKER = "game_loop";
-
-	// Target frame elapsed time
-	static double MS_PER_FRAME = 16.67;
-
-	// Controls whether or not the game is running
-	static bool mGameIsRunning = true;
+	// Ensure all systems & managers are properly initialized
+	if (mpsSystemInstance && mpsUnitManager && mpsGraphicsBufferManager)
+	{
+		mpsGameInstance->mGameIsRunning = true;
+	}
 
 	// Loop functionality
-	while (mGameIsRunning)
+	while (mpsGameInstance->mGameIsRunning)
 	{
 		// Clear the performance tracke for the game loop
-		mpPerformanceTrackerInstance->clearTracker(GAME_LOOP_TRACKER);
+		mpPerformanceTrackerInstance->clearTracker(mpsGameInstance->GAME_LOOP_TRACKER);
 
 		// Begin tracking this frame
-		mpPerformanceTrackerInstance->startTracking(GAME_LOOP_TRACKER);
+		mpPerformanceTrackerInstance->startTracking(mpsGameInstance->GAME_LOOP_TRACKER);
 
 		// Start the timer for this frame
 		mpTimerInstance->start();
@@ -215,16 +212,13 @@ void Game::runGameLoop()
 		renderToDisplay();
 
 		// Sleep for ~16 ms
-		mpTimerInstance->sleepUntilElapsed(MS_PER_FRAME);
+		mpTimerInstance->sleepUntilElapsed(mpsGameInstance->MS_PER_FRAME);
 
 		// Stop tracking the performance of this frame
-		mpPerformanceTrackerInstance->stopTracking(GAME_LOOP_TRACKER);
+		mpPerformanceTrackerInstance->stopTracking(mpsGameInstance->GAME_LOOP_TRACKER);
 
 		// Print elapsed time to console
-		std::cout << "Elapsed Time: " << mpPerformanceTrackerInstance->getElapsedTime(GAME_LOOP_TRACKER) << std::endl;
-
-		// TODO: Remove this once ESC functionality is in
-		mGameIsRunning = false;
+		std::cout << "Elapsed Time: " << mpPerformanceTrackerInstance->getElapsedTime(mpsGameInstance->GAME_LOOP_TRACKER) << std::endl;
 	}
 
 	// Stop the game loop, delete pointers, etc.
@@ -259,14 +253,23 @@ void Game::stopGameLoop()
 }
 
 // Checks for user input from the system
+// TODO: Create KB & Mouse functions to prevent future messiness
 void Game::getUserInput()
 {
-	// Ensure the System Instance is initialized
-	// TODO: Upgrade user input parsing
-	if (mpsSystemInstance)
+	int userInput = mpsSystemInstance->getKeyState();
+
+	std::cout << "Input: " << userInput << "\n";
+
+	if (userInput == ESCAPE)
 	{
-		mpsSystemInstance->getMouseState();
-		mpsSystemInstance->getKeyState();
+		mpsGameInstance->mGameIsRunning = false;
+	}
+	else if (userInput == ENTER)
+	{
+
+	}
+	else if (userInput == SPACEBAR)
+	{
 	}
 
 	return;
@@ -275,7 +278,6 @@ void Game::getUserInput()
 // Update all game objects / units
 void Game::updateLoop()
 {
-
 
 	return;
 }
