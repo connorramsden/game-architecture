@@ -1,10 +1,10 @@
 /*********************************************************************
 **		Author:	Connor Ramsden										**
 **		Class: EGP-310-02											**
-**		Assignment: Assignment 04									**
+**		Assignment: Assignment 05									**
 **		Certification of Authenticity:								**
 **		I certify that this assignment is entirely my own work.	    **
-**		Assignment 04 Author: Connor Ramsden						**
+**		Assignment 05 Author: Connor Ramsden						**
 *********************************************************************/
 
 /*
@@ -12,8 +12,9 @@
 	1. I BORROWED Nick Da Costa's Assignment 02 as a baseline for my Assignment 03 work.
 		This was done with EXPLICIT PERMISSION from the author.
 		I have NOT removed his certificate(s) of authenticity from his files so that this is clearly apparent.
-	2. I did NOT borrow anyone's work for the assignment 03 files used to start Assignment 04
-	3. NO other help was received in the creation of this assignmnet
+	2. I did NOT borrow anyone's work for the assignment 03 files used to start assignment 04
+	3. I did NOT borrow anyone's work for the assignment 04 files used to start assignment 05
+	4. NO other help was received in the creation of this assignmnet
 */
 
 // C/C++ Includes
