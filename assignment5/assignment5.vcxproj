@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GraphicsBufferManager.h" />
+    <ClInclude Include="InputTranslator.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitManager.h" />
   </ItemGroup>

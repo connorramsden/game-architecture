@@ -14,15 +14,10 @@
 #include <Trackable.h>
 #include <Vector2D.h>
 
-// Allegro Includes
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/mouse.h>
-#include <allegro5/keyboard.h>
-
 // GraphicsLib Includes
 #include "GraphicsSystem.h"
 #include "Animation.h"
+#include "InputSystem.h"
 
 class System : public Trackable
 {
@@ -36,41 +31,24 @@ public:
 	// Initializes System
 	void systemInit();
 
-	// Initializes Allegro components for user input
-	void initAllegroInput();
-
 	// Cleans up the System
 	void systemCleanup();
 
-	// Gets user keyboard input
-	int getKeyState();
-
-	// Gets user mouse input
-	int getMouseState();
-
 	// Get the team-defined DISPLAY_WIDTH & DISPLAY_HEIGHT as a clean Vector2D
 	Vector2D getDisplayDimensions() { return Vector2D(DISPLAY_WIDTH, DISPLAY_HEIGHT); }
-
-	Vector2D getMousePosition() { return mMousePosition; }
-	void setMousePosition(int newMouseX, int newMouseY);
-
-	// Returns graphicsSystem
+	
+	// Return mpGraphicsSystem
 	GraphicsSystem *getGraphicsSystem() { return mpGraphicsSystem; }
+
+	// Return mpInputSystem
+	InputSystem *getInputSystem() { return mpInputSystem; }
 
 private:
 	// Stores a GraphicsSystem object
 	GraphicsSystem *mpGraphicsSystem = nullptr;
 
-	// Resolves user mouse input calls
-	ALLEGRO_MOUSE_STATE mMouseState;
-
-	// Resolves user keyboard input calls
-	ALLEGRO_KEYBOARD_STATE mKeyboardState;
-
-	ALLEGRO_EVENT_QUEUE *mKeyboardQueue;
-
-	// Vector2D storing current mouse position
-	Vector2D mMousePosition;
+	// Stores an InputSystem object
+	InputSystem *mpInputSystem = nullptr;
 
 	// Display dimensions.
 	const int DISPLAY_WIDTH = 800;

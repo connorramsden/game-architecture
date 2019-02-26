@@ -265,8 +265,8 @@ void Game::stopGameLoop()
 // TODO: Create KB & Mouse functions to prevent future messiness
 void Game::getUserInput()
 {
-	int keyboardInput = mpsSystemInstance->getKeyState();
-	int mouseInput = mpsSystemInstance->getMouseState();
+	int keyboardInput = mpsSystemInstance->getInputSystem()->getKeyState();
+	int mouseInput = mpsSystemInstance->getInputSystem()->getMouseState();
 
 	// Exit the game gracefully
 	if (keyboardInput == ESCAPE)
@@ -304,7 +304,7 @@ void Game::getUserInput()
 		mpsGameInstance->mNumUnits++;
 
 		// Create a new unit and emplace it at center-screen
-		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, mpsSystemInstance->getMousePosition());
+		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, mpsSystemInstance->getInputSystem()->getMousePosition());
 
 		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
 
