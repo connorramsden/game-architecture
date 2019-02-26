@@ -1,10 +1,10 @@
 /*********************************************************************
 **		Author:	Connor Ramsden										**
 **		Class: EGP-310-02											**
-**		Assignment: Assignment 04									**
+**		Assignment: Assignment 05									**
 **		Certification of Authenticity:								**
 **		I certify that this assignment is entirely my own work.	    **
-**		Assignment 04 Author: Connor Ramsden						**
+**		Assignment 05 Author: Connor Ramsden						**
 *********************************************************************/
 
 #ifndef GAME_H
@@ -70,22 +70,22 @@ public:
 	static void cleanupInstance();
 
 	// Game Init / Cleanup
-	static void initGame();
-	static void cleanupGame();
+	void initGame();
+	void cleanupGame();
 
 	// Game Operations
-	static void initGameLoop();
+	void initGameLoop();
 	static void runGameLoop();
-	static void stopGameLoop();
+	void stopGameLoop();
 
 	// Retrieve user input from KB&M
-	static void getUserInput();
+	void getUserInput();
 
 	// Update all game objects
-	static void updateLoop(double newUnitSpeed);
+	void updateLoop(double newUnitSpeed);
 
 	// Render all game objects and backgrounds to the display
-	static void renderToDisplay();
+	void renderToDisplay();
 
 private:
 	// Default Game Constructor
@@ -130,8 +130,6 @@ private:
 
 	double mUnitSpeed;
 };
-
-extern Game *gpGame;
 
 enum KeyCode : int
 {

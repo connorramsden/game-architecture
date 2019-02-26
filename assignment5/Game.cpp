@@ -1,15 +1,13 @@
 /*********************************************************************
 **		Author:	Connor Ramsden										**
 **		Class: EGP-310-02											**
-**		Assignment: Assignment 04									**
+**		Assignment: Assignment 05									**
 **		Certification of Authenticity:								**
 **		I certify that this assignment is entirely my own work.	    **
-**		Assignment 04 Author: Connor Ramsden						**
+**		Assignment 05 Author: Connor Ramsden						**
 *********************************************************************/
 
 #include "Game.h"
-
-Game *gpGame;
 
 // Initialize Game / System / Manager Instances
 Game * Game::mpsGameInstance = nullptr;
@@ -81,7 +79,7 @@ void Game::initInstance()
 	else { std::cout << "Game instance already exists." << std::endl; return; }
 
 	// Now that the Instance has been initialized, initialize the game
-	initGame();
+	mpsGameInstance->initGame();
 
 	return;
 }
@@ -183,7 +181,7 @@ void Game::initGameLoop()
 void Game::runGameLoop()
 {
 	// Initialize necessary game loop components
-	initGameLoop();
+	mpsGameInstance->initGameLoop();
 
 	// Ensure all systems & managers are properly initialized
 	if (mpsSystemInstance && mpsUnitManager && mpsGraphicsBufferManager)
@@ -208,13 +206,13 @@ void Game::runGameLoop()
 		mpTimerInstance->start();
 
 		// Get mouse / keyboard input
-		getUserInput();
+		mpsGameInstance->getUserInput();
 
 		// Update Unit(s) on screen
-		updateLoop(mpsGameInstance->mUnitSpeed);
+		mpsGameInstance->updateLoop(mpsGameInstance->mUnitSpeed);
 
 		// Render background / units / etc to display
-		renderToDisplay();
+		mpsGameInstance->renderToDisplay();
 
 		// Sleep for ~16 ms
 		mpTimerInstance->sleepUntilElapsed(mpsGameInstance->MS_PER_FRAME);
@@ -227,7 +225,7 @@ void Game::runGameLoop()
 	}
 
 	// Stop the game loop, delete pointers, etc.
-	stopGameLoop();
+	mpsGameInstance->stopGameLoop();
 
 	return;
 }
@@ -327,7 +325,7 @@ void Game::updateLoop(double newUnitSpeed)
 	{
 		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mpsGameInstance->mUnitAnimIndex);
 		mpsUnitManager->updateUnitsInMap(newUnitSpeed);
-	}	
+	}
 
 	return;
 }
