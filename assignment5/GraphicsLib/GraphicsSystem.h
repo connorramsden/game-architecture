@@ -48,7 +48,6 @@ public:
 	// Initialize Allegro components (call in initialize)
 	void initAllegro();
 
-	// TODO: Check Dean's email response about this.
 	// Clean up the allegro system.
 	void cleanUp();
 

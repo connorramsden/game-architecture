@@ -13,11 +13,6 @@
 // DeanLib Includes
 #include "Trackable.h"
 
-/// <summary>
-/// 
-/// </summary>
-/// <seealso cref="PerformanceTracker" />
-/// TODO Edit XML Comment Template for Color
 class Color : public Trackable
 {
 public:

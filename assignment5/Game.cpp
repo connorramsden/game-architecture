@@ -186,10 +186,16 @@ void Game::runGameLoop()
 	// Ensure all systems & managers are properly initialized
 	if (mpsSystemInstance && mpsUnitManager && mpsGraphicsBufferManager)
 	{
+		// Ensure that the game loop will run
 		mpsGameInstance->mGameIsRunning = true;
+
+		// Start all Units from the first Animation frame
 		mpsGameInstance->mUnitAnimIndex = 0;
-		// Starts at -1 to start at 0 index in vector
+
+		// Ensures first user click will bring map count to 0, instead of 1
 		mpsGameInstance->mNumUnits = -1;
+
+		// Ensure all units move at a normalized speed
 		mpsGameInstance->mUnitSpeed = 1.0;
 	}
 
@@ -262,6 +268,7 @@ void Game::getUserInput()
 	int keyboardInput = mpsSystemInstance->getKeyState();
 	int mouseInput = mpsSystemInstance->getMouseState();
 
+	// Exit the game gracefully
 	if (keyboardInput == ESCAPE)
 	{
 		mpsGameInstance->mGameIsRunning = false;
@@ -278,6 +285,7 @@ void Game::getUserInput()
 			mpsGameInstance->mUnitAnimIndex = 0;
 		}
 	}
+	// Pause all Unit animations
 	else if (keyboardInput == SPACEBAR)
 	{
 		if (mpsGameInstance->mUnitSpeed == 1.0)

@@ -27,13 +27,8 @@ class GraphicsSystem;
 constexpr auto FONT_DEFAULT      = 0; 
 constexpr auto FONT_ALIGN_LEFT   = 0; 
 constexpr auto FONT_ALIGN_CENTER = 1; 
-constexpr auto FONT_ALIGN_RIGHT  = 2; 
+constexpr auto FONT_ALIGN_RIGHT  = 2;
 
-/// <summary>
-/// 
-/// </summary>
-/// <seealso cref="PerformanceTracker" />
-/// TODO Edit XML Comment Template for Font
 class Font : public Trackable
 {
 public:

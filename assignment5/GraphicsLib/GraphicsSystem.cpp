@@ -80,7 +80,6 @@ void GraphicsSystem::initAllegro()
 	return;
 }
 
-// TODO: Check Dean's email response about this.
 // Clean up the object.
 void GraphicsSystem::cleanUp()
 {

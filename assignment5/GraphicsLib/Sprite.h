@@ -13,12 +13,6 @@
 // GraphicsLib Includes
 #include "GraphicsBuffer.h"
 
-/// <summary>
-///		A pointer to a specific part of a <see cref="GraphicsBuffer" />.
-/// </summary>
-/// <seealso cref="PerformanceTracker" />
-/// TODO Edit XML Comment Template for Sprite
-
 class Sprite : public Trackable
 {
 public:
