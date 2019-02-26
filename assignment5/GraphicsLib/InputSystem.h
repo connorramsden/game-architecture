@@ -30,13 +30,13 @@ public:
 	// Default InputSystem Deconstructor
 	~InputSystem();
 
-	// Initializes InputSystem
-	void initInputSystem();
-
 	// Initializes 
 	void initAllegroInputComponents();
 
-	void inputCleanup();
+	// Initializes InputSystem
+	void initInputSystem();
+
+	void cleanupInputSystem();
 
 	// Gets user keyboard input
 	int getKeyState();

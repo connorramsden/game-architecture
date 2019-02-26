@@ -8,6 +8,9 @@
 *********************************************************************/
 
 #include "Game.h"
+#include "UnitManager.h"
+#include "GraphicsBufferManager.h"
+#include "InputTranslator.h"
 
 // Initialize Game / System / Manager Instances
 Game * Game::mpsGameInstance = nullptr;

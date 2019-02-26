@@ -19,9 +19,10 @@
 #include <Timer.h>
 #include <PerformanceTracker.h>
 
-// Game Includes
-#include "UnitManager.h"
-#include "GraphicsBufferManager.h"
+// Game Class References
+class UnitManager;
+class GraphicsBufferManager;
+class InputTranslator;
 
 // GraphicsLib Includes
 #include <System.h>

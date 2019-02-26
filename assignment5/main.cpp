@@ -26,9 +26,13 @@
 
 // GraphicsLib Includes
 #include "Game.h"
+#include "EventSystem.h"
 
 int main()
 {
+	// Initialize an EventSystem
+	EventSystem::initEventSystem();
+
 	// Initialize a Game instance
 	Game::initInstance();
 
@@ -37,6 +41,9 @@ int main()
 
 	// When the game loop breaks, clean up the Game instance
 	Game::cleanupInstance();
+
+	// Clean up the EventSystem
+	EventSystem::cleanupEventSystem();
 
 	// Report memory leaks to console
 	MemoryTracker::getInstance()->reportAllocations(std::cout);

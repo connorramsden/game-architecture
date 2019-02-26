@@ -16,7 +16,7 @@ InputSystem::InputSystem()
 
 InputSystem::~InputSystem()
 {
-	inputCleanup();
+	cleanupInputSystem();
 
 	return;
 }
@@ -29,7 +29,7 @@ void InputSystem::initInputSystem()
 	}
 	else
 	{
-		inputCleanup();
+		cleanupInputSystem();
 	}
 
 	// TODO: Rest of IS initialization requirements
@@ -74,7 +74,7 @@ void InputSystem::initAllegroInputComponents()
 	return;
 }
 
-void InputSystem::inputCleanup()
+void InputSystem::cleanupInputSystem()
 {
 	// Un-register keyboard input with the system event queue
 	al_unregister_event_source(mKeyboardQueue, al_get_keyboard_event_source());
