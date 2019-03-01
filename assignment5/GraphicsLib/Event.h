@@ -19,13 +19,11 @@
 enum EventType
 {
 	INVALID_EVENT_TYPE = -1,
-	KEY_EVENT,
-	MOUSE_EVENT,
-	NUM_EVENT_TYPES
+	NUM_EVENT_TYPES = 1
 };
 
 const std::string EVENT_NAMES[NUM_EVENT_TYPES] = 
-{ "Key Event", "Mouse Event" };
+{};
 
 class Event : public Trackable
 {

@@ -266,6 +266,7 @@ void Game::stopGameLoop()
 
 // Checks for user input from the system
 // TODO: Create KB & Mouse functions to prevent future messiness
+
 void Game::getUserInput()
 {
 	int keyboardInput = mpsSystemInstance->getInputSystem()->getKeyState();

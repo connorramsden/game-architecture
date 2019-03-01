@@ -21,6 +21,9 @@
 #include <allegro5/mouse.h>
 #include <allegro5/keyboard.h>
 
+// GraphicsLib Class References
+class EventSystem;
+
 class InputSystem : public Trackable
 {
 public:
@@ -36,15 +39,8 @@ public:
 	// Initializes InputSystem
 	void initInputSystem();
 
+	// Cleans up the Input System
 	void cleanupInputSystem();
-
-	// Gets user keyboard input
-	int getKeyState();
-
-	void fireKeyboardEvent();
-
-	// Gets user mouse input
-	int getMouseState();
 
 	Vector2D getMousePosition() { return mMousePosition; }
 	void setMousePosition(int newMouseX, int newMouseY);
@@ -52,15 +48,7 @@ public:
 private:
 	bool mInputSystemInitialized = false;
 
-	// Stores keyboard inputs in an Allegro event queue
-	ALLEGRO_EVENT_QUEUE *mKeyboardQueue;
-
-	// Retrieves mouse state at time of access
-	ALLEGRO_MOUSE_STATE mMouseState;
-
-	// Retrieves keyboard state at time of access
-	ALLEGRO_KEYBOARD_STATE mKeyboardState;
-
+	// Stores cursor x/y position in 2D space
 	Vector2D mMousePosition;
 };
 

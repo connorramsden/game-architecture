@@ -8,6 +8,7 @@
 *********************************************************************/
 
 #include "InputSystem.h"
+#include "EventSystem.h"
 
 InputSystem::InputSystem()
 {
@@ -16,8 +17,6 @@ InputSystem::InputSystem()
 
 InputSystem::~InputSystem()
 {
-	cleanupInputSystem();
-
 	return;
 }
 
@@ -31,13 +30,6 @@ void InputSystem::initInputSystem()
 	{
 		cleanupInputSystem();
 	}
-
-	// TODO: Rest of IS initialization requirements
-	// Create a new Allegro Event Queue
-	mKeyboardQueue = al_create_event_queue();
-
-	// Register keyboard input into the IS event queue
-	al_register_event_source(mKeyboardQueue, al_get_keyboard_event_source());
 
 	return;
 }
@@ -76,52 +68,9 @@ void InputSystem::initAllegroInputComponents()
 
 void InputSystem::cleanupInputSystem()
 {
-	// Un-register keyboard input with the system event queue
-	al_unregister_event_source(mKeyboardQueue, al_get_keyboard_event_source());
-
-	// Destroy the system keyboard event queue
-	al_destroy_event_queue(mKeyboardQueue);
-
 	// Clean-up Allegro components
 	al_uninstall_mouse();
 	al_uninstall_keyboard();
-}
-
-// Returns index of keyboard button down
-int InputSystem::getKeyState()
-{
-	// Update the current keyboard state
-	al_get_keyboard_state(&mKeyboardState);
-
-	// Event managing keyboard input
-	ALLEGRO_EVENT keyInput;
-
-	// Wait for 0.0001 seconds to set up a keyboard input
-	al_wait_for_event_timed(mKeyboardQueue, &keyInput, 0.0001f);
-
-	return keyInput.keyboard.keycode;
-}
-
-void InputSystem::fireKeyboardEvent()
-{
-	al_get_keyboard_state(&mKeyboardState);
-
-	ALLEGRO_EVENT keyInput;
-
-	al_wait_for_event_timed(mKeyboardQueue, &keyInput, 0.0001f);
-}
-
-// Returns index of mouse button down
-int InputSystem::getMouseState()
-{
-	// Get the current mouse state
-	al_get_mouse_state(&mMouseState);
-
-	// Update mouse position
-	setMousePosition(mMouseState.x, mMouseState.y);
-
-	// Return any mouse buttons triggered at this time
-	return mMouseState.buttons;
 }
 
 void InputSystem::setMousePosition(int newMouseX, int newMouseY)
