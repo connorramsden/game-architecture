@@ -41,6 +41,8 @@ public:
 	// Gets user keyboard input
 	int getKeyState();
 
+	void fireKeyboardEvent();
+
 	// Gets user mouse input
 	int getMouseState();
 

@@ -102,6 +102,15 @@ int InputSystem::getKeyState()
 	return keyInput.keyboard.keycode;
 }
 
+void InputSystem::fireKeyboardEvent()
+{
+	al_get_keyboard_state(&mKeyboardState);
+
+	ALLEGRO_EVENT keyInput;
+
+	al_wait_for_event_timed(mKeyboardQueue, &keyInput, 0.0001f);
+}
+
 // Returns index of mouse button down
 int InputSystem::getMouseState()
 {
