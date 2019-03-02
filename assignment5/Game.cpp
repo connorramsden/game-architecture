@@ -396,8 +396,6 @@ void Game::deleteUnit(Vector2D targetPos)
 {
 	if (mpsGameInstance->mNumUnits >= 0)
 	{
-		// Deletes last-created unit
-		// Have some functionality for deleting @ mouse position, but not working properly.
 		mpsUnitManager->deleteUnit(mpsGameInstance->mNumUnits);
 		mpsGameInstance->mNumUnits--;
 	}

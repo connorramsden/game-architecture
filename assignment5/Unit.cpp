@@ -28,6 +28,27 @@ void Unit::drawUnit()
 	Game::getSystemInstance()->getGraphicsSystem()->draw(spr, mUnitPosition.getX(), mUnitPosition.getY());
 }
 
+bool Unit::isUnitColliding(Vector2D collisionPoint)
+{
+	Sprite spr = mpCurrentAnimation->getCurrentSprite();
+
+	if (mUnitPosition.getX() < collisionPoint.getX() && mUnitPosition.getX() + spr.getWidth() > collisionPoint.getX())
+	{
+		if (mUnitPosition.getY() < collisionPoint.getY() && mUnitPosition.getY() + spr.getHeight() > collisionPoint.getY())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
 // Loop through all Animation(s) in mUnitAnimations
 // and delete + null each one
 void Unit::cleanupUnit()

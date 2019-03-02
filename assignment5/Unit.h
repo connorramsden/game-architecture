@@ -34,6 +34,10 @@ public:
 	// Draw the unit's current animation to screen
 	void drawUnit();
 
+	// Determines if unit is colliding with the passed in point
+	// Credit to Jacob Rose for this method
+	bool isUnitColliding(Vector2D collisionPoint);
+
 	// Cleans up the unit & its animation sheet
 	void cleanupUnit();
 

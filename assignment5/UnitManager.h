@@ -13,6 +13,7 @@
 // C/C++ Includes
 #include <string>
 #include <map>
+#include <vector>
 
 // DeanLib Includes
 #include <Trackable.h>

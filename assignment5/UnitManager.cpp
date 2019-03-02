@@ -95,20 +95,29 @@ void UnitManager::deleteUnit(Unit *pUnit)
 
 void UnitManager::deleteUnit(Vector2D unitToDeletePosition)
 {
+	std::vector<UnitKey> keys;
+
 	UnitMap::iterator iter;
 
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); iter++)
 	{
-		if (unitToDeletePosition == iter->second->getUnitPosition())
+		Unit *pUnit = iter->second;
+
+		if (pUnit->isUnitColliding(unitToDeletePosition))
 		{
-			delete iter->second;
-
-			iter->second = nullptr;
-
-			mUnitMap.erase(iter);
-
-			return;
+			keys.push_back(iter->first);
 		}
+	}
+
+	for (int i = 0; i < (int) keys.size() - 1; i++)
+	{
+		Unit *pUnit = mUnitMap.find(keys.at(i))->second;
+
+		delete pUnit;
+
+		pUnit = nullptr;
+
+		mUnitMap.erase(keys.at(i));
 	}
 
 	return;
