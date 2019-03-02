@@ -21,6 +21,10 @@
 #include <allegro5/mouse.h>
 #include <allegro5/keyboard.h>
 
+// GraphicsLib Includes
+#include "KeyboardEvent.h"
+#include "MouseEvent.h"
+
 // GraphicsLib Class References
 class EventSystem;
 
@@ -42,6 +46,10 @@ public:
 	// Cleans up the Input System
 	void cleanupInputSystem();
 
+	// Dispatch events through an event system
+	void updateInputSystem();
+
+	// Get/Set the current mouse position
 	Vector2D getMousePosition() { return mMousePosition; }
 	void setMousePosition(int newMouseX, int newMouseY);
 

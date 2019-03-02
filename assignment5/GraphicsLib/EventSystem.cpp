@@ -116,7 +116,7 @@ void EventSystem::dispatchAllEvents(const Event & eventToDispatch)
 {
 	ListenerMapPair ret;
 
-	ret = mListenerMap.equal_range(eventToDispatch.getType());
+	ret = mListenerMap.equal_range(eventToDispatch.getEventType());
 
 	ListenerMap::iterator iter;
 

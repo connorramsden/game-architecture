@@ -7,28 +7,26 @@
 **		Assignment 05 Author: Connor Ramsden						**
 *********************************************************************/
 
-// Game Includes
-#include "InputTranslator.h"
-#include "EventSystem.h"
+#ifndef KEYBOARDEVENT_H
+#define KEYBOARDEVENT_H
+
+// GraphicsLib Includes
 #include "Event.h"
 
-int InputTranslator::msID = 0;
-
-InputTranslator::InputTranslator(EventSystem * pEventSystem)
-	:EventListener(pEventSystem)
-	, mID(msID)
+class KeyboardEvent : public Event
 {
-	msID++;
+public:
+	KeyboardEvent(int keyNum, KeypressType kpType);
+	~KeyboardEvent();
 
-	// EventSystem::getEventSystemInstance()->addListener(Event, this);
-}
+	inline int getKeyNum() const { return mKeyNum; }
 
-InputTranslator::~InputTranslator()
-{
-	return;
-}
+	inline KeypressType getKeypressType() const { return mKeypressType; }
 
-void InputTranslator::handleEvent(const Event & eventToHandle)
-{
-	
-}
+private:
+	int mKeyNum;
+
+	KeypressType mKeypressType;
+};
+
+#endif

@@ -7,43 +7,33 @@
 **		Assignment 05 Author: Connor Ramsden						**
 *********************************************************************/
 
-#ifndef INPUTTRANSLATOR_H
-#define INPUTTRANSLATOR_H
+#ifndef MOUSEEVENT_H
+#define MOUSEEVENT_H
 
 // DeanLib Includes
-#include <Trackable.h>
+#include <Vector2D.h>
 
 // GraphicsLib Includes
-#include <EventListener.h>
+#include "Event.h"
 
-// GraphicsLib Class References
-class EventSystem;
-
-class InputTranslator : public EventListener
+class MouseEvent : public Event
 {
 public:
-	InputTranslator(EventSystem *pEventSystem);
-	~InputTranslator();
+	MouseEvent(int mouseNum, MousepressType mpType, Vector2D mousePos);
+	~MouseEvent();
 
-	void handleEvent(const Event &eventToHandle);
+	inline int getMouseNum() const { return mMouseNum; }
+
+	inline Vector2D getMousePosition() const { return mMousePosition; }
+
+	inline MousepressType getMousepressType() const { return mMousepressType; }
 
 private:
-	static int msID;
-
-	int mID;
-};
-
-enum KeyCode : int
-{
-	ESCAPE = 59,
-	ENTER = 67,
-	SPACEBAR = 75,
-};
-
-enum MouseCode : int
-{
-	LEFTBUTTON = 1,
-	RIGHTBUTTON = 2,
+	int mMouseNum;
+	
+	Vector2D mMousePosition;
+	
+	MousepressType mMousepressType;
 };
 
 #endif

@@ -19,13 +19,13 @@
 #include <Timer.h>
 #include <PerformanceTracker.h>
 
-// Game Class References
-class UnitManager;
-class GraphicsBufferManager;
-class InputTranslator;
-
 // GraphicsLib Includes
 #include <System.h>
+
+// Game Class References
+class InputTranslator;
+class UnitManager;
+class GraphicsBufferManager;
 
 // Converts a string to its ascii / char values, and returns the sum of those values
 int stringToASCII(std::string s);
@@ -59,6 +59,7 @@ public:
 	// System / Manager Accessors
 	static Game *getGameInstance();
 	static System *getSystemInstance();
+	static InputTranslator *getInputTranslatorInstance();
 	static UnitManager *getUnitManagerInstance();
 	static GraphicsBufferManager *getGraphicsBufferManager();
 
@@ -101,10 +102,13 @@ private:
 	// An instance of the System class, referenced by the Game
 	static System *mpsSystemInstance;
 
+	// An instance of the InputTranslator class, referenced by the Game
+	static InputTranslator *mpsInputTranslatorInstance;
+
 	// An instance of the UnitManager class, referenced by the Game
 	static UnitManager *mpsUnitManager;
 
-	// A reference the the GraphicsBufferManager class, referenced by the Game
+	// An instance of the GraphicsBufferManager class, referenced by the Game
 	static GraphicsBufferManager *mpsGraphicsBufferManager;
 
 	// Game Performance Tracker
@@ -130,19 +134,6 @@ private:
 	int mNumUnits;
 
 	double mUnitSpeed;
-};
-
-enum KeyCode : int
-{
-	ESCAPE = 59,
-	ENTER = 67,
-	SPACEBAR = 75,
-};
-
-enum MouseCode : int
-{
-	LEFTBUTTON = 1,
-	RIGHTBUTTON = 2,
 };
 
 #endif

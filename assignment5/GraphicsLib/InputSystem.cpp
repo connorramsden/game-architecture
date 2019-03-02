@@ -9,6 +9,7 @@
 
 #include "InputSystem.h"
 #include "EventSystem.h"
+#include "Event.h"
 
 InputSystem::InputSystem()
 {
@@ -71,6 +72,13 @@ void InputSystem::cleanupInputSystem()
 	// Clean-up Allegro components
 	al_uninstall_mouse();
 	al_uninstall_keyboard();
+
+	return;
+}
+
+void InputSystem::updateInputSystem()
+{
+	
 }
 
 void InputSystem::setMousePosition(int newMouseX, int newMouseY)

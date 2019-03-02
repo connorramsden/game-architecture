@@ -11,12 +11,14 @@
 #include "UnitManager.h"
 #include "GraphicsBufferManager.h"
 #include "InputTranslator.h"
+#include <EventSystem.h>
 
 // Initialize Game / System / Manager Instances
 Game * Game::mpsGameInstance = nullptr;
 System * Game::mpsSystemInstance = nullptr;
 UnitManager * Game::mpsUnitManager = nullptr;
 GraphicsBufferManager * Game::mpsGraphicsBufferManager = nullptr;
+InputTranslator * Game::mpsInputTranslatorInstance = nullptr;
 
 // Initialize tracker & Timer
 PerformanceTracker * Game::mpPerformanceTrackerInstance = nullptr;
@@ -38,6 +40,14 @@ System * Game::getSystemInstance()
 	return mpsSystemInstance;
 }
 
+// Returns mpsInputTranslatorInstance
+InputTranslator * Game::getInputTranslatorInstance()
+{
+	assert(mpsInputTranslatorInstance != nullptr);
+
+	return mpsInputTranslatorInstance;
+}
+
 // Returns mpsUnitManager
 UnitManager * Game::getUnitManagerInstance()
 {
@@ -46,7 +56,7 @@ UnitManager * Game::getUnitManagerInstance()
 	return mpsUnitManager;
 }
 
-// returns mpsGraphicsBufferManager
+// Returns mpsGraphicsBufferManager
 GraphicsBufferManager * Game::getGraphicsBufferManager()
 {
 	assert(mpsGraphicsBufferManager != nullptr);
@@ -112,7 +122,7 @@ void Game::initGame()
 		// Init the display
 		mpsSystemInstance->systemInit();
 	}
-	else { std::cout << "No system instance exists." << std::endl; }
+	else { std::cout << "No System instance exists." << std::endl; }
 
 	// If the UMI has been properly initialized
 	if (mpsUnitManager && mpsGraphicsBufferManager)
@@ -364,7 +374,13 @@ Game::Game()
 		// Create new System/Managers
 		mpsSystemInstance = new System();
 	}
-	else { std::cout << "A system instance already exists" << std::endl; }
+	else { std::cout << "A System instance already exists" << std::endl; }
+
+	if (!mpsInputTranslatorInstance)
+	{
+		mpsInputTranslatorInstance = new InputTranslator(EventSystem::getEventSystemInstance());
+	}
+	else { std::cout << "An InputTranslator instance already exists" << std::endl; }
 
 	if (!mpsUnitManager)
 	{
