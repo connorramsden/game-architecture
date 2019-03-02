@@ -18,6 +18,8 @@ InputSystem::InputSystem()
 
 InputSystem::~InputSystem()
 {
+	cleanupInputSystem();
+
 	return;
 }
 
@@ -69,9 +71,14 @@ void InputSystem::initAllegroInputComponents()
 
 void InputSystem::cleanupInputSystem()
 {
-	// Clean-up Allegro components
-	al_uninstall_mouse();
-	al_uninstall_keyboard();
+	if (mInputSystemInitialized)
+	{
+		mInputSystemInitialized = false;
+
+		// Clean-up Allegro components
+		al_uninstall_mouse();
+		al_uninstall_keyboard();
+	}
 
 	return;
 }

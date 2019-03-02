@@ -117,6 +117,7 @@
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="KeyboardEvent.cpp" />
+    <ClCompile Include="MouseEvent.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>

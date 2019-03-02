@@ -58,6 +58,9 @@ private:
 
 	// Stores cursor x/y position in 2D space
 	Vector2D mMousePosition;
+
+	ALLEGRO_KEYBOARD_STATE mKeyboardState;
+	ALLEGRO_MOUSE_STATE mMouseState;
 };
 
 #endif
