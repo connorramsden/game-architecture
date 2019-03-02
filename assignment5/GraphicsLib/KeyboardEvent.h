@@ -17,17 +17,17 @@
 class KeyboardEvent : public Event
 {
 public:
-	KeyboardEvent(KeyCode keyCode, KeypressType kpType);
+	KeyboardEvent(KeyCode keyCode);
+	KeyboardEvent(KeyCode keyCode, EventInputState inputState);
 	~KeyboardEvent();
 
 	inline KeyCode getKeyNum() const { return mKeyCode; }
-
-	inline KeypressType getKeypressType() const { return mKeypressType; }
+	inline EventInputState getInputState() const { return mInputState; }
 
 private:
 	KeyCode mKeyCode;
 
-	KeypressType mKeypressType;
+	EventInputState mInputState;
 };
 
 #endif

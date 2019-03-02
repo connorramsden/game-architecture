@@ -37,9 +37,6 @@ void System::systemInit()
 	// Initialize graphicsSystem with passed width & height
 	mpGraphicsSystem->initialize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 
-	// Set default mouse position to center-screen
-	mpInputSystem->setMousePosition(DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2);
-
 	return;
 }
 

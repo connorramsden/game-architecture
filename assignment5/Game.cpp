@@ -7,11 +7,18 @@
 **		Assignment 05 Author: Connor Ramsden						**
 *********************************************************************/
 
+// GraphicsLib Incldues
+#include <EventSystem.h>
+#include <Event.h>
+
+// Game Includes
 #include "Game.h"
 #include "UnitManager.h"
 #include "GraphicsBufferManager.h"
 #include "InputTranslator.h"
-#include <EventSystem.h>
+#include "GameEvent.h"
+
+int Game::msID = 0;
 
 // Initialize Game / System / Manager Instances
 Game * Game::mpsGameInstance = nullptr;
@@ -86,7 +93,7 @@ void Game::initInstance()
 	// If the instance has not been initialized, initialize the instance
 	if (!mpsGameInstance)
 	{
-		mpsGameInstance = new Game();
+		mpsGameInstance = new Game(EventSystem::getEventSystemInstance());
 	}
 	// Otherwise, print that the instance has already been initt'd
 	else { std::cout << "Game instance already exists." << std::endl; return; }
@@ -124,6 +131,11 @@ void Game::initGame()
 	}
 	else { std::cout << "No System instance exists." << std::endl; }
 
+	if (mpsInputTranslatorInstance)
+	{
+		mpsInputTranslatorInstance->initInputTranslator();
+	}
+
 	// If the UMI has been properly initialized
 	if (mpsUnitManager && mpsGraphicsBufferManager)
 	{
@@ -137,12 +149,25 @@ void Game::initGame()
 		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(BACKGROUND_INDEX, ASSET_PATH, WOODS_FILENAME);
 	}
 
+	// Register the event system instance with this listener
+	EventSystem::getEventSystemInstance()->addListener((EventType)EXIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)DELETE_UNIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)SPRITE_SWAP, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)PAUSE_UNITS, this);
+
 	return;
 }
 
 // Delete System/Managers
 void Game::cleanupGame()
 {
+	EventSystem::getEventSystemInstance()->addListener((EventType)PAUSE_UNITS, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)SPRITE_SWAP, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)DELETE_UNIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
+	EventSystem::getEventSystemInstance()->removeListener((EventType)EXIT, this);
+
 	// Clean up the GBM
 	if (mpsGraphicsBufferManager)
 	{
@@ -159,6 +184,14 @@ void Game::cleanupGame()
 		mpsUnitManager = nullptr;
 	}
 	else { std::cout << "No UnitManager exists" << std::endl; }
+
+	if (mpsInputTranslatorInstance)
+	{
+		delete mpsInputTranslatorInstance;
+
+		mpsInputTranslatorInstance = nullptr;
+	}
+	else { std::cout << "No InputTranslator instance exists" << std::endl; }
 
 	// Clean up the System Instance
 	if (mpsSystemInstance)
@@ -224,7 +257,7 @@ void Game::runGameLoop()
 		// Start the timer for this frame
 		mpTimerInstance->start();
 
-		// Get mouse / keyboard input
+		// Get user input from System
 		mpsGameInstance->getUserInput();
 
 		// Update Unit(s) on screen
@@ -245,6 +278,39 @@ void Game::runGameLoop()
 
 	// Stop the game loop, delete pointers, etc.
 	mpsGameInstance->stopGameLoop();
+
+	return;
+}
+
+void Game::handleEvent(const Event & eventToHandle)
+{
+	if (eventToHandle.getEventType() == GameEventType::EXIT)
+	{
+		exitGame();
+		return;
+	}
+	else if (eventToHandle.getEventType() == GameEventType::CREATE_UNIT)
+	{
+		const CreateUnit & createUnitEvent = static_cast<const CreateUnit &>(eventToHandle);
+
+		createUnit(createUnitEvent.getUnitPosition());
+		return;
+	}
+	else if (eventToHandle.getEventType() == GameEventType::DELETE_UNIT)
+	{
+		const DeleteUnit & deleteUnitEvent = static_cast<const DeleteUnit &>(eventToHandle);
+
+		deleteUnit(deleteUnitEvent.getDestroyPosition());
+		return;
+	}
+	else if(eventToHandle.getEventType() == GameEventType::PAUSE_UNITS)
+	{
+		pauseUnits();
+	}
+	else if (eventToHandle.getEventType() == GameEventType::SPRITE_SWAP)
+	{
+		swapSprites();
+	}
 
 	return;
 }
@@ -274,67 +340,10 @@ void Game::stopGameLoop()
 	return;
 }
 
-// Checks for user input from the system
-// TODO: Create KB & Mouse functions to prevent future messiness
-
+// Checks for user input from the System
 void Game::getUserInput()
 {
-	int keyboardInput = mpsSystemInstance->getInputSystem()->getKeyState();
-	int mouseInput = mpsSystemInstance->getInputSystem()->getMouseState();
-
-	// Exit the game gracefully
-	if (keyboardInput == ESCAPE)
-	{
-		mpsGameInstance->mGameIsRunning = false;
-	}
-	// Toggle last Unit animation state
-	else if (keyboardInput == ENTER)
-	{
-		if (mpsGameInstance->mUnitAnimIndex == 0)
-		{
-			mpsGameInstance->mUnitAnimIndex = 1;
-		}
-		else if (mpsGameInstance->mUnitAnimIndex == 1)
-		{
-			mpsGameInstance->mUnitAnimIndex = 0;
-		}
-	}
-	// Pause all Unit animations
-	else if (keyboardInput == SPACEBAR)
-	{
-		if (mpsGameInstance->mUnitSpeed == 1.0)
-		{
-			mpsGameInstance->mUnitSpeed = 0.0;
-		}
-		else
-		{
-			mpsGameInstance->mUnitSpeed = 1.0;
-		}
-	}
-
-	// TODO: Fix drawing new units @ mUnitAnimIndex, instead at 0
-	if (mouseInput == LEFTBUTTON)
-	{
-		mpsGameInstance->mNumUnits++;
-
-		// Create a new unit and emplace it at center-screen
-		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, mpsSystemInstance->getInputSystem()->getMousePosition());
-
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
-
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
-	}
-	// TODO: Delete @ mouse position
-	else if (mouseInput == RIGHTBUTTON)
-	{
-		if (mpsGameInstance->mNumUnits >= 0)
-		{
-			// Deletes last-created unit
-			// Have some functionality for deleting @ mouse position, but not working properly.
-			mpsUnitManager->deleteUnit(mpsGameInstance->mNumUnits);
-			mpsGameInstance->mNumUnits--;
-		}
-	}
+	mpsSystemInstance->getInputSystem()->updateInputSystem();
 
 	return;
 }
@@ -366,9 +375,65 @@ void Game::renderToDisplay()
 	return;
 }
 
-// Default Game Constructor
-Game::Game()
+void Game::exitGame()
 {
+	mpsGameInstance->mGameIsRunning = false;
+}
+
+void Game::createUnit(Vector2D targetPos)
+{
+	mpsGameInstance->mNumUnits++;
+
+	// Create a new unit and emplace it at center-screen
+	mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, mpsSystemInstance->getInputSystem()->getMousePosition());
+
+	mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
+
+	mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
+}
+
+void Game::deleteUnit(Vector2D targetPos)
+{
+	if (mpsGameInstance->mNumUnits >= 0)
+	{
+		// Deletes last-created unit
+		// Have some functionality for deleting @ mouse position, but not working properly.
+		mpsUnitManager->deleteUnit(mpsGameInstance->mNumUnits);
+		mpsGameInstance->mNumUnits--;
+	}
+}
+
+void Game::swapSprites()
+{
+	if (mpsGameInstance->mUnitAnimIndex == 0)
+	{
+		mpsGameInstance->mUnitAnimIndex = 1;
+	}
+	else if (mpsGameInstance->mUnitAnimIndex == 1)
+	{
+		mpsGameInstance->mUnitAnimIndex = 0;
+	}
+}
+
+void Game::pauseUnits()
+{
+	if (mpsGameInstance->mUnitSpeed == 1.0)
+	{
+		mpsGameInstance->mUnitSpeed = 0.0;
+	}
+	else
+	{
+		mpsGameInstance->mUnitSpeed = 1.0;
+	}
+}
+
+// Default Game Constructor
+Game::Game(EventSystem *pEventSystem)
+	:EventListener(pEventSystem)
+	,mID(msID)
+{
+	msID++;
+
 	if (!mpsSystemInstance)
 	{
 		// Create new System/Managers

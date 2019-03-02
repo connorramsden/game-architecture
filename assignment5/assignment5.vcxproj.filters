@@ -62,5 +62,8 @@
     <ClInclude Include="InputTranslator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

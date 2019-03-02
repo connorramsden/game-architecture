@@ -34,6 +34,10 @@ void InputSystem::initInputSystem()
 		cleanupInputSystem();
 	}
 
+	// Store 'last' input state at system initialization
+	al_get_keyboard_state(&mPreviousKeyboardState);
+	al_get_mouse_state(&mPreviousMouseState);
+
 	return;
 }
 
@@ -93,10 +97,17 @@ void InputSystem::updateInputSystem()
 	setMousePosition(mMouseState.x, mMouseState.y);
 
 	// Fire current keyboard state
-	fireKeyboardEvent(mKeyboardState);
+	fireKeyboardEvent(ESCAPE);
+	fireKeyboardEvent(SPACEBAR);
+	fireKeyboardEvent(ENTER);
 
 	// Fire current mouse state
-	fireMouseEvent(mMouseState);
+	fireMouseEvent(LEFTBUTTON);
+	fireMouseEvent(RIGHTBUTTON);
+
+	// Update previous input state to current input state
+	mPreviousKeyboardState = mKeyboardState;
+	mPreviousMouseState = mMouseState;
 
 	return;
 }
@@ -109,8 +120,34 @@ void InputSystem::setMousePosition(int newMouseX, int newMouseY)
 	return;
 }
 
-void InputSystem::fireKeyboardEvent(ALLEGRO_KEYBOARD_STATE kbState)
-{}
+void InputSystem::fireKeyboardEvent(KeyCode keyCode)
+{
+	if (al_key_down(&mKeyboardState, keyCode) && al_key_down(&mPreviousKeyboardState, keyCode))
+	{
+		EventSystem::getEventSystemInstance()->fireEvent(KeyboardEvent(keyCode, STATE_HELD));
+	}
+	else if (al_key_down(&mKeyboardState, keyCode) && !al_key_down(&mPreviousKeyboardState, keyCode))
+	{
+		EventSystem::getEventSystemInstance()->fireEvent(KeyboardEvent(keyCode, STATE_PRESSED));
+	}
+	else if (!al_key_down(&mKeyboardState, keyCode) && al_key_down(&mPreviousKeyboardState, keyCode))
+	{
+		EventSystem::getEventSystemInstance()->fireEvent(KeyboardEvent(keyCode, STATE_RELEASED));
+	}
+}
 
-void InputSystem::fireMouseEvent(ALLEGRO_MOUSE_STATE mouseState)
-{}
+void InputSystem::fireMouseEvent(MouseCode mouseCode)
+{
+	if (mMouseState.buttons & mouseCode && mPreviousMouseState.buttons & mouseCode)
+	{
+		EventSystem::getEventSystemInstance()->fireEvent(MouseEvent(mouseCode, mMousePosition, STATE_HELD));
+	}
+	else if (mMouseState.buttons & mouseCode && !mPreviousMouseState.buttons & mouseCode)
+	{
+		EventSystem::getEventSystemInstance()->fireEvent(MouseEvent(mouseCode, mMousePosition, STATE_PRESSED));
+	}
+	else if (!mMouseState.buttons & mouseCode && mPreviousMouseState.buttons & mouseCode)
+	{
+		EventSystem::getEventSystemInstance()->fireEvent(MouseEvent(mouseCode, mMousePosition, STATE_RELEASED));
+	}
+}

@@ -20,21 +20,21 @@
 class MouseEvent : public Event
 {
 public:
-	MouseEvent(MouseCode mouseNum, MousepressType mpType, Vector2D mousePos);
+	MouseEvent(MouseCode mouseNum, Vector2D mousePos, EventInputState inputState);
 	~MouseEvent();
 
 	inline MouseCode getMouseNum() const { return mMouseCode; }
 
 	inline Vector2D getMousePosition() const { return mMousePosition; }
 
-	inline MousepressType getMousepressType() const { return mMousepressType; }
+	inline EventInputState getInputState() const { return mInputState; }
 
 private:
 	MouseCode mMouseCode;
 	
 	Vector2D mMousePosition;
-	
-	MousepressType mMousepressType;
+
+	EventInputState mInputState;
 };
 
 #endif

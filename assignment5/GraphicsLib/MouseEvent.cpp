@@ -1,10 +1,10 @@
 #include "MouseEvent.h"
 
-MouseEvent::MouseEvent(MouseCode mouseCode, MousepressType mpType, Vector2D mousePos)
-	:Event(MOUSE_EVENT)
+MouseEvent::MouseEvent(MouseCode mouseCode, Vector2D mousePos, EventInputState inputState)
+	:Event(MOUSEINPUT_EVENT)
 	,mMouseCode(mouseCode)
-	,mMousepressType(mpType)
 	,mMousePosition(mousePos)
+	,mInputState(inputState)
 {}
 
 MouseEvent::~MouseEvent()

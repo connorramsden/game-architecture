@@ -50,9 +50,8 @@ public:
 
 	// Dispatch events through an event system
 	void updateInputSystem();
-	// Get/Set the current mouse position
-	Vector2D getMousePosition() { return mMousePosition; }
-	void setMousePosition(int newMouseX, int newMouseY);
+
+	inline Vector2D getMousePosition() const { return mMousePosition; }
 
 private:
 	bool mInputSystemInitialized = false;
@@ -60,14 +59,22 @@ private:
 	// Stores cursor x/y position in 2D space
 	Vector2D mMousePosition;
 
+	// Set mMousePosition x&y by passed values
+	void setMousePosition(int newMouseX, int newMouseY);
+
+	// Stores current Allegro input state
 	ALLEGRO_KEYBOARD_STATE mKeyboardState;
 	ALLEGRO_MOUSE_STATE mMouseState;
 
+	// Stores last Allegro input state (Credit to Amelia Payne for the idea)
+	ALLEGRO_KEYBOARD_STATE mPreviousKeyboardState;
+	ALLEGRO_MOUSE_STATE mPreviousMouseState;
+
 	// Used in updateInputSystem() to fire keyboard inputs
-	void fireKeyboardEvent(ALLEGRO_KEYBOARD_STATE kbState);
+	void fireKeyboardEvent(KeyCode keyCode);
 
 	// Used in updateInputSystem() to fire mouse inputs
-	void fireMouseEvent(ALLEGRO_MOUSE_STATE mouseState);
+	void fireMouseEvent(MouseCode mouseCode);
 };
 
 #endif

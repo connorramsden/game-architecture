@@ -22,9 +22,19 @@ class EventSystem;
 class InputTranslator : public EventListener
 {
 public:
+	// Default InputTranslator Constructor
 	InputTranslator(EventSystem *pEventSystem);
+
+	// Default InputTranslator Deconstructor
 	~InputTranslator();
 
+	// Initialize an instance of this class
+	void initInputTranslator();
+
+	// Clean up an instance of this class
+	void cleanupInputTranslator();
+
+	// Handles / translates incoming events
 	void handleEvent(const Event &eventToHandle);
 
 private:

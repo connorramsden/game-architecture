@@ -21,11 +21,22 @@
 
 // GraphicsLib Includes
 #include <System.h>
+#include <EventListener.h>
+
+// GraphicsLib Class References
+class EventSystem;
 
 // Game Class References
 class InputTranslator;
 class UnitManager;
 class GraphicsBufferManager;
+
+// Game Event Class References
+class ExitEvent;
+class CreateUnit;
+class DeleteUnit;
+class SpriteSwap;
+class PauseUnits;
 
 // Converts a string to its ascii / char values, and returns the sum of those values
 int stringToASCII(std::string s);
@@ -53,8 +64,9 @@ const int SMURF_SPRITE_INDEX = basicHashFunction(SMURF_SPRITE_FILENAME) % HASH_M
 const int DEAN_SPRITE_INDEX = basicHashFunction(DEAN_SPRITE_FILENAME) % HASH_MOD;
 const int BACKGROUND_INDEX = basicHashFunction(WOODS_FILENAME) % HASH_MOD;
 
-class Game : public Trackable
+class Game : public EventListener
 {
+	// Public Game Instance Functions
 public:
 	// System / Manager Accessors
 	static Game *getGameInstance();
@@ -67,34 +79,29 @@ public:
 	static PerformanceTracker *getPerformanceTrackerInstance();
 	static Timer *getTimerInstance();
 
+	// Public Game Functions
+public:
 	// Game Instance Init / Cleanup
 	static void initInstance();
 	static void cleanupInstance();
 
-	// Game Init / Cleanup
-	void initGame();
-	void cleanupGame();
-
 	// Game Operations
-	void initGameLoop();
 	static void runGameLoop();
-	void stopGameLoop();
 
-	// Retrieve user input from KB&M
-	void getUserInput();
+	// Handle incoming Game events
+	void handleEvent(const Event &eventToHandle);
 
-	// Update all game objects
-	void updateLoop(double newUnitSpeed);
-
-	// Render all game objects and backgrounds to the display
-	void renderToDisplay();
-
+	// Private Game Instances & Constructors
 private:
 	// Default Game Constructor
-	Game();
+	Game(EventSystem *pEventSystem);
 
 	// Default Game Deconstructor
 	~Game();
+
+	static int msID;
+
+	int mID;
 
 	// An instance of the Game class
 	static Game *mpsGameInstance;
@@ -117,6 +124,8 @@ private:
 	// Game Timer
 	static Timer *mpTimerInstance;
 
+	// Private Game Variables
+private:
 	// Game Loop Variables
 	// PerformanceTracker string to track frame performance
 	const std::string GAME_LOOP_TRACKER = "game_loop";;
@@ -134,6 +143,37 @@ private:
 	int mNumUnits;
 
 	double mUnitSpeed;
+
+	// Private Game Functions
+private:
+	// Game Init / Cleanup
+	void initGame();
+	void cleanupGame();
+
+	// Initializers for runGameLoop()
+	void initGameLoop();
+	void stopGameLoop();
+
+	// Retrieve user input from KB&M
+	void getUserInput();
+
+	// Update all game objects
+	void updateLoop(double newUnitSpeed);
+
+	// Render all game objects and backgrounds to the display
+	void renderToDisplay();
+	
+	// Private Game Event Functions
+private:
+	void exitGame();
+
+	void createUnit(Vector2D targetPos);
+
+	void deleteUnit(Vector2D targetPos);
+
+	void swapSprites();
+
+	void pauseUnits();
 };
 
 #endif
