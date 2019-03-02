@@ -15,21 +15,22 @@
 
 // GraphicsLib Includes
 #include "Event.h"
+#include "InputCodes.h"
 
 class MouseEvent : public Event
 {
 public:
-	MouseEvent(int mouseNum, MousepressType mpType, Vector2D mousePos);
+	MouseEvent(MouseCode mouseNum, MousepressType mpType, Vector2D mousePos);
 	~MouseEvent();
 
-	inline int getMouseNum() const { return mMouseNum; }
+	inline MouseCode getMouseNum() const { return mMouseCode; }
 
 	inline Vector2D getMousePosition() const { return mMousePosition; }
 
 	inline MousepressType getMousepressType() const { return mMousepressType; }
 
 private:
-	int mMouseNum;
+	MouseCode mMouseCode;
 	
 	Vector2D mMousePosition;
 	

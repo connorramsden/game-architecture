@@ -12,19 +12,20 @@
 
 // GraphicsLib Includes
 #include "Event.h"
+#include "InputCodes.h"
 
 class KeyboardEvent : public Event
 {
 public:
-	KeyboardEvent(int keyNum, KeypressType kpType);
+	KeyboardEvent(KeyCode keyCode, KeypressType kpType);
 	~KeyboardEvent();
 
-	inline int getKeyNum() const { return mKeyNum; }
+	inline KeyCode getKeyNum() const { return mKeyCode; }
 
 	inline KeypressType getKeypressType() const { return mKeypressType; }
 
 private:
-	int mKeyNum;
+	KeyCode mKeyCode;
 
 	KeypressType mKeypressType;
 };

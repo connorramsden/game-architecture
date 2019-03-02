@@ -1,8 +1,8 @@
 #include "KeyboardEvent.h"
 
-KeyboardEvent::KeyboardEvent(int keyNum, KeypressType kpType)
+KeyboardEvent::KeyboardEvent(KeyCode keyCode, KeypressType kpType)
 	:Event(KEYBOARD_EVENT)
-	,mKeyNum(keyNum)
+	,mKeyCode(keyCode)
 	,mKeypressType(kpType)
 {}
 

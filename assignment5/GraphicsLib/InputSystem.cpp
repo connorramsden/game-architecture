@@ -85,7 +85,20 @@ void InputSystem::cleanupInputSystem()
 
 void InputSystem::updateInputSystem()
 {
-	
+	// Update keyboard & mouse states on Allegro side
+	al_get_keyboard_state(&mKeyboardState);
+	al_get_mouse_state(&mMouseState);
+
+	// Update mouse position to current mouse position
+	setMousePosition(mMouseState.x, mMouseState.y);
+
+	// Fire current keyboard state
+	fireKeyboardEvent(mKeyboardState);
+
+	// Fire current mouse state
+	fireMouseEvent(mMouseState);
+
+	return;
 }
 
 void InputSystem::setMousePosition(int newMouseX, int newMouseY)
@@ -95,3 +108,9 @@ void InputSystem::setMousePosition(int newMouseX, int newMouseY)
 
 	return;
 }
+
+void InputSystem::fireKeyboardEvent(ALLEGRO_KEYBOARD_STATE kbState)
+{}
+
+void InputSystem::fireMouseEvent(ALLEGRO_MOUSE_STATE mouseState)
+{}
