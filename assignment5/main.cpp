@@ -14,7 +14,8 @@
 		I have NOT removed his certificate(s) of authenticity from his files so that this is clearly apparent.
 	2. I did NOT borrow anyone's work for the assignment 03 files used to start assignment 04
 	3. I did NOT borrow anyone's work for the assignment 04 files used to start assignment 05
-	4. NO other help was received in the creation of this assignmnet
+	4. I REFERENCED Amelia Payne's Piazza post to set up EventInputState
+	5. NO other help was received in the creation of this assignmnet
 */
 
 // C/C++ Includes
