@@ -1,6 +1,4 @@
 # .gitignore for Connor Ramsden EGP-310 Repository
 
-*/.vs
-*/*/[Dd]ebug
-*/[Dd]ebug
-*/*.jpg
+**/*.vs
+**/[Dd]ebug
