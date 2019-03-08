@@ -60,7 +60,7 @@ const int HASH_MOD = 127;
 
 class Game : public EventListener
 {
-	// Public Game Instance Functions
+// Public Game Instance Functions
 public:
 	// System / Manager Accessors
 	static Game *getGameInstance();
@@ -73,7 +73,7 @@ public:
 	static PerformanceTracker *getPerformanceTrackerInstance();
 	static Timer *getTimerInstance();
 
-	// Public Game Functions
+// Public Game Functions
 public:
 	// Game Instance Init / Cleanup
 	static void initInstance();
@@ -85,7 +85,7 @@ public:
 	// Handle incoming Game events
 	void handleEvent(const Event &eventToHandle);
 
-	// Private Game Instances & Constructors
+// Private Game Instances & Constructors
 private:
 	// Default Game Constructor
 	Game(EventSystem *pEventSystem);
@@ -140,7 +140,9 @@ private:
 	// Determines how quickly the units are animated
 	double mUnitSpeed;
 
-	// Private Game Functions
+	Vector2D mHeadStartPosition;
+
+// Private Game Functions
 private:
 	// Game Init / Cleanup
 	void initGame();
@@ -159,7 +161,7 @@ private:
 	// Render all game objects and backgrounds to the display
 	void renderToDisplay();
 	
-	// Private Game Event Functions
+// Private Game Event Functions
 private:
 	void exitGame();
 
@@ -167,9 +169,7 @@ private:
 
 	void deleteUnit(Vector2D targetPos);
 
-	void swapSprites();
-
-	void pauseUnits();
+	void moveUnit(Vector2D targetPos);
 };
 
 #endif

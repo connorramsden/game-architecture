@@ -35,13 +35,15 @@ public:
 	void systemCleanup();
 
 	// Get the team-defined DISPLAY_WIDTH & DISPLAY_HEIGHT as a clean Vector2D
-	Vector2D getDisplayDimensions() { return Vector2D(DISPLAY_WIDTH, DISPLAY_HEIGHT); }
+	inline Vector2D getDisplayDimensions() const { return Vector2D(DISPLAY_WIDTH, DISPLAY_HEIGHT); }
+
+	inline Vector2D getCenterScreen() const { return Vector2D(DISPLAY_WIDTH / 2.0f, DISPLAY_HEIGHT / 2.0f); }
 	
 	// Return mpGraphicsSystem
-	GraphicsSystem *getGraphicsSystem() { return mpGraphicsSystem; }
+	inline GraphicsSystem *getGraphicsSystem() const { return mpGraphicsSystem; }
 
 	// Return mpInputSystem
-	InputSystem *getInputSystem() { return mpInputSystem; }
+	inline InputSystem *getInputSystem() const { return mpInputSystem; }
 
 private:
 	// Stores a GraphicsSystem object
@@ -51,8 +53,8 @@ private:
 	InputSystem *mpInputSystem = nullptr;
 
 	// Display dimensions.
-	const int DISPLAY_WIDTH = 800;
-	const int DISPLAY_HEIGHT = 600;
+	const int DISPLAY_WIDTH = 1280;
+	const int DISPLAY_HEIGHT = 720;
 };
 
 #endif

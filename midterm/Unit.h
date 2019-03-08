@@ -25,6 +25,9 @@ public:
 	// Returns the current unit position as a Vector2D
 	inline Vector2D getUnitPosition() const { return mUnitPosition; };
 
+	// Update the current unit position with the passed Vector2D
+	inline void setUnitPosition(Vector2D newPos) { mUnitPosition = newPos; }
+
 	// Adds a new Animation to the Unit's animation sheet
 	void addNewAnimation(Animation &newAnim);
 

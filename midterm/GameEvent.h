@@ -21,8 +21,7 @@ enum GameEventType
 	EXIT = NUM_EVENT_TYPES,
 	CREATE_UNIT,
 	DELETE_UNIT,
-	SPRITE_SWAP,
-	PAUSE_UNITS,
+	MOVE_SNAKE,
 };
 
 class ExitEvent : public Event
@@ -48,6 +47,7 @@ private:
 	Vector2D mCreatePosition;
 };
 
+// TODO: DeleteUnit should function differently for snake
 class DeleteUnit : public Event
 {
 public:
@@ -63,20 +63,18 @@ private:
 	Vector2D mDeletePosition;
 };
 
-class SpriteSwap : public Event
+class MoveSnake : public Event
 {
 public:
-	SpriteSwap()
-		:Event((EventType)GameEventType::SPRITE_SWAP)
-	{};
-};
+	MoveSnake()
+		:Event((EventType)GameEventType::MOVE_SNAKE)
+	{
+	};
 
-class PauseUnits : public Event
-{
-public:
-	PauseUnits()
-		:Event((EventType)GameEventType::PAUSE_UNITS)
-	{};
+	inline Vector2D getMovementDirection() const { return mMovementDirection; }
+
+private:
+	Vector2D mMovementDirection;
 };
 
 #endif

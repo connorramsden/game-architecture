@@ -143,7 +143,7 @@ void UnitManager::drawUnitsInMap()
 	return;
 }
 
-void UnitManager::updateUnitInMap(const UnitKey key, const int currentUnitState)
+void UnitManager::updateUnitInMap(const UnitKey key, const int currentUnitState, Vector2D &newUnitLocation)
 {
 	UnitMap::iterator iter = mUnitMap.find(key);
 
@@ -151,6 +151,7 @@ void UnitManager::updateUnitInMap(const UnitKey key, const int currentUnitState)
 	{
 		Unit *pUnit = iter->second;
 		pUnit->updateUnit(currentUnitState);
+		pUnit->setUnitPosition(newUnitLocation);
 	}
 
 	return;
@@ -163,7 +164,6 @@ void UnitManager::updateUnitsInMap(double newAnimSpeed)
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
 	{
 		Unit *pUnit = iter->second;
-
 		pUnit->getCurrentAnimation()->animUpdate(newAnimSpeed);
 	}
 }

@@ -59,7 +59,7 @@ public:
 	void drawUnitsInMap();
 
 	// Update all units in mUnitMap
-	void updateUnitInMap(const UnitKey key, const int currentUnitState);
+	void updateUnitInMap(const UnitKey key, const int currentUnitState, Vector2D &newUnitLocation);
 	void updateUnitsInMap(double newAnimSpeed);
 
 	// returns the Unit located at &key in mUnitMap

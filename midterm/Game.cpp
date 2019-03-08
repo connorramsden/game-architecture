@@ -128,6 +128,10 @@ void Game::initGame()
 	{
 		// Init the display
 		mpsSystemInstance->systemInit();
+
+		// Set head start position to center of screen
+		// TODO: Load start position from a data file
+		mHeadStartPosition = mpsSystemInstance->getCenterScreen();
 	}
 	else { std::cout << "No System instance exists." << std::endl; }
 
@@ -136,6 +140,12 @@ void Game::initGame()
 		mpsInputTranslatorInstance->initInputTranslator();
 	}
 
+	// Register the event system instance with this listener
+	EventSystem::getEventSystemInstance()->addListener((EventType)EXIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)DELETE_UNIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)MOVE_SNAKE, this);
+
 	// If the UMI has been properly initialized
 	if (mpsUnitManager && mpsGraphicsBufferManager)
 	{
@@ -143,23 +153,15 @@ void Game::initGame()
 		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_INDEX, ASSET_PATH, SNAKE_HEAD_FILENAME);
 	}
 
-	// Register the event system instance with this listener
-	EventSystem::getEventSystemInstance()->addListener((EventType)EXIT, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)DELETE_UNIT, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)SPRITE_SWAP, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)PAUSE_UNITS, this);
-
 	return;
 }
 
 // Delete System/Managers
 void Game::cleanupGame()
 {
-	EventSystem::getEventSystemInstance()->addListener((EventType)PAUSE_UNITS, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)SPRITE_SWAP, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)DELETE_UNIT, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
+	EventSystem::getEventSystemInstance()->removeListener((EventType)MOVE_SNAKE, this);
+	EventSystem::getEventSystemInstance()->removeListener((EventType)DELETE_UNIT, this);
+	EventSystem::getEventSystemInstance()->removeListener((EventType)CREATE_UNIT, this);
 	EventSystem::getEventSystemInstance()->removeListener((EventType)EXIT, this);
 
 	// Clean up the GBM
@@ -237,6 +239,8 @@ void Game::runGameLoop()
 
 		// Ensure all units move at a normalized speed
 		mpsGameInstance->mUnitSpeed = 1.0;
+
+		mpsGameInstance->createUnit(mpsGameInstance->mHeadStartPosition);
 	}
 
 	// Loop functionality
@@ -297,13 +301,9 @@ void Game::handleEvent(const Event & eventToHandle)
 		deleteUnit(deleteUnitEvent.getDestroyPosition());
 		return;
 	}
-	else if(eventToHandle.getEventType() == GameEventType::PAUSE_UNITS)
+	else if (eventToHandle.getEventType() == GameEventType::MOVE_SNAKE)
 	{
-		pauseUnits();
-	}
-	else if (eventToHandle.getEventType() == GameEventType::SPRITE_SWAP)
-	{
-		swapSprites();
+		const MoveSnake & moveSnakeEvent = static_cast<const MoveSnake &>(eventToHandle);
 	}
 
 	return;
@@ -348,7 +348,8 @@ void Game::updateLoop(double newUnitSpeed)
 	// Ensure that there is at least one unit present
 	if (mpsGameInstance->mNumUnits >= 0)
 	{
-		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mpsGameInstance->mUnitAnimIndex);
+		// TODO: Update snake position based on passed movement
+		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mpsGameInstance->mUnitAnimIndex, Vector2D(400,0));
 		mpsUnitManager->updateUnitsInMap(newUnitSpeed);
 	}
 
@@ -376,6 +377,22 @@ void Game::exitGame()
 
 void Game::createUnit(Vector2D targetPos)
 {
+	// Runs at start of SNAKE, creates the 'head' at the center of the screen
+	if(mpsGameInstance->mNumUnits < 0)
+	{
+		// mNumUnits => 0
+		mpsGameInstance->mNumUnits++;
+
+		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, targetPos);
+
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_INDEX), Vector2D(1.0f, 1.0f), true));
+	}
+	else
+	{
+		std::cout << "DEBUG CALL, WHY IS THIS CALLING" << std::endl;
+	}
+
+	/*
 	mpsGameInstance->mNumUnits++;
 
 	// Create a new unit and emplace it at center-screen
@@ -384,6 +401,7 @@ void Game::createUnit(Vector2D targetPos)
 	mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
 
 	mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
+	*/
 }
 
 void Game::deleteUnit(Vector2D targetPos)
@@ -395,27 +413,11 @@ void Game::deleteUnit(Vector2D targetPos)
 	}
 }
 
-void Game::swapSprites()
+void Game::moveUnit(Vector2D targetPos)
 {
-	if (mpsGameInstance->mUnitAnimIndex == 0)
+	if (mpsGameInstance->mNumUnits >= 0)
 	{
-		mpsGameInstance->mUnitAnimIndex = 1;
-	}
-	else if (mpsGameInstance->mUnitAnimIndex == 1)
-	{
-		mpsGameInstance->mUnitAnimIndex = 0;
-	}
-}
-
-void Game::pauseUnits()
-{
-	if (mpsGameInstance->mUnitSpeed == 1.0)
-	{
-		mpsGameInstance->mUnitSpeed = 0.0;
-	}
-	else
-	{
-		mpsGameInstance->mUnitSpeed = 1.0;
+		
 	}
 }
 

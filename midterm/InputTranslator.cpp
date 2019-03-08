@@ -56,30 +56,30 @@ void InputTranslator::cleanupInputTranslator()
 // Translate Allegro events into GameEvents
 void InputTranslator::handleEvent(const Event &eventToHandle)
 {
+	// Handles events dealing with keyboard input
 	if (eventToHandle.getEventType() == KEYBOARD_EVENT)
 	{
-		const KeyboardEvent &keyboardEvent = static_cast<const KeyboardEvent&>(eventToHandle);
+		const KeyboardEvent &kbEvent = static_cast<const KeyboardEvent&>(eventToHandle);
 
-		if (keyboardEvent.getInputState() == STATE_PRESSED)
+		// Functions called on key down
+		if (kbEvent.getInputState() == STATE_PRESSED)
 		{
-			if (keyboardEvent.getKeyNum() == ESCAPE)
+			if (kbEvent.getKeyNum() == ESCAPE)
 			{
 				EventSystem::getEventSystemInstance()->fireEvent(ExitEvent());
 			}
+			else if (kbEvent.getKeyNum() == W)
+			{
+				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake());
+			}
 		}		
-		else if (keyboardEvent.getInputState() == STATE_RELEASED)
-		{			
-			if (keyboardEvent.getKeyNum() == ENTER)
-			{
-				EventSystem::getEventSystemInstance()->fireEvent(SpriteSwap());
-			}
-			else if (keyboardEvent.getKeyNum() == SPACEBAR)
-			{
-				EventSystem::getEventSystemInstance()->fireEvent(PauseUnits());
-			}
+		// Functions called on key release
+		else if (kbEvent.getInputState() == STATE_RELEASED)
+		{
 		}
 		
 	}
+	// TODO: Clean up mouse button input, not important for Snake
 	else if (eventToHandle.getEventType() == MOUSEINPUT_EVENT)
 	{
 		const MouseEvent &mouseEvent = static_cast<const MouseEvent&>(eventToHandle);
@@ -87,14 +87,14 @@ void InputTranslator::handleEvent(const Event &eventToHandle)
 		Vector2D mousePosition = mouseEvent.getMousePosition();
 
 		if (mouseEvent.getInputState() == STATE_PRESSED || mouseEvent.getInputState() == STATE_HELD)
-		{
+		{			
 			if (mouseEvent.getMouseNum() == LEFTBUTTON)
 			{
-				EventSystem::getEventSystemInstance()->fireEvent(CreateUnit(mousePosition));
+				// EventSystem::getEventSystemInstance()->fireEvent(CreateUnit(mousePosition));
 			}
 			else if (mouseEvent.getMouseNum() == RIGHTBUTTON)
 			{
-				EventSystem::getEventSystemInstance()->fireEvent(DeleteUnit(mousePosition));
+				// EventSystem::getEventSystemInstance()->fireEvent(DeleteUnit(mousePosition));
 			}
 		}
 	}

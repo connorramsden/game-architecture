@@ -10,11 +10,17 @@
 #ifndef INPUTCODES_H
 #define INPUTCODES_H
 
+#include <allegro5/keycodes.h>
+
 enum KeyCode : int
 {
-	ESCAPE = 59,
-	ENTER = 67,
-	SPACEBAR = 75,
+	A = ALLEGRO_KEY_A,
+	D = ALLEGRO_KEY_D,
+	S = ALLEGRO_KEY_S,
+	W = ALLEGRO_KEY_W,
+	ESCAPE = ALLEGRO_KEY_ESCAPE,
+	ENTER = ALLEGRO_KEY_ENTER,
+	SPACEBAR = ALLEGRO_KEY_SPACE,
 };
 
 enum MouseCode : int
