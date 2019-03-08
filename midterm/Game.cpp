@@ -131,7 +131,7 @@ void Game::initGame()
 
 		// Set head start position to center of screen
 		// TODO: Load start position from a data file
-		mHeadStartPosition = mpsSystemInstance->getCenterScreen();
+		mSnakeHeadPosition = mpsSystemInstance->getCenterScreen();
 	}
 	else { std::cout << "No System instance exists." << std::endl; }
 
@@ -233,7 +233,7 @@ void Game::runGameLoop()
 		mpsGameInstance->mNumUnits = -1;
 
 		// Creates the snake head at the file-specified starting position
-		mpsGameInstance->createHead(mpsGameInstance->mHeadStartPosition);
+		mpsGameInstance->createHead(mpsGameInstance->mSnakeHeadPosition);
 	}
 
 	// Loop functionality
@@ -317,6 +317,8 @@ void Game::handleEvent(const Event & eventToHandle)
 	else if (eventToHandle.getEventType() == GameEventType::MOVE_SNAKE)
 	{
 		const MoveSnake & moveSnakeEvent = static_cast<const MoveSnake &>(eventToHandle);
+
+		moveHead(moveSnakeEvent.getMoveDirection());
 	}
 
 	return;
@@ -337,7 +339,7 @@ void Game::updateLoop()
 	if (mpsGameInstance->mNumUnits >= 0)
 	{
 		// TODO: Update snake position based on passed movement
-		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, Vector2D(400,0));
+		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mSnakeHeadPosition);
 	}
 
 	return;
@@ -367,23 +369,33 @@ void Game::exitGame()
 void Game::createHead(Vector2D targetPos)
 {
 	// Runs at start of SNAKE, creates the 'head' at the center of the screen
-	if(mpsGameInstance->mNumUnits < 0)
+	if (mpsGameInstance->mNumUnits < 0)
 	{
 		// mNumUnits => 0
 		mpsGameInstance->mNumUnits++;
 
 		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, targetPos);
-		
+
 		Animation snakeHead(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_INDEX), Vector2D(1.0f, 1.0f), false);
 
 		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHead);
 	}
 }
 
+void Game::moveHead(Vector2D moveDirection)
+{
+	// mSnakeHeadPosition = targetPos;
+
+	if (moveDirection.getY() == 1.0f)
+	{
+		mSnakeHeadPosition.setY(mSnakeHeadPosition.getY() - 10.0f);
+	}
+}
+
 // Default Game Constructor
 Game::Game(EventSystem *pEventSystem)
 	:EventListener(pEventSystem)
-	,mID(msID)
+	, mID(msID)
 {
 	msID++;
 

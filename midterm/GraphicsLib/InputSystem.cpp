@@ -97,6 +97,11 @@ void InputSystem::updateInputSystem()
 	setMousePosition(mMouseState.x, mMouseState.y);
 
 	// Fire current keyboard state
+	// TODO: Modular fireKeyboardEvent, no need to account for all game keys
+	fireKeyboardEvent(A);
+	fireKeyboardEvent(D);
+	fireKeyboardEvent(S);
+	fireKeyboardEvent(W);
 	fireKeyboardEvent(ESCAPE);
 	fireKeyboardEvent(SPACEBAR);
 	fireKeyboardEvent(ENTER);

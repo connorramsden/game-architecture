@@ -49,9 +49,16 @@ private:
 class MoveSnake : public Event
 {
 public:
-	MoveSnake()
+	MoveSnake(Vector2D newDirection)
 		:Event((EventType)GameEventType::MOVE_SNAKE)
-	{};
+	{
+		mMoveDirection = newDirection;
+	};
+
+	inline Vector2D getMoveDirection() const { return mMoveDirection; }
+
+private:
+	Vector2D mMoveDirection;
 };
 
 #endif

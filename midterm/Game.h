@@ -42,8 +42,9 @@ class PauseUnits;
 int stringToASCII(std::string s);
 int basicHashFunction(std::string s);
 
-// Asset locations / file names for use in the Game
-// Real game would have a better asset management system
+// Decent table size to hash-function with
+const int HASH_MOD = 127;
+
 const std::string ASSET_PATH = "Assets/";
 const std::string SNAKE_HEAD_FILENAME = "snake_head.png";
 const std::string SNAKE_BODY_FILENAME = "snake_body.png";
@@ -54,9 +55,6 @@ const int SNAKE_HEAD_INDEX = basicHashFunction(SNAKE_HEAD_FILENAME);
 const int SNAKE_BODY_INDEX = basicHashFunction(SNAKE_BODY_FILENAME);
 const int OBJECTIVE_INDEX = basicHashFunction(OBJECTIVE_FILENAME);
 const int WALLS_INDEX = basicHashFunction(WALLS_FILENAME);
-
-// Decent table size to hash-map with
-const int HASH_MOD = 127;
 
 class Game : public EventListener
 {
@@ -134,8 +132,8 @@ private:
 	// Determines how many units exist in mpsUnitManager
 	int mNumUnits;
 
-	// Stores the x/y position of the head at game start
-	Vector2D mHeadStartPosition;
+	// Stores the x/y position of the snake head
+	Vector2D mSnakeHeadPosition;
 
 // Private Game Functions
 private:
@@ -163,6 +161,8 @@ private:
 
 	// Create the 'head' piece of the Snake
 	void createHead(Vector2D targetPos);
+
+	void moveHead(Vector2D targetPos);
 };
 
 #endif

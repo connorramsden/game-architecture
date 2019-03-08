@@ -61,20 +61,26 @@ void InputTranslator::handleEvent(const Event &eventToHandle)
 	{
 		const KeyboardEvent &kbEvent = static_cast<const KeyboardEvent&>(eventToHandle);
 
-		// Events fired on key down
-		if (kbEvent.getInputState() == STATE_PRESSED)
+		// Events fired on key hold or press
+		if (kbEvent.getInputState() == STATE_HELD || kbEvent.getInputState() == STATE_PRESSED)
+		{
+			if (kbEvent.getKeyNum() == W)
+			{
+				Vector2D moveDirection(0.0f, 1.0f);
+
+				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+			}
+		}
+		// Events fired on key release
+		else if (kbEvent.getInputState() == STATE_RELEASED)
 		{
 			if (kbEvent.getKeyNum() == ESCAPE)
 			{
 				EventSystem::getEventSystemInstance()->fireEvent(ExitEvent());
 				return;
 			}
-		}		
-		// Events fired on key release
-		else if (kbEvent.getInputState() == STATE_RELEASED)
-		{
 		}
-		
+
 	}
 	// TODO: Clean up mouse button input, not important for Snake
 	else if (eventToHandle.getEventType() == MOUSEINPUT_EVENT)
@@ -84,7 +90,7 @@ void InputTranslator::handleEvent(const Event &eventToHandle)
 		Vector2D mousePosition = mouseEvent.getMousePosition();
 
 		if (mouseEvent.getInputState() == STATE_PRESSED || mouseEvent.getInputState() == STATE_HELD)
-		{			
+		{
 			if (mouseEvent.getMouseNum() == LEFTBUTTON)
 			{
 				// EventSystem::getEventSystemInstance()->fireEvent(CreateUnit(mousePosition));
