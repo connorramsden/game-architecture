@@ -1,10 +1,10 @@
 /*********************************************************************
 **		Author:	Connor Ramsden										**
 **		Class: EGP-310-02											**
-**		Assignment: Assignment 05									**
+**		Assignment: Midterm Project (Snake)							**
 **		Certification of Authenticity:								**
 **		I certify that this assignment is entirely my own work.	    **
-**		Assignment 05 Author: Connor Ramsden						**
+**		Midterm Project Author: Connor Ramsden						**
 *********************************************************************/
 
 #ifndef GAME_H
@@ -50,10 +50,10 @@ const std::string SNAKE_BODY_FILENAME = "snake_body.png";
 const std::string OBJECTIVE_FILENAME = "objective.png";
 const std::string WALLS_FILENAME = "walls.png";
 
-const int SNAKE_HEAD_INDEX = stringToASCII(SNAKE_HEAD_FILENAME);
-const int SNAKE_BODY_INDEX = stringToASCII(SNAKE_BODY_FILENAME);
-const int OBJECTIVE_INDEX = stringToASCII(OBJECTIVE_FILENAME);
-const int WALLS_INDEX = stringToASCII(WALLS_FILENAME);
+const int SNAKE_HEAD_INDEX = basicHashFunction(SNAKE_HEAD_FILENAME);
+const int SNAKE_BODY_INDEX = basicHashFunction(SNAKE_BODY_FILENAME);
+const int OBJECTIVE_INDEX = basicHashFunction(OBJECTIVE_FILENAME);
+const int WALLS_INDEX = basicHashFunction(WALLS_FILENAME);
 
 // Decent table size to hash-map with
 const int HASH_MOD = 127;
