@@ -41,26 +41,24 @@ public:
 	// Loops through mUnitMap and deletes all Unit(s)
 	void cleanupUnitManager();
 
-	// Add a new Unit to the map at the passed UnitKey
+	// Add a new Unit to the map at the passed UnitKey index
 	Unit *createAndManageUnit(const UnitKey key, Vector2D &unitLocation);
 
-	// Delete the Unit in mUnitMap at the specified key
+	// Delete the Unit in mUnitMap at the passed UnitKey
 	void deleteUnit(const UnitKey key);
 
-	// Deletes the passed unit from mUnitMap
+	// Deletes the passed Unit from mUnitMap
 	void deleteUnit(Unit *pUnit);
 
-	// Delete the unit at unitToDeletePostion from mUnitMap
-	void deleteUnit(Vector2D unitToDeletePosition);
-
+	// Add the passed Animation to the Unit at the passed UnitKey index
 	void addAnimationToUnit(const UnitKey key, Animation &animToAdd);
 
 	// Draws all units in mUnitMap to screen
 	void drawUnitsInMap();
 
 	// Update all units in mUnitMap
-	void updateUnitInMap(const UnitKey key, const int currentUnitState, Vector2D &newUnitLocation);
-	void updateUnitsInMap(double newAnimSpeed);
+	void updateUnitInMap(const UnitKey key, Vector2D &newUnitLocation);
+	void updateAnimationsInMap(double newAnimSpeed);
 
 	// returns the Unit located at &key in mUnitMap
 	Unit *getUnit(const UnitKey key) const;

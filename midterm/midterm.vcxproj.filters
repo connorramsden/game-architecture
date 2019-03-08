@@ -66,4 +66,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\objective.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\snake_body.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\snake_head.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\walls.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

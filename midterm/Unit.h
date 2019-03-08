@@ -31,15 +31,8 @@ public:
 	// Adds a new Animation to the Unit's animation sheet
 	void addNewAnimation(Animation &newAnim);
 
-	// Update the unit currently selected
-	void updateUnit(const int currentUnitState);
-
 	// Draw the unit's current animation to screen
 	void drawUnit();
-
-	// Determines if unit is colliding with the passed in point
-	// Credit to Jacob Rose for this method
-	bool isUnitColliding(Vector2D collisionPoint);
 
 	// Cleans up the unit & its animation sheet
 	void cleanupUnit();

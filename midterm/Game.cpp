@@ -143,7 +143,6 @@ void Game::initGame()
 	// Register the event system instance with this listener
 	EventSystem::getEventSystemInstance()->addListener((EventType)EXIT, this);
 	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)DELETE_UNIT, this);
 	EventSystem::getEventSystemInstance()->addListener((EventType)MOVE_SNAKE, this);
 
 	// If the UMI has been properly initialized
@@ -160,7 +159,6 @@ void Game::initGame()
 void Game::cleanupGame()
 {
 	EventSystem::getEventSystemInstance()->removeListener((EventType)MOVE_SNAKE, this);
-	EventSystem::getEventSystemInstance()->removeListener((EventType)DELETE_UNIT, this);
 	EventSystem::getEventSystemInstance()->removeListener((EventType)CREATE_UNIT, this);
 	EventSystem::getEventSystemInstance()->removeListener((EventType)EXIT, this);
 
@@ -231,16 +229,11 @@ void Game::runGameLoop()
 		// Ensure that the game loop will run
 		mpsGameInstance->mGameIsRunning = true;
 
-		// Start all Units from the first Animation frame
-		mpsGameInstance->mUnitAnimIndex = 0;
-
 		// Ensures first user click will bring map count to 0, instead of 1
 		mpsGameInstance->mNumUnits = -1;
 
-		// Ensure all units move at a normalized speed
-		mpsGameInstance->mUnitSpeed = 1.0;
-
-		mpsGameInstance->createUnit(mpsGameInstance->mHeadStartPosition);
+		// Creates the snake head at the file-specified starting position
+		mpsGameInstance->createHead(mpsGameInstance->mHeadStartPosition);
 	}
 
 	// Loop functionality
@@ -259,7 +252,7 @@ void Game::runGameLoop()
 		mpsGameInstance->getUserInput();
 
 		// Update Unit(s) on screen
-		mpsGameInstance->updateLoop(mpsGameInstance->mUnitSpeed);
+		mpsGameInstance->updateLoop();
 
 		// Render background / units / etc to display
 		mpsGameInstance->renderToDisplay();
@@ -276,35 +269,6 @@ void Game::runGameLoop()
 
 	// Stop the game loop, delete pointers, etc.
 	mpsGameInstance->stopGameLoop();
-
-	return;
-}
-
-void Game::handleEvent(const Event & eventToHandle)
-{
-	if (eventToHandle.getEventType() == GameEventType::EXIT)
-	{
-		exitGame();
-		return;
-	}
-	else if (eventToHandle.getEventType() == GameEventType::CREATE_UNIT)
-	{
-		const CreateUnit & createUnitEvent = static_cast<const CreateUnit &>(eventToHandle);
-
-		createUnit(createUnitEvent.getUnitPosition());
-		return;
-	}
-	else if (eventToHandle.getEventType() == GameEventType::DELETE_UNIT)
-	{
-		const DeleteUnit & deleteUnitEvent = static_cast<const DeleteUnit &>(eventToHandle);
-
-		deleteUnit(deleteUnitEvent.getDestroyPosition());
-		return;
-	}
-	else if (eventToHandle.getEventType() == GameEventType::MOVE_SNAKE)
-	{
-		const MoveSnake & moveSnakeEvent = static_cast<const MoveSnake &>(eventToHandle);
-	}
 
 	return;
 }
@@ -334,6 +298,30 @@ void Game::stopGameLoop()
 	return;
 }
 
+// Handle incoming Game events
+void Game::handleEvent(const Event & eventToHandle)
+{
+	if (eventToHandle.getEventType() == GameEventType::EXIT)
+	{
+		exitGame();
+		return;
+	}
+	// TODO: CreateUnit behavior will be different for Snake
+	else if (eventToHandle.getEventType() == GameEventType::CREATE_UNIT)
+	{
+		const CreateUnit & createUnitEvent = static_cast<const CreateUnit &>(eventToHandle);
+
+		// createUnit(createUnitEvent.getUnitPosition());
+		return;
+	}
+	else if (eventToHandle.getEventType() == GameEventType::MOVE_SNAKE)
+	{
+		const MoveSnake & moveSnakeEvent = static_cast<const MoveSnake &>(eventToHandle);
+	}
+
+	return;
+}
+
 // Checks for user input from the System
 void Game::getUserInput()
 {
@@ -343,14 +331,13 @@ void Game::getUserInput()
 }
 
 // Update all game objects / units
-void Game::updateLoop(double newUnitSpeed)
+void Game::updateLoop()
 {
 	// Ensure that there is at least one unit present
 	if (mpsGameInstance->mNumUnits >= 0)
 	{
 		// TODO: Update snake position based on passed movement
-		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mpsGameInstance->mUnitAnimIndex, Vector2D(400,0));
-		mpsUnitManager->updateUnitsInMap(newUnitSpeed);
+		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, Vector2D(400,0));
 	}
 
 	return;
@@ -370,12 +357,14 @@ void Game::renderToDisplay()
 	return;
 }
 
+// Stop the game loop from running
 void Game::exitGame()
 {
 	mpsGameInstance->mGameIsRunning = false;
 }
 
-void Game::createUnit(Vector2D targetPos)
+// Create the 'head' piece of the Snake
+void Game::createHead(Vector2D targetPos)
 {
 	// Runs at start of SNAKE, creates the 'head' at the center of the screen
 	if(mpsGameInstance->mNumUnits < 0)
@@ -384,40 +373,10 @@ void Game::createUnit(Vector2D targetPos)
 		mpsGameInstance->mNumUnits++;
 
 		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, targetPos);
-
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_INDEX), Vector2D(1.0f, 1.0f), true));
-	}
-	else
-	{
-		std::cout << "DEBUG CALL, WHY IS THIS CALLING" << std::endl;
-	}
-
-	/*
-	mpsGameInstance->mNumUnits++;
-
-	// Create a new unit and emplace it at center-screen
-	mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, mpsSystemInstance->getInputSystem()->getMousePosition());
-
-	mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(SMURF_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
-
-	mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, Animation(*mpsGraphicsBufferManager->getGraphicsBuffer(DEAN_SPRITE_INDEX), Vector2D(SPRITESHEET_ROW_COUNT, SPRITESHEET_COLUMN_COUNT), true));
-	*/
-}
-
-void Game::deleteUnit(Vector2D targetPos)
-{
-	if (mpsGameInstance->mNumUnits >= 0)
-	{
-		mpsUnitManager->deleteUnit(mpsGameInstance->mNumUnits);
-		mpsGameInstance->mNumUnits--;
-	}
-}
-
-void Game::moveUnit(Vector2D targetPos)
-{
-	if (mpsGameInstance->mNumUnits >= 0)
-	{
 		
+		Animation snakeHead(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_INDEX), Vector2D(1.0f, 1.0f), false);
+
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHead);
 	}
 }
 

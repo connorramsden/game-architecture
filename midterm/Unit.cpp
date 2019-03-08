@@ -13,12 +13,16 @@
 // Add a new Animation to mUnitAnimations
 void Unit::addNewAnimation(Animation & newAnim)
 {
-	mUnitAnimations.push_back(new Animation(newAnim));
-}
-
-void Unit::updateUnit(const int currentUnitState)
-{
-	mpCurrentAnimation = mUnitAnimations.at(currentUnitState);
+	// If this is the first animation being added to the unit,
+	if (mUnitAnimations.empty())
+	{
+		mUnitAnimations.push_back(new Animation(newAnim));
+		mpCurrentAnimation = mUnitAnimations.at(0);
+	}
+	else
+	{
+		mUnitAnimations.push_back(new Animation(newAnim));
+	}
 }
 
 void Unit::drawUnit()
@@ -26,27 +30,6 @@ void Unit::drawUnit()
 	Sprite spr = mpCurrentAnimation->getCurrentSprite();
 
 	Game::getSystemInstance()->getGraphicsSystem()->draw(spr, mUnitPosition.getX(), mUnitPosition.getY());
-}
-
-bool Unit::isUnitColliding(Vector2D collisionPoint)
-{
-	Sprite spr = mpCurrentAnimation->getCurrentSprite();
-
-	if (mUnitPosition.getX() < collisionPoint.getX() && mUnitPosition.getX() + spr.getWidth() > collisionPoint.getX())
-	{
-		if (mUnitPosition.getY() < collisionPoint.getY() && mUnitPosition.getY() + spr.getHeight() > collisionPoint.getY())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
 }
 
 // Loop through all Animation(s) in mUnitAnimations

@@ -137,6 +137,12 @@
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitManager.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\objective.png" />
+    <Image Include="Assets\snake_body.png" />
+    <Image Include="Assets\snake_head.png" />
+    <Image Include="Assets\walls.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

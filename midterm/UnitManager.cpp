@@ -37,6 +37,7 @@ void UnitManager::cleanupUnitManager()
 	return;
 }
 
+// Add a new Unit to the map at the passed UnitKey
 Unit * UnitManager::createAndManageUnit(const UnitKey key, Vector2D &unitLocation)
 {
 	Unit *pUnit = nullptr;
@@ -53,6 +54,7 @@ Unit * UnitManager::createAndManageUnit(const UnitKey key, Vector2D &unitLocatio
 	return pUnit;
 }
 
+// Delete the Unit in mUnitMap at the passed UnitKey index
 void UnitManager::deleteUnit(const UnitKey key)
 {
 	UnitMap::iterator iter = mUnitMap.find(key);
@@ -71,7 +73,7 @@ void UnitManager::deleteUnit(const UnitKey key)
 	return;
 }
 
-// Deletes the passed unit from mUnitMap
+// Deletes the passed Unit from mUnitMap
 void UnitManager::deleteUnit(Unit *pUnit)
 {
 	UnitMap::iterator iter;
@@ -93,36 +95,7 @@ void UnitManager::deleteUnit(Unit *pUnit)
 	return;
 }
 
-void UnitManager::deleteUnit(Vector2D unitToDeletePosition)
-{
-	std::vector<UnitKey> keys;
-
-	UnitMap::iterator iter;
-
-	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); iter++)
-	{
-		Unit *pUnit = iter->second;
-
-		if (pUnit->isUnitColliding(unitToDeletePosition))
-		{
-			keys.push_back(iter->first);
-		}
-	}
-
-	for (int i = 0; i < (int) keys.size() - 1; i++)
-	{
-		Unit *pUnit = mUnitMap.find(keys.at(i))->second;
-
-		delete pUnit;
-
-		pUnit = nullptr;
-
-		mUnitMap.erase(keys.at(i));
-	}
-
-	return;
-}
-
+// Add the passed Animation to the Unit at the passed UnitKey index
 void UnitManager::addAnimationToUnit(const UnitKey key, Animation & animToAdd)
 {
 	mUnitMap[key]->addNewAnimation(animToAdd);
@@ -143,21 +116,20 @@ void UnitManager::drawUnitsInMap()
 	return;
 }
 
-void UnitManager::updateUnitInMap(const UnitKey key, const int currentUnitState, Vector2D &newUnitLocation)
+void UnitManager::updateUnitInMap(const UnitKey key, Vector2D &newUnitLocation)
 {
 	UnitMap::iterator iter = mUnitMap.find(key);
 
 	if (iter->second)
 	{
 		Unit *pUnit = iter->second;
-		pUnit->updateUnit(currentUnitState);
 		pUnit->setUnitPosition(newUnitLocation);
 	}
 
 	return;
 }
 
-void UnitManager::updateUnitsInMap(double newAnimSpeed)
+void UnitManager::updateAnimationsInMap(double newAnimSpeed)
 {
 	UnitMap::iterator iter;
 

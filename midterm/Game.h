@@ -131,15 +131,10 @@ private:
 	// Controls whether or not the game loop can run
 	bool mGameIsRunning;
 
-	// Controls which index of mpsUnitManager to show
-	int mUnitAnimIndex;
-
 	// Determines how many units exist in mpsUnitManager
 	int mNumUnits;
 
-	// Determines how quickly the units are animated
-	double mUnitSpeed;
-
+	// Stores the x/y position of the head at game start
 	Vector2D mHeadStartPosition;
 
 // Private Game Functions
@@ -156,20 +151,18 @@ private:
 	void getUserInput();
 
 	// Update all game objects
-	void updateLoop(double newUnitSpeed);
+	void updateLoop();
 
 	// Render all game objects and backgrounds to the display
 	void renderToDisplay();
 	
 // Private Game Event Functions
 private:
+	// Stop the game loop from running
 	void exitGame();
 
-	void createUnit(Vector2D targetPos);
-
-	void deleteUnit(Vector2D targetPos);
-
-	void moveUnit(Vector2D targetPos);
+	// Create the 'head' piece of the Snake
+	void createHead(Vector2D targetPos);
 };
 
 #endif

@@ -61,19 +61,16 @@ void InputTranslator::handleEvent(const Event &eventToHandle)
 	{
 		const KeyboardEvent &kbEvent = static_cast<const KeyboardEvent&>(eventToHandle);
 
-		// Functions called on key down
+		// Events fired on key down
 		if (kbEvent.getInputState() == STATE_PRESSED)
 		{
 			if (kbEvent.getKeyNum() == ESCAPE)
 			{
 				EventSystem::getEventSystemInstance()->fireEvent(ExitEvent());
-			}
-			else if (kbEvent.getKeyNum() == W)
-			{
-				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake());
+				return;
 			}
 		}		
-		// Functions called on key release
+		// Events fired on key release
 		else if (kbEvent.getInputState() == STATE_RELEASED)
 		{
 		}
