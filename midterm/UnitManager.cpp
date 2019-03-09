@@ -129,14 +129,14 @@ void UnitManager::updateUnitInMap(const UnitKey key, Vector2D &newUnitLocation)
 	return;
 }
 
-void UnitManager::updateAnimationsInMap(double newAnimSpeed)
+void UnitManager::updateAnimationsInMap(int newAnimIndex)
 {
 	UnitMap::iterator iter;
 
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
 	{
 		Unit *pUnit = iter->second;
-		pUnit->getCurrentAnimation()->animUpdate(newAnimSpeed);
+		pUnit->updateUnitAnim(newAnimIndex);
 	}
 }
 

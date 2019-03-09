@@ -26,6 +26,9 @@
 // GraphicsLib Class References
 class EventSystem;
 
+// Game Includes
+#include "GameAssets.h"
+
 // Game Class References
 class InputTranslator;
 class UnitManager;
@@ -37,24 +40,6 @@ class CreateUnit;
 class DeleteUnit;
 class SpriteSwap;
 class PauseUnits;
-
-// Converts a string to its ascii / char values, and returns the sum of those values
-int stringToASCII(std::string s);
-int basicHashFunction(std::string s);
-
-// Decent table size to hash-function with
-const int HASH_MOD = 127;
-
-const std::string ASSET_PATH = "Assets/";
-const std::string SNAKE_HEAD_FILENAME = "snake_head.png";
-const std::string SNAKE_BODY_FILENAME = "snake_body.png";
-const std::string OBJECTIVE_FILENAME = "objective.png";
-const std::string WALLS_FILENAME = "walls.png";
-
-const int SNAKE_HEAD_INDEX = basicHashFunction(SNAKE_HEAD_FILENAME);
-const int SNAKE_BODY_INDEX = basicHashFunction(SNAKE_BODY_FILENAME);
-const int OBJECTIVE_INDEX = basicHashFunction(OBJECTIVE_FILENAME);
-const int WALLS_INDEX = basicHashFunction(WALLS_FILENAME);
 
 class Game : public EventListener
 {
@@ -132,8 +117,13 @@ private:
 	// Determines how many units exist in mpsUnitManager
 	int mNumUnits;
 
+	Font *mpGameFont;
+
 	// Stores the x/y position of the snake head
 	Vector2D mSnakeHeadPosition;
+
+	// Stores the direction the snake is moving at any given time
+	Vector2D mCurrentSnakeDirection;
 
 // Private Game Functions
 private:
@@ -159,10 +149,16 @@ private:
 	// Stop the game loop from running
 	void exitGame();
 
+	// Similar to exitGame(), but not as instant
+	void failState();
+
 	// Create the 'head' piece of the Snake
 	void createHead(Vector2D targetPos);
 
 	void moveHead(Vector2D targetPos);
+	void updateSnakeHead();
+
+	bool isSnakeWithinBounds();
 };
 
 #endif

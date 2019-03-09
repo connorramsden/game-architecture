@@ -58,7 +58,8 @@ public:
 
 	// Update all units in mUnitMap
 	void updateUnitInMap(const UnitKey key, Vector2D &newUnitLocation);
-	void updateAnimationsInMap(double newAnimSpeed);
+
+	void updateAnimationsInMap(int newAnimIndex);
 
 	// returns the Unit located at &key in mUnitMap
 	Unit *getUnit(const UnitKey key) const;

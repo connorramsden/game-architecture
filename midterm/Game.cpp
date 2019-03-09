@@ -132,6 +132,8 @@ void Game::initGame()
 		// Set head start position to center of screen
 		// TODO: Load start position from a data file
 		mSnakeHeadPosition = mpsSystemInstance->getCenterScreen();
+
+		mpsGameInstance->mpGameFont = new Font(ASSET_PATH, GAME_FONT, 36);
 	}
 	else { std::cout << "No System instance exists." << std::endl; }
 
@@ -149,7 +151,10 @@ void Game::initGame()
 	if (mpsUnitManager && mpsGraphicsBufferManager)
 	{
 		// Create a graphics buffer from 'smurf_sprites.png'
-		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_INDEX, ASSET_PATH, SNAKE_HEAD_FILENAME);
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_UP_INDEX, ASSET_PATH, SNAKE_HEAD_UP_FILENAME);
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_RIGHT_INDEX, ASSET_PATH, SNAKE_HEAD_RIGHT_FILENAME);
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_DOWN_INDEX, ASSET_PATH, SNAKE_HEAD_DOWN_FILENAME);
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_LEFT_INDEX, ASSET_PATH, SNAKE_HEAD_LEFT_FILENAME);
 	}
 
 	return;
@@ -232,6 +237,8 @@ void Game::runGameLoop()
 		// Ensures first user click will bring map count to 0, instead of 1
 		mpsGameInstance->mNumUnits = -1;
 
+		mpsSystemInstance->getGraphicsSystem()->writeText(mpsSystemInstance->getGraphicsSystem()->getBackBuffer(), mpsSystemInstance->getCenterScreen().getX(), mpsSystemInstance->getCenterScreen().getY(), *mpsGameInstance->mpGameFont, Color(1, 1, 1), "Press WASD to Start!");
+
 		// Creates the snake head at the file-specified starting position
 		mpsGameInstance->createHead(mpsGameInstance->mSnakeHeadPosition);
 	}
@@ -279,6 +286,9 @@ void Game::stopGameLoop()
 	// Stops game timer
 	mpTimerInstance->stop();
 
+	delete mpGameFont;
+	mpGameFont = nullptr;
+
 	if (mpTimerInstance)
 	{
 		// Delete & nullify the game timer
@@ -318,7 +328,7 @@ void Game::handleEvent(const Event & eventToHandle)
 	{
 		const MoveSnake & moveSnakeEvent = static_cast<const MoveSnake &>(eventToHandle);
 
-		moveHead(moveSnakeEvent.getMoveDirection());
+		mCurrentSnakeDirection = moveSnakeEvent.getMoveDirection();
 	}
 
 	return;
@@ -338,7 +348,10 @@ void Game::updateLoop()
 	// Ensure that there is at least one unit present
 	if (mpsGameInstance->mNumUnits >= 0)
 	{
-		// TODO: Update snake position based on passed movement
+		moveHead(mCurrentSnakeDirection);
+
+		updateSnakeHead();
+
 		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mSnakeHeadPosition);
 	}
 
@@ -365,6 +378,13 @@ void Game::exitGame()
 	mpsGameInstance->mGameIsRunning = false;
 }
 
+void Game::failState()
+{
+	mpsGameInstance->mGameIsRunning = false;
+
+	system("pause");
+}
+
 // Create the 'head' piece of the Snake
 void Game::createHead(Vector2D targetPos)
 {
@@ -376,19 +396,85 @@ void Game::createHead(Vector2D targetPos)
 
 		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, targetPos);
 
-		Animation snakeHead(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_INDEX), Vector2D(1.0f, 1.0f), false);
+		Animation snakeHeadUp(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_UP_INDEX), Vector2D(1.0f, 1.0f), false);
+		Animation snakeHeadRight(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_RIGHT_INDEX), Vector2D(1.0f, 1.0f), false);
+		Animation snakeHeadDown(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_DOWN_INDEX), Vector2D(1.0f, 1.0f), false);
+		Animation snakeHeadLeft(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_LEFT_INDEX), Vector2D(1.0f, 1.0f), false);
 
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHead);
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadUp);
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadRight);
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadDown);
+		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadLeft);
 	}
 }
 
 void Game::moveHead(Vector2D moveDirection)
 {
-	// mSnakeHeadPosition = targetPos;
+	const float SNAKE_SPEED = 7.5f;
 
-	if (moveDirection.getY() == 1.0f)
+	if (isSnakeWithinBounds())
 	{
-		mSnakeHeadPosition.setY(mSnakeHeadPosition.getY() - 10.0f);
+		if (moveDirection.getY() == 1.0f)
+		{
+			mSnakeHeadPosition.setY(mSnakeHeadPosition.getY() - SNAKE_SPEED);
+		}
+		else if (moveDirection.getY() == -1.0f)
+		{
+			mSnakeHeadPosition.setY(mSnakeHeadPosition.getY() + SNAKE_SPEED);
+		}
+
+		if (moveDirection.getX() == 1.0f)
+		{
+			mSnakeHeadPosition.setX(mSnakeHeadPosition.getX() + SNAKE_SPEED);
+		}
+		else if (moveDirection.getX() == -1.0f)
+		{
+			mSnakeHeadPosition.setX(mSnakeHeadPosition.getX() - SNAKE_SPEED);
+		}
+	}
+	else
+	{
+		failState();
+	}
+}
+
+void Game::updateSnakeHead()
+{
+	if (mCurrentSnakeDirection.getY() == 1.0f)
+	{
+		mpsUnitManager->updateAnimationsInMap(0);
+	}
+	else if (mCurrentSnakeDirection.getY() == -1.0f)
+	{
+		mpsUnitManager->updateAnimationsInMap(2);
+	}
+
+	if (mCurrentSnakeDirection.getX() == 1.0f)
+	{
+		mpsUnitManager->updateAnimationsInMap(1);
+	}
+	else if (mCurrentSnakeDirection.getX() == -1.0f)
+	{
+		mpsUnitManager->updateAnimationsInMap(3);
+	}
+}
+
+bool Game::isSnakeWithinBounds()
+{
+	if (mSnakeHeadPosition.getY() > 0 && mSnakeHeadPosition.getY() < 720)
+	{
+		if (mSnakeHeadPosition.getX() > 0 && mSnakeHeadPosition.getX() < 1280)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -433,23 +519,4 @@ Game::~Game()
 	cleanupGame();
 
 	return;
-}
-
-// Converts passed string to ASCII characters
-int stringToASCII(std::string s)
-{
-	int sum = 0;
-
-	for (int i = 0; i < (int)s.length(); i++)
-	{
-		sum += (int)s[i];
-	}
-
-	return sum;
-}
-
-// Uses ASCII characters to create an integer hash index
-int basicHashFunction(std::string s)
-{
-	return stringToASCII(s) % HASH_MOD;
 }

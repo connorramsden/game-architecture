@@ -15,6 +15,7 @@
 
 // DeanLib Includes
 #include <Trackable.h>
+#include <Vector2D.h>
 
 // Allegro Includes
 #include <allegro5/allegro.h>
@@ -71,6 +72,9 @@ public:
 
 	// Write text to the current back buffer.
 	static void writeText(float _destinationX, float _destinationY, Font& _font, Color _color, std::string _text, int _flag = FONT_ALIGN_LEFT);
+
+	// Write text to current backbuffer || ADDED BY CONNOR RAMSDEN
+	static void writeText(Vector2D _destination, Font& _font, Color _color, std::string _text, int _flag = FONT_ALIGN_LEFT);
 
 	// Write text to the given buffer.
 	static void writeText(GraphicsBuffer& _buffer, float _destinationX, float _destinationY, Font& _font, Color _color, std::string _text, int _flag = FONT_ALIGN_LEFT);

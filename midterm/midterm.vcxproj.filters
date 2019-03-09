@@ -39,6 +39,9 @@
     <ClCompile Include="InputTranslator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameAssets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UnitManager.h">
@@ -65,6 +68,9 @@
     <ClInclude Include="GameEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameAssets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\objective.png">
@@ -73,11 +79,25 @@
     <Image Include="Assets\snake_body.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\snake_head.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Assets\walls.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\snake_head_down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\snake_head_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\snake_head_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\snake_head_up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\cour.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

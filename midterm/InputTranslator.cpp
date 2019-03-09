@@ -62,7 +62,7 @@ void InputTranslator::handleEvent(const Event &eventToHandle)
 		const KeyboardEvent &kbEvent = static_cast<const KeyboardEvent&>(eventToHandle);
 
 		// Events fired on key hold or press
-		if (kbEvent.getInputState() == STATE_HELD || kbEvent.getInputState() == STATE_PRESSED)
+		if (kbEvent.getInputState() == STATE_PRESSED)
 		{
 			if (kbEvent.getKeyNum() == W)
 			{
@@ -70,6 +70,24 @@ void InputTranslator::handleEvent(const Event &eventToHandle)
 
 				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
 			}
+			else if (kbEvent.getKeyNum() == S)
+			{
+				Vector2D moveDirection(0.0f, -1.0f);
+				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+			}
+
+			if (kbEvent.getKeyNum() == A)
+			{
+				Vector2D moveDirection(-1.0f, 0.0f);
+
+				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+			}
+			else if (kbEvent.getKeyNum() == D)
+			{
+				Vector2D moveDirection(1.0f, 0.0f);
+				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+			}
+			
 		}
 		// Events fired on key release
 		else if (kbEvent.getInputState() == STATE_RELEASED)

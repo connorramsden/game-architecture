@@ -34,6 +34,8 @@ public:
 	// Draw the unit's current animation to screen
 	void drawUnit();
 
+	void updateUnitAnim(int newAnimIndex);
+
 	// Cleans up the unit & its animation sheet
 	void cleanupUnit();
 

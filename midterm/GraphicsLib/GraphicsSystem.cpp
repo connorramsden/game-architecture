@@ -193,6 +193,13 @@ void GraphicsSystem::writeText(float _destinationX, float _destinationY, Font& _
 	return;
 }
 
+void GraphicsSystem::writeText(Vector2D _destination, Font & _font, Color _color, std::string _text, int _flag)
+{
+	al_draw_text(_font.mpFont, getColor(_color), _destination.getX(), _destination.getY(), _flag, _text.c_str());
+
+	return;
+}
+
 // Write text to the given buffer.
 void GraphicsSystem::writeText(GraphicsBuffer& _buffer, float _destinationX, float _destinationY, Font& _font, Color _color, std::string _text, int _flag /* = FONT_ALIGN_LEFT */)
 {

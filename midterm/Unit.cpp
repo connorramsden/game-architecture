@@ -32,6 +32,19 @@ void Unit::drawUnit()
 	Game::getSystemInstance()->getGraphicsSystem()->draw(spr, mUnitPosition.getX(), mUnitPosition.getY());
 }
 
+void Unit::updateUnitAnim(int newAnimIndex)
+{
+	if (mUnitAnimations.empty())
+	{
+		std::cout << "Animation sheet empty, BUG" << std::endl;
+		return;
+	}
+	else
+	{
+		mpCurrentAnimation = mUnitAnimations.at(newAnimIndex);
+	}
+}
+
 // Loop through all Animation(s) in mUnitAnimations
 // and delete + null each one
 void Unit::cleanupUnit()
