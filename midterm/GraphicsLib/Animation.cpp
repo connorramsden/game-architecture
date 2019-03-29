@@ -1,3 +1,4 @@
+#include "Animation.h"
 /*********************************************************************
 **		Author:	Connor Ramsden										**
 **		Class: EGP-310-02											**
@@ -14,7 +15,7 @@ Animation::Animation()
 	return;
 }
 
-Animation::Animation(GraphicsBuffer & src, Vector2D rowColNum, bool loopSheet)
+Animation::Animation(GraphicsBuffer& src, Vector2D rowColNum, bool loopSheet)
 {
 	fillSpriteSheet(src, rowColNum);
 
@@ -28,14 +29,14 @@ Animation::~Animation()
 	return;
 }
 
-void Animation::addSprite(GraphicsBuffer &src, Vector2D sprLoc, Vector2D sprDimensions)
+void Animation::addSprite(GraphicsBuffer& src, Vector2D sprLoc, Vector2D sprDimensions)
 {
 	mSpriteSheet.push_back(Sprite(src, sprLoc.getX(), sprLoc.getY(), sprDimensions.getX(), sprDimensions.getY()));
 
 	return;
 }
 
-void Animation::fillSpriteSheet(GraphicsBuffer & src, Vector2D rowColNum)
+void Animation::fillSpriteSheet(GraphicsBuffer& src, Vector2D rowColNum)
 {
 	// Clear the sprite sheet before filling it
 	// Make sure to add this Animation to a Unit before calling this function
@@ -89,7 +90,7 @@ void Animation::animUpdate(double newSpeed)
 		{
 			mCurrentSprIndex++;
 		}
-		
+
 	}
 	else if (mCurrentSprIndex == (int)mSpriteSheet.size() - 1)
 	{

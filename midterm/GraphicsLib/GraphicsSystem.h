@@ -64,6 +64,8 @@ public:
 	// Draw sprites.
 	static void draw(Sprite _sprite, float _destinationX, float _destinationY, float _scale = 1.0);
 
+	void drawScaledSprite(Sprite _sprite, float _destinationX, float _destinationY, float _scale);
+
 	// Draw a buffer to a target buffer.
 	static void draw(GraphicsBuffer& _drawBuffer, GraphicsBuffer& _targetBuffer, int _flag = BUFFER_TOP_LEFT, float _scale = 1.0f);
 
@@ -78,6 +80,8 @@ public:
 
 	// Write text to the given buffer.
 	static void writeText(GraphicsBuffer& _buffer, float _destinationX, float _destinationY, Font& _font, Color _color, std::string _text, int _flag = FONT_ALIGN_LEFT);
+
+	static void writeText(GraphicsBuffer& _buffer, Vector2D _destination, Font& _font, Color _color, std::string _text, int _flag = FONT_ALIGN_LEFT);
 
 	// Save a buffer.
 	static void saveBuffer(GraphicsBuffer& _buffer, std::string _fileName);

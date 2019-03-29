@@ -8,8 +8,8 @@
 *********************************************************************/
 
 #include "InputSystem.h"
-#include "EventSystem.h"
-#include "Event.h"
+#include "EventSystem/EventSystem.h"
+#include "EventSystem/Event.h"
 
 InputSystem::InputSystem()
 {
@@ -97,9 +97,9 @@ void InputSystem::updateInputSystem()
 	setMousePosition(mMouseState.x, mMouseState.y);
 
 	// Fire current keyboard state
-	// TODO: Modular fireKeyboardEvent, no need to account for all game keys
 	fireKeyboardEvent(A);
 	fireKeyboardEvent(D);
+	fireKeyboardEvent(R);
 	fireKeyboardEvent(S);
 	fireKeyboardEvent(W);
 	fireKeyboardEvent(ESCAPE);
@@ -147,11 +147,11 @@ void InputSystem::fireMouseEvent(MouseCode mouseCode)
 	{
 		EventSystem::getEventSystemInstance()->fireEvent(MouseEvent(mouseCode, mMousePosition, STATE_HELD));
 	}
-	else if (mMouseState.buttons & mouseCode && !mPreviousMouseState.buttons & mouseCode)
+	else if (!(mPreviousMouseState.buttons & mouseCode) && mMouseState.buttons & mouseCode)
 	{
 		EventSystem::getEventSystemInstance()->fireEvent(MouseEvent(mouseCode, mMousePosition, STATE_PRESSED));
 	}
-	else if (!mMouseState.buttons & mouseCode && mPreviousMouseState.buttons & mouseCode)
+	else if (!(mMouseState.buttons & mouseCode) && mPreviousMouseState.buttons & mouseCode)
 	{
 		EventSystem::getEventSystemInstance()->fireEvent(MouseEvent(mouseCode, mMousePosition, STATE_RELEASED));
 	}

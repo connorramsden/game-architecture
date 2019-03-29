@@ -14,6 +14,10 @@
 #include <map>
 #include <assert.h>
 
+// C++ Usings
+using std::multimap;
+using std::pair;
+
 // DeanLib Includes
 #include <Trackable.h>
 
@@ -24,13 +28,13 @@ enum EventType;
 
 // EventSystem Typedefs
 // STL Multimap storing EventType & EventListener key-value pairs
-typedef std::multimap<EventType, EventListener*> ListenerMap;
+typedef multimap<EventType, EventListener*> ListenerMap;
 
 // STL Pair storing an EventType & EventListener
-typedef std::pair<EventType, EventListener*> ListenerPair;
+typedef pair<EventType, EventListener*> ListenerPair;
 
 // STL pair holding two ListenerMaps
-typedef std::pair<ListenerMap::iterator, ListenerMap::iterator> ListenerMapPair;
+typedef pair<ListenerMap::iterator, ListenerMap::iterator> ListenerMapPair;
 
 class EventSystem : public Trackable
 {

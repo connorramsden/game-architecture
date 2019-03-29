@@ -1,3 +1,4 @@
+#include "GraphicsSystem.h"
 /*********************************************************************
 **		Author:														**
 **		Class: 310 <Section 0>										**
@@ -122,6 +123,13 @@ void GraphicsSystem::draw(Sprite _sprite, float _destinationX, float _destinatio
 	return;
 }
 
+void GraphicsSystem::drawScaledSprite(Sprite _sprite, float _destinationX, float _destinationY, float _scale)
+{
+	al_draw_scaled_bitmap(_sprite.getBuffer().mpBitmap, _sprite.getSourceX(), _sprite.getSourceY(), _sprite.getWidth(), _sprite.getHeight(), _destinationX, _destinationY, _sprite.getWidth() * _scale, _sprite.getHeight() * _scale, 0);
+
+	return;
+}
+
 // Draw a buffer to a target buffer.
 void GraphicsSystem::draw(GraphicsBuffer& _drawBuffer, GraphicsBuffer& _targetBuffer, int _flag /*  BUFFER_TOP_LEFT */, float _scale /* = 1.0 */)
 {
@@ -211,6 +219,23 @@ void GraphicsSystem::writeText(GraphicsBuffer& _buffer, float _destinationX, flo
 
 	// Draw the text to the buffer.
 	al_draw_text(_font.mpFont, getColor(_color), _destinationX, _destinationY, _flag, _text.c_str());
+
+	// Restore the back buffer.
+	al_set_target_bitmap(pBackBuffer);
+
+	return;
+}
+
+void GraphicsSystem::writeText(GraphicsBuffer& _buffer, Vector2D _destination, Font& _font, Color _color, std::string _text, int _flag)
+{
+	// Store the current back buffer.
+	ALLEGRO_BITMAP* pBackBuffer = al_get_target_bitmap();
+
+	// Set the target drawing buffer.
+	al_set_target_bitmap(_buffer.mpBitmap);
+
+	// Draw the text to the buffer.
+	al_draw_text(_font.mpFont, getColor(_color), _destination.getX(), _destination.getY(), _flag, _text.c_str());
 
 	// Restore the back buffer.
 	al_set_target_bitmap(pBackBuffer);

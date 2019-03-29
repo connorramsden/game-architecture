@@ -48,16 +48,16 @@ private:
 	GraphicsBuffer *mpBuffer;
 
 	// Source x location of the sprite on the buffer.
-	int mSourceX = 0;
+	int mSourceX;
 
 	// Source y location of the sprite on the buffer.
-	int mSourceY = 0;
+	int mSourceY;
 
 	// Width of the sprite.
-	int mWidth = 0;
+	int mWidth;
 
 	// Height of the sprite.
-	int mHeight = 0;
+	int mHeight;
 };
 
 #endif

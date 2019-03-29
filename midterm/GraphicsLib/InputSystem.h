@@ -23,8 +23,8 @@
 
 // GraphicsLib Includes
 #include "InputCodes.h"
-#include "KeyboardEvent.h"
-#include "MouseEvent.h"
+#include "EventSystem/MouseEvent.h"
+#include "EventSystem/KeyboardEvent.h"
 
 // GraphicsLib Class References
 class Event;

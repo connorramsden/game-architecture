@@ -27,7 +27,7 @@ class Unit;
 
 typedef int UnitKey;
 
-typedef std::map<UnitKey, Unit *> UnitMap;
+typedef std::map<UnitKey, Unit*> UnitMap;
 
 class UnitManager : public Trackable
 {
@@ -42,27 +42,27 @@ public:
 	void cleanupUnitManager();
 
 	// Add a new Unit to the map at the passed UnitKey index
-	Unit *createAndManageUnit(const UnitKey key, Vector2D &unitLocation);
+	void createAndManageUnit(const UnitKey key, Vector2D& unitLocation);
 
 	// Delete the Unit in mUnitMap at the passed UnitKey
 	void deleteUnit(const UnitKey key);
 
 	// Deletes the passed Unit from mUnitMap
-	void deleteUnit(Unit *pUnit);
+	void deleteUnit(Unit* pUnit);
 
 	// Add the passed Animation to the Unit at the passed UnitKey index
-	void addAnimationToUnit(const UnitKey key, Animation &animToAdd);
+	void addAnimationToUnit(const UnitKey key, Animation& animToAdd);
 
 	// Draws all units in mUnitMap to screen
 	void drawUnitsInMap();
 
 	// Update all units in mUnitMap
-	void updateUnitInMap(const UnitKey key, Vector2D &newUnitLocation);
+	void updateUnitInMap(const UnitKey key, Vector2D& newUnitLocation);
 
 	void updateAnimationsInMap(int newAnimIndex);
 
 	// returns the Unit located at &key in mUnitMap
-	Unit *getUnit(const UnitKey key) const;
+	Unit* getUnit(const UnitKey key) const;
 
 private:
 	// An STL map storing Units

@@ -12,6 +12,13 @@
 // Default constructor.
 Sprite::Sprite()
 {
+	mpBuffer = nullptr;
+
+	mSourceX = -1;
+	mSourceY = -1;
+	mWidth = 0;
+	mHeight = 0;
+
 	return;
 }
 

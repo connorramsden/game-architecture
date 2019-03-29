@@ -14,6 +14,10 @@
 #include <string>
 #include <map>
 
+// C/C++ Usings
+using std::string;
+using std::map;
+
 // DeanLib Includes
 #include <Trackable.h>
 
@@ -21,7 +25,7 @@ class GraphicsBuffer;
 
 typedef int GraphicsBufferKey;
 
-typedef std::map<GraphicsBufferKey, GraphicsBuffer*> GraphicsBufferMap;
+typedef map<GraphicsBufferKey, GraphicsBuffer*> GraphicsBufferMap;
 
 class GraphicsBufferManager : public Trackable
 {
@@ -36,7 +40,7 @@ public:
 	void cleanupGraphicsBufferManager();
 
 	// Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
-	GraphicsBuffer *createAndManageGraphicsBuffer(const GraphicsBufferKey key, std::string assetPath, std::string fileName);
+	GraphicsBuffer *createAndManageGraphicsBuffer(const GraphicsBufferKey key, string assetPath, string fileName);
 
 	// Delete the GraphicsBuffer in mGraphicsBufferMap at &key
 	void deleteGraphicsBuffer(const GraphicsBufferKey key);

@@ -1,0 +1,6 @@
+0 background.png
+1 snake_head.png
+2 snake_body.png
+3 walls.png
+4 yummy_food.png
+5 cour.ttf

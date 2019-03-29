@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,12 +22,11 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{EC58DA42-88DA-4B82-BFC4-AE6D5219F837}</ProjectGuid>
     <RootNamespace>midterm</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>midterm</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -70,16 +69,17 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile />
+    <Link />
     <ClCompile>
+      <AdditionalIncludeDirectories>..\..\shared\allegro\include;..\..\shared\deanlib\include;GraphicsLib\;GraphicsLib\EventSystem</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\shared\allegro\include;..\..\shared\deanlib\include;GraphicsLib\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>GraphicsLib\debug;..\..\shared\deanlib\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>GraphicsLib\Debug;..\..\shared\DeanLib\lib;`</AdditionalLibraryDirectories>
       <AdditionalDependencies>GraphicsLib.lib;DeanLibDebug.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -118,10 +118,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameAssets.cpp" />
+    <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="GraphicsBufferManager.cpp" />
     <ClCompile Include="InputTranslator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuManager.cpp" />
+    <ClCompile Include="PickupManager.cpp" />
+    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitManager.cpp" />
   </ItemGroup>
@@ -132,24 +135,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameAssets.h" />
+    <ClInclude Include="DataManager.h" />
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GraphicsBufferManager.h" />
     <ClInclude Include="InputTranslator.h" />
+    <ClInclude Include="MenuManager.h" />
+    <ClInclude Include="PickupManager.h" />
+    <ClInclude Include="Snake.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\objective.png" />
+    <Image Include="Assets\background.png" />
     <Image Include="Assets\snake_body.png" />
-    <Image Include="Assets\snake_head_down.png" />
-    <Image Include="Assets\snake_head_left.png" />
-    <Image Include="Assets\snake_head_right.png" />
-    <Image Include="Assets\snake_head_up.png" />
+    <Image Include="Assets\snake_head.png" />
     <Image Include="Assets\walls.png" />
+    <Image Include="assets\yummy_food.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\cour.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\leveldata_1.txt" />
+    <Text Include="assets\menudata.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

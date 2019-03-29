@@ -7,40 +7,69 @@
 **		Midterm Project Author: Connor Ramsden						**
 *********************************************************************/
 
+// Game Includes
+#include "Game.h"
+#include "DataManager.h"
+#include "InputTranslator.h"
+#include "MenuManager.h"
+#include "UnitManager.h"
+#include "GraphicsBufferManager.h"
+#include "Snake.h"
+#include "PickupManager.h"
+#include "GameEvent.h"
+
+// C/C++ Includes
+#include <stdlib.h>
+#include <assert.h>
+#include <math.h>
+#include <sstream>
+#include <vector>
+
+// C/C++ Usings
+using std::vector;
+using std::cout;
+using std::endl;
+
 // GraphicsLib Incldues
 #include <EventSystem.h>
 #include <Event.h>
 
-// Game Includes
-#include "Game.h"
-#include "UnitManager.h"
-#include "GraphicsBufferManager.h"
-#include "InputTranslator.h"
-#include "GameEvent.h"
-
+#pragma region Static Accessors & Variables
 int Game::msID = 0;
 
 // Initialize Game / System / Manager Instances
-Game * Game::mpsGameInstance = nullptr;
-System * Game::mpsSystemInstance = nullptr;
-UnitManager * Game::mpsUnitManager = nullptr;
-GraphicsBufferManager * Game::mpsGraphicsBufferManager = nullptr;
-InputTranslator * Game::mpsInputTranslatorInstance = nullptr;
+Game* Game::mpsGameInstance = nullptr;
+DataManager* Game::mpsDataManager = nullptr;
+System* Game::mpsSystemInstance = nullptr;
+InputTranslator* Game::mpsInputTranslatorInstance = nullptr;
+MenuManager* Game::mpsMenuManager = nullptr;
+UnitManager* Game::mpsUnitManager = nullptr;
+GraphicsBufferManager* Game::mpsGraphicsBufferManager = nullptr;
+Snake* Game::mpsSnakeInstance = nullptr;
+PickupManager* Game::mpsPickupManager = nullptr;
 
 // Initialize tracker & Timer
-PerformanceTracker * Game::mpPerformanceTrackerInstance = nullptr;
-Timer * Game::mpTimerInstance = nullptr;
+PerformanceTracker* Game::mpPerformanceTrackerInstance = nullptr;
+Timer* Game::mpTimerInstance = nullptr;
 
 // Returns mpsGameInstance
-Game * Game::getGameInstance()
+Game* Game::getGameInstance()
 {
 	assert(mpsGameInstance != nullptr);
 
 	return mpsGameInstance;
 }
 
+// Returns mpsDataManager
+DataManager* Game::getDataManager()
+{
+	assert(mpsDataManager != nullptr);
+
+	return mpsDataManager;
+}
+
 // Returns mpsSystemInstance
-System * Game::getSystemInstance()
+System* Game::getSystemInstance()
 {
 	assert(mpsSystemInstance != nullptr);
 
@@ -48,15 +77,22 @@ System * Game::getSystemInstance()
 }
 
 // Returns mpsInputTranslatorInstance
-InputTranslator * Game::getInputTranslatorInstance()
+InputTranslator* Game::getInputTranslatorInstance()
 {
 	assert(mpsInputTranslatorInstance != nullptr);
 
 	return mpsInputTranslatorInstance;
 }
 
+MenuManager * Game::getMenuManager()
+{
+	assert(mpsMenuManager != nullptr);
+
+	return mpsMenuManager;
+}
+
 // Returns mpsUnitManager
-UnitManager * Game::getUnitManagerInstance()
+UnitManager* Game::getUnitManagerInstance()
 {
 	assert(mpsUnitManager != nullptr);
 
@@ -64,15 +100,31 @@ UnitManager * Game::getUnitManagerInstance()
 }
 
 // Returns mpsGraphicsBufferManager
-GraphicsBufferManager * Game::getGraphicsBufferManager()
+GraphicsBufferManager* Game::getGraphicsBufferManager()
 {
 	assert(mpsGraphicsBufferManager != nullptr);
 
 	return mpsGraphicsBufferManager;
 }
 
+// Returns mpsSnakeInstance
+Snake* Game::getSnakeInstance()
+{
+	assert(mpsSnakeInstance != nullptr);
+
+	return mpsSnakeInstance;
+}
+
+// Returns mpsPickupManager
+PickupManager* Game::getPickupManager()
+{
+	assert(mpsPickupManager != nullptr);
+
+	return mpsPickupManager;
+}
+
 // Returns mpPerforamnceTracker
-PerformanceTracker * Game::getPerformanceTrackerInstance()
+PerformanceTracker* Game::getPerformanceTrackerInstance()
 {
 	assert(mpPerformanceTrackerInstance != nullptr);
 
@@ -80,23 +132,24 @@ PerformanceTracker * Game::getPerformanceTrackerInstance()
 }
 
 // Returns mpTimerInstance
-Timer * Game::getTimerInstance()
+Timer* Game::getTimerInstance()
 {
 	assert(mpTimerInstance != nullptr);
 
 	return mpTimerInstance;
 }
+#pragma endregion
 
+#pragma region Game Management
 // Initializes a new Game instance
 void Game::initInstance()
 {
 	// If the instance has not been initialized, initialize the instance
 	if (!mpsGameInstance)
-	{
 		mpsGameInstance = new Game(EventSystem::getEventSystemInstance());
-	}
 	// Otherwise, print that the instance has already been initt'd
-	else { std::cout << "Game instance already exists." << std::endl; return; }
+	else
+		cout << "Game instance already exists." << endl;
 
 	// Now that the Instance has been initialized, initialize the game
 	mpsGameInstance->initGame();
@@ -111,51 +164,39 @@ void Game::cleanupInstance()
 	if (mpsGameInstance)
 	{
 		delete mpsGameInstance;
-
 		mpsGameInstance = nullptr;
 	}
 	// Otherwise, report to console that no instance exists
-	else { std::cout << "No game instance exists" << std::endl; return; }
+	else { cout << "No game instance exists" << endl; return; }
 
 	return;
+}
+
+// Called in main.cpp, displays menu & awaits user input
+void Game::startGame()
+{
+	mpsGameInstance->mpsMenuManager->generateMenu();
+
+	mpsGameInstance->runGameLoop();
 }
 
 // Initialize System/Managers within the game
 void Game::initGame()
 {
-	// If the system instance has been properly initialized
+	// If the system instance has been properly created
 	if (mpsSystemInstance)
-	{
 		// Init the display
 		mpsSystemInstance->systemInit();
-
-		// Set head start position to center of screen
-		// TODO: Load start position from a data file
-		mSnakeHeadPosition = mpsSystemInstance->getCenterScreen();
-
-		mpsGameInstance->mpGameFont = new Font(ASSET_PATH, GAME_FONT, 36);
-	}
-	else { std::cout << "No System instance exists." << std::endl; }
+	else { cout << "No System instance exists." << endl; }
 
 	if (mpsInputTranslatorInstance)
-	{
 		mpsInputTranslatorInstance->initInputTranslator();
-	}
+
 
 	// Register the event system instance with this listener
 	EventSystem::getEventSystemInstance()->addListener((EventType)EXIT, this);
-	EventSystem::getEventSystemInstance()->addListener((EventType)CREATE_UNIT, this);
+	EventSystem::getEventSystemInstance()->addListener((EventType)START_GAME, this);
 	EventSystem::getEventSystemInstance()->addListener((EventType)MOVE_SNAKE, this);
-
-	// If the UMI has been properly initialized
-	if (mpsUnitManager && mpsGraphicsBufferManager)
-	{
-		// Create a graphics buffer from 'smurf_sprites.png'
-		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_UP_INDEX, ASSET_PATH, SNAKE_HEAD_UP_FILENAME);
-		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_RIGHT_INDEX, ASSET_PATH, SNAKE_HEAD_RIGHT_FILENAME);
-		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_DOWN_INDEX, ASSET_PATH, SNAKE_HEAD_DOWN_FILENAME);
-		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(SNAKE_HEAD_LEFT_INDEX, ASSET_PATH, SNAKE_HEAD_LEFT_FILENAME);
-	}
 
 	return;
 }
@@ -164,60 +205,123 @@ void Game::initGame()
 void Game::cleanupGame()
 {
 	EventSystem::getEventSystemInstance()->removeListener((EventType)MOVE_SNAKE, this);
-	EventSystem::getEventSystemInstance()->removeListener((EventType)CREATE_UNIT, this);
+	EventSystem::getEventSystemInstance()->removeListener((EventType)START_GAME, this);
 	EventSystem::getEventSystemInstance()->removeListener((EventType)EXIT, this);
 
-	// Clean up the GBM
+	// Clean up the GraphicsBufferManager
 	if (mpsGraphicsBufferManager)
 	{
 		delete mpsGraphicsBufferManager;
-
 		mpsGraphicsBufferManager = nullptr;
 	}
 
-	// Clean up the UMI
+	// Clean up the PickupManager
+	if (mpsPickupManager)
+	{
+		delete mpsPickupManager;
+		mpsPickupManager = nullptr;
+	}
+	else
+		cout << "No PickupManager exists." << endl;
+
+	// Clean up the UnitManager
 	if (mpsUnitManager)
 	{
 		delete mpsUnitManager;
-
 		mpsUnitManager = nullptr;
 	}
-	else { std::cout << "No UnitManager exists" << std::endl; }
+	else
+		cout << "No UnitManager exists" << endl;
 
+	if (mpsMenuManager)
+	{
+		delete mpsMenuManager;
+		mpsMenuManager = nullptr;
+	}
+	else
+		cout << "No MenuManager exists." << endl;
+
+	// Clean up the InputTranslator
 	if (mpsInputTranslatorInstance)
 	{
 		delete mpsInputTranslatorInstance;
-
 		mpsInputTranslatorInstance = nullptr;
 	}
-	else { std::cout << "No InputTranslator instance exists" << std::endl; }
+	else
+		cout << "No InputTranslator instance exists" << endl;
+
+	if (mpsDataManager)
+	{
+		delete mpsDataManager;
+		mpsDataManager = nullptr;
+	}
+	else
+		cout << "No DataManager isntance exists" << endl;
 
 	// Clean up the System Instance
 	if (mpsSystemInstance)
 	{
 		delete mpsSystemInstance;
-
 		mpsSystemInstance = nullptr;
 	}
-	else { std::cout << "No System instance exists" << std::endl; }
+	else
+		cout << "No System instance exists" << endl;
 }
+#pragma endregion
 
+#pragma region Game Loop
 // Initialize components necessary for the game loop to function
 void Game::initGameLoop()
 {
-	if (!mpPerformanceTrackerInstance)
+	// If the UnitManager, GraphicsBufferManager, and DataManager have been properly initialized
+	if (mpsUnitManager && mpsGraphicsBufferManager && mpsDataManager)
 	{
-		mpPerformanceTrackerInstance = new PerformanceTracker();
+		mpsDataManager->readData(ASSET_PATH, "leveldata_1.txt");
+
+		// Create a graphics buffer from 'background.png'
+		mNumBuffers++;
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(mNumBuffers, ASSET_PATH, mpsDataManager->getFileName(mNumBuffers));
+
+		// Create a graphics buffer from 'snake_head.png'
+		mNumBuffers++;
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(mNumBuffers, ASSET_PATH, mpsDataManager->getFileName(mNumBuffers));
+
+		// Create a graphcis buffer from 'snake_body.png'
+		mNumBuffers++;
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(mNumBuffers, ASSET_PATH, mpsDataManager->getFileName(mNumBuffers));
+
+		// Create a graphics buffer from 'walls.png'
+		mNumBuffers++;
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(mNumBuffers, ASSET_PATH, mpsDataManager->getFileName(mNumBuffers));
+
+		// Create a graphics buffer from 'yummy_food.png'
+		mNumBuffers++;
+		mpsGraphicsBufferManager->createAndManageGraphicsBuffer(mNumBuffers, ASSET_PATH, mpsDataManager->getFileName(mNumBuffers));
 	}
-	else { std::cout << "PerformanceTracker already exists." << std::endl; }
+
+	if (!mpPerformanceTrackerInstance)
+		mpPerformanceTrackerInstance = new PerformanceTracker();
+	else
+		cout << "PerformanceTracker already exists." << endl;
 
 	if (!mpTimerInstance)
-	{
 		mpTimerInstance = new Timer();
-	}
-	else { std::cout << "Timer already exists." << std::endl; }
+	else
+		cout << "Timer already exists." << endl;
 
-	std::cout << "Press 'Escape' to stop the game." << std::endl;
+	//TODO Pass starting location from data sheet
+	if (!mpsSnakeInstance)
+		mpsSnakeInstance = new Snake(mpsSystemInstance->getCenterScreen());
+	else
+		cout << "A Snake already exists" << endl;
+
+	// Ensure that the game loop will run
+	mpsGameInstance->mGameIsRunning = true;
+
+	// Create the snake head
+	mpsSnakeInstance->addPieceToSnake();
+
+	cout << "Press 'Escape' to stop the game." << endl;
 
 	return;
 }
@@ -227,21 +331,6 @@ void Game::runGameLoop()
 {
 	// Initialize necessary game loop components
 	mpsGameInstance->initGameLoop();
-
-	// Ensure all systems & managers are properly initialized
-	if (mpsSystemInstance && mpsUnitManager && mpsGraphicsBufferManager)
-	{
-		// Ensure that the game loop will run
-		mpsGameInstance->mGameIsRunning = true;
-
-		// Ensures first user click will bring map count to 0, instead of 1
-		mpsGameInstance->mNumUnits = -1;
-
-		mpsSystemInstance->getGraphicsSystem()->writeText(mpsSystemInstance->getGraphicsSystem()->getBackBuffer(), mpsSystemInstance->getCenterScreen().getX(), mpsSystemInstance->getCenterScreen().getY(), *mpsGameInstance->mpGameFont, Color(1, 1, 1), "Press WASD to Start!");
-
-		// Creates the snake head at the file-specified starting position
-		mpsGameInstance->createHead(mpsGameInstance->mSnakeHeadPosition);
-	}
 
 	// Loop functionality
 	while (mpsGameInstance->mGameIsRunning)
@@ -255,11 +344,14 @@ void Game::runGameLoop()
 		// Start the timer for this frame
 		mpTimerInstance->start();
 
+		// Update the snake every 6 frames
+		int updateCheck = mpsGameInstance->mTotalElapsedFrames % mpsGameInstance->mUpdateOffset;
+
 		// Get user input from System
 		mpsGameInstance->getUserInput();
 
 		// Update Unit(s) on screen
-		mpsGameInstance->updateLoop();
+		mpsGameInstance->updateLoop(updateCheck);
 
 		// Render background / units / etc to display
 		mpsGameInstance->renderToDisplay();
@@ -270,8 +362,10 @@ void Game::runGameLoop()
 		// Stop tracking the performance of this frame
 		mpPerformanceTrackerInstance->stopTracking(mpsGameInstance->GAME_LOOP_TRACKER);
 
+		mpsGameInstance->mTotalElapsedFrames++;
+
 		// Print elapsed time to console
-		std::cout << "Elapsed Time: " << mpPerformanceTrackerInstance->getElapsedTime(mpsGameInstance->GAME_LOOP_TRACKER) << std::endl;
+		cout << "Elapsed Time: " << mpPerformanceTrackerInstance->getElapsedTime(mpsGameInstance->GAME_LOOP_TRACKER) << endl;
 	}
 
 	// Stop the game loop, delete pointers, etc.
@@ -286,8 +380,13 @@ void Game::stopGameLoop()
 	// Stops game timer
 	mpTimerInstance->stop();
 
-	delete mpGameFont;
-	mpGameFont = nullptr;
+	// Clean up the Snake
+	if (mpsSnakeInstance)
+	{
+		delete mpsSnakeInstance;
+		mpsSnakeInstance = nullptr;
+	}
+	else { cout << "No Snake exists." << endl; }
 
 	if (mpTimerInstance)
 	{
@@ -295,7 +394,7 @@ void Game::stopGameLoop()
 		delete mpTimerInstance;
 		mpTimerInstance = nullptr;
 	}
-	else { std::cout << "No Timer instance exists" << std::endl; }
+	else { cout << "No Timer instance exists" << endl; }
 
 	if (mpPerformanceTrackerInstance)
 	{
@@ -303,7 +402,9 @@ void Game::stopGameLoop()
 		delete mpPerformanceTrackerInstance;
 		mpPerformanceTrackerInstance = nullptr;
 	}
-	else { std::cout << "No PerformanceTracker instance exists" << std::endl; }
+	else { cout << "No PerformanceTracker instance exists" << endl; }
+
+	cout << "Total Elapsed Frames: " << getTotalElapsedFrames() << endl;
 
 	return;
 }
@@ -311,24 +412,26 @@ void Game::stopGameLoop()
 // Handle incoming Game events
 void Game::handleEvent(const Event & eventToHandle)
 {
-	if (eventToHandle.getEventType() == GameEventType::EXIT)
+	switch (eventToHandle.getEventType())
 	{
-		exitGame();
-		return;
-	}
-	// TODO: CreateUnit behavior will be different for Snake
-	else if (eventToHandle.getEventType() == GameEventType::CREATE_UNIT)
-	{
-		const CreateUnit & createUnitEvent = static_cast<const CreateUnit &>(eventToHandle);
+		if (mpsGameInstance->mGameIsRunning)
+		{
+		case EXIT:
+			exitToMenu();
+			return;
+		case MOVE_SNAKE:
+			const MoveSnake& moveSnakeEvent = static_cast<const MoveSnake&>(eventToHandle);
+			mpsSnakeInstance->setSnakeDirection(moveSnakeEvent.getMoveDirection());
+			return;
+		}
+		else
+		{
+		case START_GAME:
+			// Stop the start loop
+			mpsGameInstance->mpsMenuManager->setInMenu(false);
+			return;
+		}
 
-		// createUnit(createUnitEvent.getUnitPosition());
-		return;
-	}
-	else if (eventToHandle.getEventType() == GameEventType::MOVE_SNAKE)
-	{
-		const MoveSnake & moveSnakeEvent = static_cast<const MoveSnake &>(eventToHandle);
-
-		mCurrentSnakeDirection = moveSnakeEvent.getMoveDirection();
 	}
 
 	return;
@@ -343,17 +446,16 @@ void Game::getUserInput()
 }
 
 // Update all game objects / units
-void Game::updateLoop()
+void Game::updateLoop(int updateLimiter)
 {
 	// Ensure that there is at least one unit present
-	if (mpsGameInstance->mNumUnits >= 0)
+	if (mpsGameInstance->getSnakeInstance()->getNumPieces() >= 0)
 	{
-		moveHead(mCurrentSnakeDirection);
-
-		updateSnakeHead();
-
-		mpsUnitManager->updateUnitInMap(mpsGameInstance->mNumUnits, mSnakeHeadPosition);
+		if (updateLimiter == 0)
+			mpsSnakeInstance->updateSnake();
 	}
+
+	mpsPickupManager->generatePickups(0);
 
 	return;
 }
@@ -364,151 +466,84 @@ void Game::renderToDisplay()
 	// Clear backbuffer to black
 	mpsSystemInstance->getGraphicsSystem()->setBufferColor(mpsSystemInstance->getGraphicsSystem()->getBackBuffer(), Color(0, 0, 0));
 
+	// Render the background image
+	mpsSystemInstance->getGraphicsSystem()->draw(*mpsGameInstance->getGraphicsBufferManager()->getGraphicsBuffer(0), 0, 1.0f);
+
+	// Draw all pieces of the snake
 	mpsUnitManager->drawUnitsInMap();
+
+	// Draw all pickups in mPickupMap
+	mpsPickupManager->drawPickups();
 
 	// Flip the display to render graphics to user
 	mpsSystemInstance->getGraphicsSystem()->updateDisplay();
-
 	return;
 }
 
 // Stop the game loop from running
-void Game::exitGame()
+void Game::exitToMenu()
 {
-	mpsGameInstance->mGameIsRunning = false;
+	if (mpsGameInstance->mGameIsRunning)
+		mpsGameInstance->mGameIsRunning = false;
+
+	return;
 }
-
-void Game::failState()
-{
-	mpsGameInstance->mGameIsRunning = false;
-
-	system("pause");
-}
-
-// Create the 'head' piece of the Snake
-void Game::createHead(Vector2D targetPos)
-{
-	// Runs at start of SNAKE, creates the 'head' at the center of the screen
-	if (mpsGameInstance->mNumUnits < 0)
-	{
-		// mNumUnits => 0
-		mpsGameInstance->mNumUnits++;
-
-		mpsUnitManager->createAndManageUnit(mpsGameInstance->mNumUnits, targetPos);
-
-		Animation snakeHeadUp(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_UP_INDEX), Vector2D(1.0f, 1.0f), false);
-		Animation snakeHeadRight(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_RIGHT_INDEX), Vector2D(1.0f, 1.0f), false);
-		Animation snakeHeadDown(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_DOWN_INDEX), Vector2D(1.0f, 1.0f), false);
-		Animation snakeHeadLeft(*mpsGraphicsBufferManager->getGraphicsBuffer(SNAKE_HEAD_LEFT_INDEX), Vector2D(1.0f, 1.0f), false);
-
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadUp);
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadRight);
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadDown);
-		mpsUnitManager->addAnimationToUnit(mpsGameInstance->mNumUnits, snakeHeadLeft);
-	}
-}
-
-void Game::moveHead(Vector2D moveDirection)
-{
-	const float SNAKE_SPEED = 7.5f;
-
-	if (isSnakeWithinBounds())
-	{
-		if (moveDirection.getY() == 1.0f)
-		{
-			mSnakeHeadPosition.setY(mSnakeHeadPosition.getY() - SNAKE_SPEED);
-		}
-		else if (moveDirection.getY() == -1.0f)
-		{
-			mSnakeHeadPosition.setY(mSnakeHeadPosition.getY() + SNAKE_SPEED);
-		}
-
-		if (moveDirection.getX() == 1.0f)
-		{
-			mSnakeHeadPosition.setX(mSnakeHeadPosition.getX() + SNAKE_SPEED);
-		}
-		else if (moveDirection.getX() == -1.0f)
-		{
-			mSnakeHeadPosition.setX(mSnakeHeadPosition.getX() - SNAKE_SPEED);
-		}
-	}
-	else
-	{
-		failState();
-	}
-}
-
-void Game::updateSnakeHead()
-{
-	if (mCurrentSnakeDirection.getY() == 1.0f)
-	{
-		mpsUnitManager->updateAnimationsInMap(0);
-	}
-	else if (mCurrentSnakeDirection.getY() == -1.0f)
-	{
-		mpsUnitManager->updateAnimationsInMap(2);
-	}
-
-	if (mCurrentSnakeDirection.getX() == 1.0f)
-	{
-		mpsUnitManager->updateAnimationsInMap(1);
-	}
-	else if (mCurrentSnakeDirection.getX() == -1.0f)
-	{
-		mpsUnitManager->updateAnimationsInMap(3);
-	}
-}
-
-bool Game::isSnakeWithinBounds()
-{
-	if (mSnakeHeadPosition.getY() > 0 && mSnakeHeadPosition.getY() < 720)
-	{
-		if (mSnakeHeadPosition.getX() > 0 && mSnakeHeadPosition.getX() < 1280)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
-}
+#pragma endregion
 
 // Default Game Constructor
-Game::Game(EventSystem *pEventSystem)
+Game::Game(EventSystem * pEventSystem)
 	:EventListener(pEventSystem)
 	, mID(msID)
 {
 	msID++;
+	mGameIsRunning = false;
+	mNumUnits = -1;
+	mNumBuffers = -1;
+	mTotalElapsedFrames = 0;
+	mUpdateOffset = 4;
 
+	// Create new System/Managers
 	if (!mpsSystemInstance)
-	{
-		// Create new System/Managers
 		mpsSystemInstance = new System();
-	}
-	else { std::cout << "A System instance already exists" << std::endl; }
+	else
+		cout << "A System instance already exists" << endl;
+
+	if (!mpsDataManager)
+		mpsDataManager = new DataManager();
+	else
+		cout << "A DataManager instance already exists." << endl;
 
 	if (!mpsInputTranslatorInstance)
-	{
 		mpsInputTranslatorInstance = new InputTranslator(EventSystem::getEventSystemInstance());
-	}
-	else { std::cout << "An InputTranslator instance already exists" << std::endl; }
+	else
+		cout << "An InputTranslator instance already exists" << endl;
+
+	if (!mpsMenuManager)
+		mpsMenuManager = new MenuManager();
+	else
+		cout << "A MenuManager instance already exists." << endl;
 
 	if (!mpsUnitManager)
-	{
 		mpsUnitManager = new UnitManager();
-	}
-	else { std::cout << "A UnitManager already exists" << std::endl; }
+	else
+		cout << "A UnitManager already exists" << endl;
 
 	if (!mpsGraphicsBufferManager)
-	{
 		mpsGraphicsBufferManager = new GraphicsBufferManager();
+	else
+		cout << "A GraphicsBufferManager already exists" << endl;
+
+	if (!mpsPickupManager)
+		mpsPickupManager = new PickupManager();
+	else
+		cout << "A PickupManager instance already exists" << endl;
+
+	if (!(mpsSystemInstance && mpsDataManager && mpsInputTranslatorInstance && mpsMenuManager && mpsUnitManager && mpsGraphicsBufferManager && mpsPickupManager))
+	{
+		cout << "An initializer has not been properly initialized. Breaking game." << endl;
+
+		system("pause");
 	}
-	else { std::cout << "A GraphicsBufferManager already exists" << std::endl; }
 
 	return;
 }

@@ -10,12 +10,16 @@
 #ifndef UNIT_H
 #define UNIT_H
 
+// C/C++ Using
+
 // GraphicsLib Includes
 #include <Animation.h>
 
 class Unit : public Trackable
 {
 	friend class UnitManager;
+	friend class PickupManager;
+	friend class Snake;
 
 public:
 	// Public Unit Accessors
@@ -32,7 +36,7 @@ public:
 	void addNewAnimation(Animation &newAnim);
 
 	// Draw the unit's current animation to screen
-	void drawUnit();
+	void drawUnit(float unitScale = 1.0f);
 
 	void updateUnitAnim(int newAnimIndex);
 

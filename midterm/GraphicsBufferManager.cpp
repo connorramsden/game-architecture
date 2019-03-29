@@ -25,7 +25,7 @@ void GraphicsBufferManager::cleanupGraphicsBufferManager()
 
 	for (iter = mGraphicsBufferMap.begin(); iter != mGraphicsBufferMap.end(); ++iter)
 	{
-		GraphicsBuffer *mpGraphicsBuffer = iter->second;
+		GraphicsBuffer* mpGraphicsBuffer = iter->second;
 
 		delete mpGraphicsBuffer;
 
@@ -38,9 +38,9 @@ void GraphicsBufferManager::cleanupGraphicsBufferManager()
 }
 
 // Creates and updates a new GraphicsBuffer into mGraphicsBufferMap
-GraphicsBuffer * GraphicsBufferManager::createAndManageGraphicsBuffer(const GraphicsBufferKey key, std::string assetPath, std::string fileName)
+GraphicsBuffer* GraphicsBufferManager::createAndManageGraphicsBuffer(const GraphicsBufferKey key, std::string assetPath, std::string fileName)
 {
-	GraphicsBuffer *pGraphicsBuffer = nullptr;
+	GraphicsBuffer* pGraphicsBuffer = nullptr;
 
 	GraphicsBufferMap::iterator iter = mGraphicsBufferMap.find(key);
 
@@ -74,7 +74,7 @@ void GraphicsBufferManager::deleteGraphicsBuffer(const GraphicsBufferKey key)
 }
 
 // Delete the GraphicsBuffer passed into the function
-void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * pGraphicsBuffer)
+void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer* pGraphicsBuffer)
 {
 	GraphicsBufferMap::iterator iter;
 
@@ -96,7 +96,7 @@ void GraphicsBufferManager::deleteGraphicsBuffer(GraphicsBuffer * pGraphicsBuffe
 }
 
 // Return the GraphicsBuffer in mGraphicsBufferMap at &key
-GraphicsBuffer * GraphicsBufferManager::getGraphicsBuffer(const GraphicsBufferKey key) const
+GraphicsBuffer* GraphicsBufferManager::getGraphicsBuffer(const GraphicsBufferKey key) const
 {
 	GraphicsBufferMap::const_iterator iter = mGraphicsBufferMap.find(key);
 
@@ -106,6 +106,8 @@ GraphicsBuffer * GraphicsBufferManager::getGraphicsBuffer(const GraphicsBufferKe
 	}
 	else
 	{
+		std::cout << "GRAPHICS BUFFER MANAGER IS BROKEN" << std::endl;
+		system("pause");
 		return nullptr;
 	}
 }

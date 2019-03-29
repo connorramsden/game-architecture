@@ -39,7 +39,16 @@
     <ClCompile Include="InputTranslator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameAssets.cpp">
+    <ClCompile Include="Snake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickupManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,30 +77,33 @@
     <ClInclude Include="GameEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameAssets.h">
+    <ClInclude Include="Snake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PickupManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\objective.png">
+    <Image Include="Assets\background.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Assets\snake_body.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\snake_head.png">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="Assets\walls.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\snake_head_down.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\snake_head_left.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\snake_head_right.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\snake_head_up.png">
+    <Image Include="assets\yummy_food.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -99,5 +111,13 @@
     <Font Include="Assets\cour.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\leveldata_1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="assets\menudata.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

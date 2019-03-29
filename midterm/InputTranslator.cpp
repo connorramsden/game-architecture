@@ -20,7 +20,7 @@
 int InputTranslator::msID = 0;
 
 // Default InputTranslator Constructor
-InputTranslator::InputTranslator(EventSystem *pEventSystem)
+InputTranslator::InputTranslator(EventSystem* pEventSystem)
 	:EventListener(pEventSystem)
 	, mID(msID)
 {
@@ -54,56 +54,68 @@ void InputTranslator::cleanupInputTranslator()
 }
 
 // Translate Allegro events into GameEvents
-void InputTranslator::handleEvent(const Event &eventToHandle)
+void InputTranslator::handleEvent(const Event& eventToHandle)
 {
 	// Handles events dealing with keyboard input
 	if (eventToHandle.getEventType() == KEYBOARD_EVENT)
 	{
-		const KeyboardEvent &kbEvent = static_cast<const KeyboardEvent&>(eventToHandle);
+		const KeyboardEvent& kbEvent = static_cast<const KeyboardEvent&>(eventToHandle);
 
 		// Events fired on key hold or press
 		if (kbEvent.getInputState() == STATE_PRESSED)
 		{
-			if (kbEvent.getKeyNum() == W)
+			switch (kbEvent.getKeyNum())
 			{
-				Vector2D moveDirection(0.0f, 1.0f);
+				case W:
+				{
+					Vector2D moveDirection(0.0f, 1.0f);
 
-				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
-			}
-			else if (kbEvent.getKeyNum() == S)
-			{
-				Vector2D moveDirection(0.0f, -1.0f);
-				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
-			}
+					EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+					break;
+				}
+				case S:
+				{
+					Vector2D moveDirection(0.0f, -1.0f);
+					EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
 
-			if (kbEvent.getKeyNum() == A)
-			{
-				Vector2D moveDirection(-1.0f, 0.0f);
+					break;
+				}
+				case A:
+				{
+					Vector2D moveDirection(-1.0f, 0.0f);
 
-				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+					EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+
+					break;
+				}
+				case D:
+				{
+					Vector2D moveDirection(1.0f, 0.0f);
+					EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
+
+					break;
+				}
 			}
-			else if (kbEvent.getKeyNum() == D)
-			{
-				Vector2D moveDirection(1.0f, 0.0f);
-				EventSystem::getEventSystemInstance()->fireEvent(MoveSnake(moveDirection));
-			}
-			
 		}
 		// Events fired on key release
 		else if (kbEvent.getInputState() == STATE_RELEASED)
 		{
-			if (kbEvent.getKeyNum() == ESCAPE)
+			switch (kbEvent.getKeyNum())
 			{
-				EventSystem::getEventSystemInstance()->fireEvent(ExitEvent());
-				return;
+				case ESCAPE:
+					EventSystem::getEventSystemInstance()->fireEvent(ExitEvent());
+					break;
+				case SPACEBAR:
+					EventSystem::getEventSystemInstance()->fireEvent(StartEvent());
+					break;
 			}
 		}
 
 	}
-	// TODO: Clean up mouse button input, not important for Snake
+	//TODO Clean up mouse button input, not important for Snake
 	else if (eventToHandle.getEventType() == MOUSEINPUT_EVENT)
 	{
-		const MouseEvent &mouseEvent = static_cast<const MouseEvent&>(eventToHandle);
+		const MouseEvent& mouseEvent = static_cast<const MouseEvent&>(eventToHandle);
 
 		Vector2D mousePosition = mouseEvent.getMousePosition();
 

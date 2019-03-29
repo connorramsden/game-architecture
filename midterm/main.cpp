@@ -7,10 +7,6 @@
 **		Midterm Project Author: Connor Ramsden						**
 *********************************************************************/
 
-// C/C++ Includes
-#include <iostream>
-#include <string>
-
 // DeanLib Includes
 #include <MemoryTracker.h>
 
@@ -20,6 +16,9 @@
 
 int main()
 {
+	// Seeding time for any random game operations
+	std::srand(time(nullptr));
+	
 	// Initialize an EventSystem
 	EventSystem::initEventSystem();
 
@@ -27,7 +26,7 @@ int main()
 	Game::initInstance();
 
 	// Run the core game loop
-	Game::runGameLoop();
+	Game::startGame();
 
 	// When the game loop breaks, clean up the Game instance
 	Game::cleanupInstance();

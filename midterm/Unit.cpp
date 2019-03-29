@@ -25,11 +25,21 @@ void Unit::addNewAnimation(Animation & newAnim)
 	}
 }
 
-void Unit::drawUnit()
+void Unit::drawUnit(float unitScale)
 {
 	Sprite spr = mpCurrentAnimation->getCurrentSprite();
+	System* systemInstance = Game::getSystemInstance();
 
-	Game::getSystemInstance()->getGraphicsSystem()->draw(spr, mUnitPosition.getX(), mUnitPosition.getY());
+	if (unitScale != 1.0f)
+	{
+		systemInstance->getGraphicsSystem()->drawScaledSprite(spr, mUnitPosition.getX(), mUnitPosition.getY(), unitScale);
+	}
+	else
+	{
+		systemInstance->getGraphicsSystem()->draw(spr, mUnitPosition.getX(), mUnitPosition.getY());
+	}
+
+	return;
 }
 
 void Unit::updateUnitAnim(int newAnimIndex)

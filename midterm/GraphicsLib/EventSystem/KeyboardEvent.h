@@ -7,32 +7,25 @@
 **		Midterm Project Author: Connor Ramsden						**
 *********************************************************************/
 
-#ifndef MOUSEEVENT_H
-#define MOUSEEVENT_H
-
-// DeanLib Includes
-#include <Vector2D.h>
+#ifndef KEYBOARDEVENT_H
+#define KEYBOARDEVENT_H
 
 // GraphicsLib Includes
 #include "Event.h"
-#include "InputCodes.h"
+#include "..\InputCodes.h"
 
-class MouseEvent : public Event
+class KeyboardEvent : public Event
 {
 public:
-	MouseEvent(MouseCode mouseNum, Vector2D mousePos, EventInputState inputState);
-	~MouseEvent();
+	KeyboardEvent(KeyCode keyCode);
+	KeyboardEvent(KeyCode keyCode, EventInputState inputState);
+	~KeyboardEvent();
 
-	inline MouseCode getMouseNum() const { return mMouseCode; }
-
-	inline Vector2D getMousePosition() const { return mMousePosition; }
-
+	inline KeyCode getKeyNum() const { return mKeyCode; }
 	inline EventInputState getInputState() const { return mInputState; }
 
 private:
-	MouseCode mMouseCode;
-	
-	Vector2D mMousePosition;
+	KeyCode mKeyCode;
 
 	EventInputState mInputState;
 };

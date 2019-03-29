@@ -21,26 +21,29 @@ UnitManager::~UnitManager()
 // Loops through mUnitMap and deletes all Unit(s)
 void UnitManager::cleanupUnitManager()
 {
-	UnitMap::iterator iter;
-
-	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
+	if (!mUnitMap.empty())
 	{
-		Unit *pUnit = iter->second;
+		UnitMap::iterator iter;
 
-		delete pUnit;
+		for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
+		{
+			Unit* pUnit = iter->second;
 
-		pUnit = nullptr;
-	}
+			delete pUnit;
 
-	mUnitMap.clear();
+			pUnit = nullptr;
+		}
+
+		mUnitMap.clear();
+	}	
 
 	return;
 }
 
 // Add a new Unit to the map at the passed UnitKey
-Unit * UnitManager::createAndManageUnit(const UnitKey key, Vector2D &unitLocation)
+void UnitManager::createAndManageUnit(const UnitKey key, Vector2D& unitLocation)
 {
-	Unit *pUnit = nullptr;
+	Unit* pUnit = nullptr;
 
 	UnitMap::iterator iter = mUnitMap.find(key);
 
@@ -51,7 +54,7 @@ Unit * UnitManager::createAndManageUnit(const UnitKey key, Vector2D &unitLocatio
 		mUnitMap[key] = pUnit;
 	}
 
-	return pUnit;
+	return;
 }
 
 // Delete the Unit in mUnitMap at the passed UnitKey index
@@ -74,7 +77,7 @@ void UnitManager::deleteUnit(const UnitKey key)
 }
 
 // Deletes the passed Unit from mUnitMap
-void UnitManager::deleteUnit(Unit *pUnit)
+void UnitManager::deleteUnit(Unit* pUnit)
 {
 	UnitMap::iterator iter;
 
@@ -96,9 +99,11 @@ void UnitManager::deleteUnit(Unit *pUnit)
 }
 
 // Add the passed Animation to the Unit at the passed UnitKey index
-void UnitManager::addAnimationToUnit(const UnitKey key, Animation & animToAdd)
+void UnitManager::addAnimationToUnit(const UnitKey key, Animation& animToAdd)
 {
 	mUnitMap[key]->addNewAnimation(animToAdd);
+
+	return;
 }
 
 // Loops through all Unit(s) in mUnitMap and draws their current state
@@ -108,7 +113,7 @@ void UnitManager::drawUnitsInMap()
 
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
 	{
-		Unit *pUnit = iter->second;
+		Unit* pUnit = iter->second;
 
 		pUnit->drawUnit();
 	}
@@ -116,13 +121,13 @@ void UnitManager::drawUnitsInMap()
 	return;
 }
 
-void UnitManager::updateUnitInMap(const UnitKey key, Vector2D &newUnitLocation)
+void UnitManager::updateUnitInMap(const UnitKey key, Vector2D& newUnitLocation)
 {
 	UnitMap::iterator iter = mUnitMap.find(key);
 
 	if (iter->second)
 	{
-		Unit *pUnit = iter->second;
+		Unit* pUnit = iter->second;
 		pUnit->setUnitPosition(newUnitLocation);
 	}
 
@@ -135,13 +140,13 @@ void UnitManager::updateAnimationsInMap(int newAnimIndex)
 
 	for (iter = mUnitMap.begin(); iter != mUnitMap.end(); ++iter)
 	{
-		Unit *pUnit = iter->second;
+		Unit* pUnit = iter->second;
 		pUnit->updateUnitAnim(newAnimIndex);
 	}
 }
 
 // returns the Unit located at &key in mUnitMap
-Unit * UnitManager::getUnit(const UnitKey key) const
+Unit* UnitManager::getUnit(const UnitKey key) const
 {
 	UnitMap::const_iterator iter = mUnitMap.find(key);
 

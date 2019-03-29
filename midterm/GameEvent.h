@@ -19,7 +19,7 @@
 enum GameEventType
 {
 	EXIT = NUM_EVENT_TYPES,
-	CREATE_UNIT,
+	START_GAME,
 	MOVE_SNAKE,
 };
 
@@ -31,19 +31,12 @@ public:
 	{};
 };
 
-class CreateUnit : public Event
+class StartEvent : public Event
 {
 public:
-	CreateUnit(Vector2D targetPos)
-		:Event((EventType)GameEventType::CREATE_UNIT)
-	{
-		mCreatePosition = targetPos;
-	};
-
-	inline Vector2D getUnitPosition() const { return mCreatePosition; }
-
-private:
-	Vector2D mCreatePosition;
+	StartEvent()
+		:Event((EventType)GameEventType::START_GAME)
+	{};
 };
 
 class MoveSnake : public Event

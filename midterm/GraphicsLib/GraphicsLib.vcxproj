@@ -77,7 +77,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\shared\allegro\include;..\..\..\shared\deanlib\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\shared\allegro\include;\EventSystem;..\..\..\shared\deanlib\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -85,11 +85,17 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>allegro.lib;allegro_acodec.lib;allegro_audio.lib;allegro_font.lib;allegro_image.lib;allegro_primitives.lib;allegro_ttf.lib</AdditionalDependencies>
+      <AdditionalDependencies>allegro.lib;allegro_acodec.lib;allegro_audio.lib;allegro_font.lib;allegro_image.lib;allegro_primitives.lib;allegro_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\shared\allegro\debug\v141\win32\lib;</AdditionalLibraryDirectories>
+      <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>
+      </LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -109,31 +115,31 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="EventListener.cpp" />
-    <ClCompile Include="EventSystem.cpp" />
+    <ClCompile Include="EventSystem\Event.cpp" />
+    <ClCompile Include="EventSystem\EventListener.cpp" />
+    <ClCompile Include="EventSystem\EventSystem.cpp" />
+    <ClCompile Include="EventSystem\KeyboardEvent.cpp" />
+    <ClCompile Include="EventSystem\MouseEvent.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GraphicsBuffer.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
-    <ClCompile Include="KeyboardEvent.cpp" />
-    <ClCompile Include="MouseEvent.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Color.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="EventListener.h" />
-    <ClInclude Include="EventSystem.h" />
+    <ClInclude Include="EventSystem\Event.h" />
+    <ClInclude Include="EventSystem\EventListener.h" />
+    <ClInclude Include="EventSystem\EventSystem.h" />
+    <ClInclude Include="EventSystem\KeyboardEvent.h" />
+    <ClInclude Include="EventSystem\MouseEvent.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GraphicsBuffer.h" />
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="InputCodes.h" />
     <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="KeyboardEvent.h" />
-    <ClInclude Include="MouseEvent.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="System.h" />
   </ItemGroup>

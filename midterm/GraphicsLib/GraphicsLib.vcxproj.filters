@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Header Files\EventSystem">
+      <UniqueIdentifier>{671fd472-6436-43bb-9864-7c1cc887101c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EventSystem">
+      <UniqueIdentifier>{cfa7da7f-cf2c-4891-871e-8f330f9cfd53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -39,20 +45,20 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EventSystem\Event.cpp">
+      <Filter>Source Files\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="EventListener.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EventSystem\EventListener.cpp">
+      <Filter>Source Files\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="EventSystem.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EventSystem\EventSystem.cpp">
+      <Filter>Source Files\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="KeyboardEvent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EventSystem\KeyboardEvent.cpp">
+      <Filter>Source Files\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="MouseEvent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EventSystem\MouseEvent.cpp">
+      <Filter>Source Files\EventSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,23 +86,23 @@
     <ClInclude Include="InputSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="InputCodes.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Event.h">
+      <Filter>Header Files\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EventListener.h">
+      <Filter>Header Files\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EventSystem.h">
+      <Filter>Header Files\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\KeyboardEvent.h">
+      <Filter>Header Files\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\MouseEvent.h">
+      <Filter>Header Files\EventSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

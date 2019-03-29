@@ -13,6 +13,9 @@
 // C/C++ Includes
 #include <vector>
 
+// C/C++ Usings
+using std::vector;
+
 // DeanLib Includes
 #include <Vector2D.h>
 
@@ -43,17 +46,18 @@ public:
 	void animUpdate(double newSpeed);
 
 	// Returns the current sprite
-	Sprite getCurrentSprite() { return mCurrentSprite; }
+	inline Sprite getCurrentSprite() const { return mCurrentSprite; }
+	inline void setCurrentSprite(int spriteIndex) { mCurrentSprite = mSpriteSheet.at(spriteIndex); return; }
 
 	// Returns current Animation speed
-	float getAnimSpeed() { return mAnimSpeed; }
+	inline float getAnimSpeed() const { return mAnimSpeed; }
 
 	// Adjusts the speed of animation
 	void updateAnimSpeed(double newSpeed);
 
 private:
 	// List of Sprites
-	std::vector<Sprite> mSpriteSheet;
+	vector<Sprite> mSpriteSheet;
 
 	// Speed at which animation plays
 	double mAnimSpeed = 1.0;
